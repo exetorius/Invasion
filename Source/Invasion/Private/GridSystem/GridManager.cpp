@@ -30,4 +30,16 @@ void AGridManager::BeginPlay()
 	}
 }
 
+FVector AGridManager::GetCellWorldLocation(int32 X, int32 Y) const
+{
+	return FVector(X * CellSize, Y * CellSize, 0);
+}
+
+FIntPoint AGridManager::GetClosestGridIndex(const FVector& WorldLocation) const
+{
+	const int32 X = FMath::RoundToInt(WorldLocation.X / CellSize);
+	const int32 Y = FMath::RoundToInt(WorldLocation.Y / CellSize);
+	return FIntPoint(X, Y);
+}
+
 

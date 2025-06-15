@@ -43,4 +43,8 @@ private:
 	
 // Getters & Setters
 public:
+	FORCEINLINE int32 GetGridWidth() const { return GridWidth; } 
+	FORCEINLINE int32 GetGridHeight() const { return GridHeight; }
+	FVector GetCellWorldLocation(int32 X, int32 Y) const;
+	FIntPoint GetClosestGridIndex(const FVector& WorldLocation) const;
 };
