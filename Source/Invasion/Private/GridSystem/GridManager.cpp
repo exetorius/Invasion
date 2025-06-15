@@ -23,8 +23,9 @@ void AGridManager::BeginPlay()
 			GridCells.Add(NewCell);
 
 			// Draw Debug Box for each cell
-			FVector BoxExtents = FVector(CellSize / 2, CellSize / 2, NewCell.Location.Z + CellSize);
-			DrawDebugBox(GetWorld(), NewCell.Location, BoxExtents, FColor::Green, false, 30.f);
+			FVector BoxLocation = FVector(NewCell.Location.X, NewCell.Location.Y, NewCell.Location.Z + CellSize);
+			FVector BoxExtents = FVector(CellSize / 2, CellSize / 2, CellSize);
+			DrawDebugBox(GetWorld(), BoxLocation, BoxExtents, FColor::Green, false, 30.f);
 		}
 	}
 }
