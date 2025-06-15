@@ -1,7 +1,7 @@
 ﻿#include "GridSystem/Pathfinder.h"
 #include "GridSystem/GridManager.h"
 
-TArray<FIntPoint> APathfinder::FindPath(const FIntPoint Start, const FIntPoint Goal, const AGridManager* GridManager)
+TArray<FIntVector> APathfinder::FindPath(const FIntVector Start, const FIntVector Goal, const AGridManager* GridManager)
 {
 	TArray<FPathNode> OpenSet;
 	TArray<FPathNode> ClosedSet;
@@ -23,9 +23,8 @@ TArray<FIntPoint> APathfinder::FindPath(const FIntPoint Start, const FIntPoint G
 
 		if (CurrentNode.GridPosition == Goal)
 		{
-			TArray<FIntPoint> Path;
-			FPathNode* Node = &CurrentNode;
-			while (Node)
+			TArray<FIntVector> Path;
+			if (const FPathNode* Node = &CurrentNode)
 			{
 				Path.Add(Node->GridPosition);
 				Node = Node->Parent;
@@ -34,14 +33,16 @@ TArray<FIntPoint> APathfinder::FindPath(const FIntPoint Start, const FIntPoint G
 			return Path;
 		}
 
-		TArray<FIntPoint> Neighbours = {
-			FIntPoint(CurrentNode.GridPosition.X + 1, CurrentNode.GridPosition.Y),
-			FIntPoint(CurrentNode.GridPosition.X - 1, CurrentNode.GridPosition.Y),
-			FIntPoint(CurrentNode.GridPosition.X, CurrentNode.GridPosition.Y + 1),
-			FIntPoint(CurrentNode.GridPosition.X, CurrentNode.GridPosition.Y - 1)
+		TArray<FIntVector> Neighbours = {
+			FIntVector(CurrentNode.GridPosition.X + 1, CurrentNode.GridPosition.Y, CurrentNode.GridPosition.Z),
+			FIntVector(CurrentNode.GridPosition.X - 1, CurrentNode.GridPosition.Y, CurrentNode.GridPosition.Z),
+			FIntVector(CurrentNode.GridPosition.X, CurrentNode.GridPosition.Y + 1, CurrentNode.GridPosition.Z),
+			FIntVector(CurrentNode.GridPosition.X, CurrentNode.GridPosition.Y - 1, CurrentNode.GridPosition.Z),
+			FIntVector(CurrentNode.GridPosition.X, CurrentNode.GridPosition.Y, CurrentNode.GridPosition.Z + 1),
+			FIntVector(CurrentNode.GridPosition.X, CurrentNode.GridPosition.Y, CurrentNode.GridPosition.Z - 1)
 		};
 
-		for (FIntPoint NeighbourPosition : Neighbours)
+		for (FIntVector NeighbourPosition : Neighbours)
 		{
 			if (NeighbourPosition.X < 0 || NeighbourPosition.Y < 0 || NeighbourPosition.X >= GridManager->GetGridWidth() || NeighbourPosition.Y >= GridManager->GetGridHeight())
 			{
@@ -81,10 +82,10 @@ TArray<FIntPoint> APathfinder::FindPath(const FIntPoint Start, const FIntPoint G
 		}
 	}
 
-	return TArray<FIntPoint>();
+	return TArray<FIntVector>();
 }
 
-float APathfinder::GetHeuristic(FIntPoint A, FIntPoint B) 
+float APathfinder::GetHeuristic(FIntVector A, FIntVector B) 
 {
-	return FMath::Abs(A.X - B.X) + FMath::Abs(A.Y - B.Y);
+	return FMath::Abs(A.X - B.X) + FMath::Abs(A.Y - B.Y) + FMath::Abs(A.Z - B.Z);
 }

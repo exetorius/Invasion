@@ -29,14 +29,20 @@ public:
 protected:
 	virtual void BeginPlay() override;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grid")
 	int32 GridWidth = 10;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grid")
 	int32 GridHeight = 10;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grid")
+	int32 GridDepth = 3;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grid")
 	int32 CellSize = 100.f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Grid")
+	int32 CellHeight = 200.f;
 
 private:
 	TArray<FGridCell> GridCells;
@@ -45,6 +51,6 @@ private:
 public:
 	FORCEINLINE int32 GetGridWidth() const { return GridWidth; } 
 	FORCEINLINE int32 GetGridHeight() const { return GridHeight; }
-	FVector GetCellWorldLocation(int32 X, int32 Y) const;
-	FIntPoint GetClosestGridIndex(const FVector& WorldLocation) const;
+	FVector GetCellWorldLocation(int32 X, int32 Y, int32 Z) const;
+	FIntVector GetClosestGridIndex(const FVector& WorldLocation) const;
 };

@@ -3,34 +3,39 @@
 
 #include "Character/BaseGridCharacter.h"
 
+#include "GameMode/InvasionBattleGameMode.h"
 #include "GridSystem/GridManager.h"
 #include "GridSystem/Pathfinder.h"
+#include "Kismet/GameplayStatics.h"
 
 ABaseGridCharacter::ABaseGridCharacter()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-	createde
 }
 
-void ABaseGridCharacter::MoveToGridCell(FIntPoint TargetCell) const
+void ABaseGridCharacter::MoveToGridCell(FIntVector TargetCell) const
 {
-	AGridManager* GridManager = Cast<AGridManager>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	APathfinder* Pathfinder = GetWorld()->SpawnActor<APathfinder>();
-
-	FIntPoint StartCell = GridManager->GetClosestGridIndex(GetActorLocation());
-	TArray<FIntPoint> Path = Pathfinder->FindPath(StartCell, TargetCell, GridManager);
-
-	if (Path.Num() > 0)
+	if (const AInvasionBattleGameMode* GameMode = Cast<AInvasionBattleGameMode>(UGameplayStatics::GetGameMode(this)))
 	{
-		for (FIntPoint Cell : Path)
+		if (APathfinder* Pathfinder = GetWorld()->SpawnActor<APathfinder>())
 		{
-			FVector TargetLocation = GridManager->GetCellWorldLocation(Cell.X, Cell.Y);
-			GetWorld()->GetFirstPlayerController()->GetPawn()->SetActorLocation(TargetLocation);
+			UE_LOG(LogTemp, Warning, TEXT("ABaseGridCharacter::MoveToGridCell: %d, %d"), TargetCell.X, TargetCell.Y);
+			
+			const FIntVector StartCell = GameMode->GridManager->GetClosestGridIndex(GetActorLocation());
+			TArray<FIntVector> Path = Pathfinder->FindPath(StartCell, TargetCell, GameMode->GridManager);
+
+			if (Path.Num() > 0)
+			{
+				for (const FIntVector Cell : Path)
+				{
+					FVector TargetLocation = GameMode->GridManager->GetCellWorldLocation(Cell.X, Cell.Y, Cell.Z);
+					GetWorld()->GetFirstPlayerController()->GetPawn()->SetActorLocation(TargetLocation);
+				}
+			}
+
+			Pathfinder->Destroy();
 		}
 	}
-
-	Pathfinder->Destroy();
 }
 
 void ABaseGridCharacter::StartTurn()

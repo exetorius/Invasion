@@ -13,7 +13,8 @@ class INVASION_API ABaseGridCharacter : public ACharacter
 
 public:
 	ABaseGridCharacter();
-	void MoveToGridCell(FIntPoint TargetCell) const;
+	UFUNCTION(BlueprintCallable)
+	void MoveToGridCell(FIntVector TargetCell) const;
 	void StartTurn();
 
 
