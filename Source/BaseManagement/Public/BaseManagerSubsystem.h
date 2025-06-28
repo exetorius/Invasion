@@ -15,13 +15,17 @@ public:
 	virtual void Deinitialize() override;
 
 	UFUNCTION(BlueprintCallable, Category = "Base Manager")
-	void AddWorker(UWorkerData* NewWorker);
-
-	UFUNCTION(BlueprintCallable, Category = "Base Manager")
-	UWorkerData* CreateAndAddTestWorker(const FString& Name, int32 Age, const FString& Race, const FString& Species);
-
+	void AddWorker(UWorkerData* NewWorker);	
+	
 	UFUNCTION(BlueprintCallable, Category = "Base Manager")
 	const TArray<UWorkerData*>& GetAllWorkers() const;
+
+	// TESTING
+	
+	UFUNCTION(BlueprintCallable, Category = "Base Manager")
+	UWorkerData* CreateAndAddTestWorker(const FString& Name, int32 Age,  ERace Race,  ESpecies Species, EWorkerRole WorkerRole);
+
+	// END TESTING
 
 private:
 	UPROPERTY()

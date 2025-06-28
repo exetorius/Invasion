@@ -22,8 +22,14 @@ void UBaseManagerSubsystem::AddWorker(UWorkerData* NewWorker)
 	}
 }
 
-UWorkerData* UBaseManagerSubsystem::CreateAndAddTestWorker(const FString& Name, int32 Age, const FString& Race,
-	const FString& Species)
+const TArray<UWorkerData*>& UBaseManagerSubsystem::GetAllWorkers() const
+{
+	return WorkerRoster;
+}
+
+// TEST FUNCTIONS
+
+UWorkerData* UBaseManagerSubsystem::CreateAndAddTestWorker(const FString& Name, int32 Age,  ERace Race,  ESpecies Species, EWorkerRole WorkerRole)
 {
 	UWorkerData* NewWorker = NewObject<UWorkerData>(this);
 	if (NewWorker)
@@ -33,16 +39,12 @@ UWorkerData* UBaseManagerSubsystem::CreateAndAddTestWorker(const FString& Name, 
 		NewWorker->Age = Age;
 		NewWorker->Race = Race;
 		NewWorker->Species = Species;
+		NewWorker->WorkerRole = WorkerRole;
 
 		AddWorker(NewWorker);
 
-		UE_LOG(LogTemp, Log, TEXT("Created Worker: %s (%s, %s)"), *Name, *Race, *Species);
+		UE_LOG(LogTemp, Log, TEXT("Created Worker: %s (Role: %s)"), *Name, *UEnum::GetValueAsString(WorkerRole));
 	}
 
 	return NewWorker;
-}
-
-const TArray<UWorkerData*>& UBaseManagerSubsystem::GetAllWorkers() const
-{
-	return WorkerRoster;
 }

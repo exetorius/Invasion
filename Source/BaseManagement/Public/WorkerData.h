@@ -2,7 +2,12 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
+#include "WorkerTypes.h"
 #include "WorkerData.generated.h"
+
+/*
+ * Base worker data, for more specific role data use a subclass that inherits from here. Can be used for a generic NPC maybe?
+ */
 
 UCLASS(Blueprintable)
 class BASEMANAGEMENT_API UWorkerData : public UObject
@@ -23,9 +28,11 @@ public:
 
 	// Maybe swap to ENUM?
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
-	FString Race;
+	ERace Race;
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
-	FString Species;
-	
+	ESpecies Species;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
+	EWorkerRole WorkerRole;
 };
