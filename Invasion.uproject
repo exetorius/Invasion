@@ -15,7 +15,10 @@
 		{
 			"Name": "BaseManagement",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"UMG"
+			]
 		}
 	],
 	"Plugins": [
