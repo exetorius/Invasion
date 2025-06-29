@@ -12,10 +12,10 @@ struct FGridCell
 	GENERATED_BODY()
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	FVector Location;
+	FVector Location = FVector(0);
 
 	UPROPERTY(EditAnywhere, BlueprintReadWrite)
-	bool bIsBlocked;
+	bool bIsBlocked = false;
 };
 
 UCLASS()
