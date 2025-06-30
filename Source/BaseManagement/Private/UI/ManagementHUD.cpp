@@ -1,5 +1,6 @@
 ﻿#include "UI/ManagementHUD.h"
 #include "Components/WidgetSwitcher.h"
+#include "UI/ManagementScreens/CharacterScreenWidget.h"
 
 void UManagementHUD::NativeConstruct()
 {
@@ -7,8 +8,16 @@ void UManagementHUD::NativeConstruct()
 	
 	SetupViewMap();
 
+	if (WBP_CharacterScreen)
+	{
+		if (UCharacterScreenWidget* Screen= Cast<UCharacterScreenWidget>(WBP_CharacterScreen))
+		{
+			Screen->InitializeManagementHUD(this);
+		}
+	}
+
 	// Start on World overview
-	SwitchToView(EManagementView::EMV_Character);
+	SwitchToView(EManagementView::EMV_World);
 }
 
 void UManagementHUD::SetupViewMap()

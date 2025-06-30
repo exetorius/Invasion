@@ -4,7 +4,7 @@
 #include "Blueprint/UserWidget.h"
 #include "ManagementHUD.generated.h"
 
-UENUM()
+UENUM(BlueprintType)
 enum class EManagementView : uint8
 {
 	EMV_World		UMETA(DisplayName = "World"),
@@ -24,6 +24,7 @@ class BASEMANAGEMENT_API UManagementHUD : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	UFUNCTION(BlueprintCallable, Category="UI")
 	void SwitchToView(EManagementView NewView);	
 
 protected:
@@ -41,7 +42,7 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UUserWidget* WBP_RosterScreen;
 
-	UPROPERTY(meta = (BindWidget))
+	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
 	UUserWidget* WBP_CharacterScreen;	
 
 	UPROPERTY(meta = (BindWidget))
