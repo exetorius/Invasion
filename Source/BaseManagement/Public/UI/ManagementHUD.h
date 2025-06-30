@@ -7,7 +7,6 @@
 UENUM()
 enum class EManagementView : uint8
 {
-	EMV_None		UMETA(DisplayName = "None"),
 	EMV_World		UMETA(DisplayName = "World"),
 	EMV_Base		UMETA(DisplayName = "Base"),
 	EMV_Roster		UMETA(DisplayName = "Roster"),
@@ -31,36 +30,33 @@ protected:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta=(BindWidget))
-	class UWidgetSwitcher* OverlaySwitcher;
+	class UWidgetSwitcher* WidgetSwitcher;
 
 	UPROPERTY(meta = (BindWidget))
-	UWidget* Overlay_None;
+	UUserWidget* WBP_WorldScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UWidget* Overlay_World;
+	UUserWidget* WBP_BaseScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UWidget* Overlay_Base;
+	UUserWidget* WBP_RosterScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UWidget* Overlay_Roster;
+	UUserWidget* WBP_CharacterScreen;	
 
 	UPROPERTY(meta = (BindWidget))
-	UWidget* Overlay_Character;	
+	UUserWidget* WBP_InventoryScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UWidget* Overlay_Inventory;
+	UUserWidget* WBP_ResearchScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UWidget* Overlay_Research;
-
-	UPROPERTY(meta = (BindWidget))
-	UWidget* Overlay_Engineering;
+	UUserWidget* WBP_EngineeringScreen;
 
 private:
 	void SetupViewMap();
 	
 	UPROPERTY()
-	TMap<EManagementView, UWidget*> ViewMap;
+	TMap<EManagementView, UUserWidget*> ViewMap;
 	
 };
