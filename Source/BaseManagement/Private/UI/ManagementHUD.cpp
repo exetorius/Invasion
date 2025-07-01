@@ -1,6 +1,7 @@
 ﻿#include "UI/ManagementHUD.h"
 #include "Components/WidgetSwitcher.h"
 #include "UI/ManagementScreens/CharacterScreenWidget.h"
+#include "UI/ManagementScreens/WorldScreenWidget.h"
 
 void UManagementHUD::NativeConstruct()
 {
@@ -8,11 +9,19 @@ void UManagementHUD::NativeConstruct()
 	
 	SetupViewMap();
 
+	if (WBP_WorldScreen)
+	{
+		if (UWorldScreenWidget* WorldScreen = Cast<UWorldScreenWidget>(WBP_WorldScreen))
+		{
+			WorldScreen->OnWorldButtonClicked.BindUObject(this, &UManagementHUD::SwitchToView);
+		}
+	}
+	
 	if (WBP_CharacterScreen)
 	{
 		if (UCharacterScreenWidget* Screen= Cast<UCharacterScreenWidget>(WBP_CharacterScreen))
 		{
-			Screen->InitializeManagementHUD(this);
+			Screen->OnBackRequested.BindUObject(this, &ThisClass::SwitchToView);
 		}
 	}
 

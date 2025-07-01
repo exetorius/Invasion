@@ -2,8 +2,8 @@
 
 #pragma once
 
-#include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "UI/ManagementHUD.h"
 #include "CharacterScreenWidget.generated.h"
 
 class UManagementHUD;
@@ -16,10 +16,10 @@ class BASEMANAGEMENT_API UCharacterScreenWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
-	UFUNCTION()
-	void InitializeManagementHUD(UManagementHUD* InHUD) { ManagementHUD = InHUD; }
-
-private:
-	UPROPERTY(BlueprintReadOnly, Category="UI", meta=(AllowPrivateAccess=true))
-	TObjectPtr<UManagementHUD> ManagementHUD;
+	DECLARE_DELEGATE_OneParam(FOnBackRequested, EManagementView);
+	FOnBackRequested OnBackRequested;
+	
+protected:
+	UFUNCTION(BlueprintCallable)
+	void OnBackRequested_Implementation(const EManagementView View) const;
 };

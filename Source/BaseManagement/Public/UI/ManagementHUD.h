@@ -42,7 +42,7 @@ protected:
 	UPROPERTY(meta = (BindWidget))
 	UUserWidget* WBP_RosterScreen;
 
-	UPROPERTY(BlueprintReadOnly, meta = (BindWidget))
+	UPROPERTY(meta = (BindWidget))
 	UUserWidget* WBP_CharacterScreen;	
 
 	UPROPERTY(meta = (BindWidget))
