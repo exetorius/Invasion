@@ -28,6 +28,7 @@ public:
 	void SwitchToView(EManagementView NewView);	
 
 protected:
+	void BindNavigationDelegates();
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta=(BindWidget))

@@ -1,29 +1,16 @@
 ﻿#include "UI/ManagementHUD.h"
 #include "Components/WidgetSwitcher.h"
-#include "UI/ManagementScreens/CharacterScreenWidget.h"
-#include "UI/ManagementScreens/WorldScreenWidget.h"
+#include "UI/ManagementScreens/BaseManagementScreenWidget.h"
+
+
 
 void UManagementHUD::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
-	SetupViewMap();
 
-	if (WBP_WorldScreen)
-	{
-		if (UWorldScreenWidget* WorldScreen = Cast<UWorldScreenWidget>(WBP_WorldScreen))
-		{
-			WorldScreen->OnWorldButtonClicked.BindUObject(this, &UManagementHUD::SwitchToView);
-		}
-	}
-	
-	if (WBP_CharacterScreen)
-	{
-		if (UCharacterScreenWidget* Screen= Cast<UCharacterScreenWidget>(WBP_CharacterScreen))
-		{
-			Screen->OnBackRequested.BindUObject(this, &ThisClass::SwitchToView);
-		}
-	}
+	// Initialise Map and Delegates
+	SetupViewMap();
+	BindNavigationDelegates();
 
 	// Start on World overview
 	SwitchToView(EManagementView::EMV_World);
@@ -38,6 +25,25 @@ void UManagementHUD::SetupViewMap()
 	ViewMap.Add(EManagementView::EMV_Inventory, WBP_InventoryScreen);
 	ViewMap.Add(EManagementView::EMV_Research, WBP_ResearchScreen);
 	ViewMap.Add(EManagementView::EMV_Engineering, WBP_EngineeringScreen);
+}
+
+void UManagementHUD::BindNavigationDelegates()
+{
+	if (WBP_WorldScreen)
+	{
+		if (UBaseManagementScreenWidget* WorldScreen = Cast<UBaseManagementScreenWidget>(WBP_WorldScreen))
+		{
+			WorldScreen->OnNavigationButtonPressed.BindUObject(this, &UManagementHUD::SwitchToView);
+		}
+	}
+	
+	if (WBP_CharacterScreen)
+	{
+		if (UBaseManagementScreenWidget* Screen= Cast<UBaseManagementScreenWidget>(WBP_CharacterScreen))
+		{
+			Screen->OnNavigationButtonPressed.BindUObject(this, &ThisClass::SwitchToView);
+		}
+	}
 }
 
 void UManagementHUD::SwitchToView(EManagementView NewView)
