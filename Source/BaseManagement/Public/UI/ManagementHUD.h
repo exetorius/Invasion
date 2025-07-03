@@ -11,7 +11,7 @@ enum class EManagementView : uint8
 	EMV_Base		UMETA(DisplayName = "Base"),
 	EMV_Roster		UMETA(DisplayName = "Roster"),
 	EMV_Character	UMETA(DisplayName = "Character"),
-	EMV_Inventory	UMETA(DisplayName = "Inventory"),
+	EMV_Warehouse	UMETA(DisplayName = "Warehouse"),
 	EMV_Research	UMETA(DisplayName = "Research"),
 	EMV_Engineering UMETA(DisplayName = "Engineering"),
 
@@ -47,7 +47,7 @@ protected:
 	UUserWidget* WBP_CharacterScreen;	
 
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_InventoryScreen;
+	UUserWidget* WBP_WarehouseScreen;
 
 	UPROPERTY(meta = (BindWidget))
 	UUserWidget* WBP_ResearchScreen;

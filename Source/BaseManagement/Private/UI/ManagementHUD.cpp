@@ -22,7 +22,7 @@ void UManagementHUD::SetupViewMap()
 	ViewMap.Add(EManagementView::EMV_Base, WBP_BaseScreen);
 	ViewMap.Add(EManagementView::EMV_Roster, WBP_RosterScreen);
 	ViewMap.Add(EManagementView::EMV_Character, WBP_CharacterScreen);
-	ViewMap.Add(EManagementView::EMV_Inventory, WBP_InventoryScreen);
+	ViewMap.Add(EManagementView::EMV_Warehouse, WBP_WarehouseScreen);
 	ViewMap.Add(EManagementView::EMV_Research, WBP_ResearchScreen);
 	ViewMap.Add(EManagementView::EMV_Engineering, WBP_EngineeringScreen);
 }
