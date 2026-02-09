@@ -29,19 +29,11 @@ void UManagementHUD::SetupViewMap()
 
 void UManagementHUD::BindNavigationDelegates()
 {
-	if (WBP_WorldScreen)
+	for (const auto& ScreenPair : ViewMap)
 	{
-		if (UBaseManagementScreenWidget* WorldScreen = Cast<UBaseManagementScreenWidget>(WBP_WorldScreen))
+		if (UBaseManagementScreenWidget* Screen = Cast<UBaseManagementScreenWidget>(ScreenPair.Value))
 		{
-			WorldScreen->OnNavigationButtonPressed.BindUObject(this, &UManagementHUD::SwitchToView);
-		}
-	}
-	
-	if (WBP_CharacterScreen)
-	{
-		if (UBaseManagementScreenWidget* Screen= Cast<UBaseManagementScreenWidget>(WBP_CharacterScreen))
-		{
-			Screen->OnNavigationButtonPressed.BindUObject(this, &ThisClass::SwitchToView);
+			Screen->OnNavigationButtonPressed.BindUObject(this, &UManagementHUD::SwitchToView);
 		}
 	}
 }
