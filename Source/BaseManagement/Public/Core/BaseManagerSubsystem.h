@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "Subsystems/GameInstanceSubsystem.h"
-#include "WorkerData.h"
+#include "Data/WorkerData.h"
 #include "BaseManagerSubsystem.generated.h"
 
 UCLASS()

@@ -1,4 +1,4 @@
-﻿#include "BaseManagement/Public/WorkerData.h"
+﻿#include "Data/WorkerData.h"
 
 UWorkerData::UWorkerData()
 {

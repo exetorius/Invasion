@@ -2,7 +2,7 @@
 
 #include "CoreMinimal.h"
 #include "UObject/Object.h"
-#include "WorkerTypes.h"
+#include "Data/WorkerTypes.h"
 #include "WorkerData.generated.h"
 
 /*
