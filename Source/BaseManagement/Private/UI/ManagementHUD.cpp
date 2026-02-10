@@ -29,7 +29,7 @@ void UManagementHUD::SetupViewMap()
 
 void UManagementHUD::BindNavigationDelegates()
 {
-	for (const auto& ScreenPair : ViewMap)
+	for (const TTuple<EManagementView, UUserWidget*>& ScreenPair : ViewMap)
 	{
 		if (UBaseManagementScreenWidget* Screen = Cast<UBaseManagementScreenWidget>(ScreenPair.Value))
 		{
