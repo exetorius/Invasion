@@ -44,6 +44,11 @@ void ABaseManagerState::InitializeBase()
 {
 	UE_LOG(LogTemp, Log, TEXT("BaseManagerState initialized for player: %s"),
 		OwningPlayerState ? *OwningPlayerState->GetPlayerName() : TEXT("Unknown"));
+
+	// Create some test workers for demonstration
+	CreateAndAddWorker("John Smith", 32, ERace::ER_Human, ESpecies::ES_Terran, EWorkerRole::EWR_Soldier);
+	CreateAndAddWorker("Dr. Chen", 45, ERace::ER_Human, ESpecies::ES_Terran, EWorkerRole::EWR_Scientist);
+	CreateAndAddWorker("Zyx-42", 15, ERace::ER_Android, ESpecies::ES_Robotic, EWorkerRole::EWR_Engineer);
 }
 
 void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
@@ -96,13 +101,13 @@ UWorkerData* ABaseManagerState::CreateAndAddWorker(const FString& Name, int32 Ag
 		NewWorker->Age = Age;
 		NewWorker->Race = Race;
 		NewWorker->Species = Species;
-		NewWorker->WorkerRole = WorkerRole;
-
-		AddWorker(NewWorker);
+		NewWorker->WorkerRole = WorkerRole;		
 
 		UE_LOG(LogTemp, Log, TEXT("Created Worker: %s (Role: %s)"),
 			*Name,
 			*UEnum::GetValueAsString(WorkerRole));
+		
+		AddWorker(NewWorker);
 	}
 
 	return NewWorker;
