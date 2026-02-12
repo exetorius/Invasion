@@ -6,7 +6,9 @@
 #include "UI/ManagementHUD.h"
 #include "BaseManagementScreenWidget.generated.h"
 
-
+ /**
+ * Base management screen widget class that all other screen widgets inherit from.
+ */
 UCLASS()
 class BASEMANAGEMENT_API UBaseManagementScreenWidget : public UUserWidget
 {
