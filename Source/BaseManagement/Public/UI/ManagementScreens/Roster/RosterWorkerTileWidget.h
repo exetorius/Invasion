@@ -32,5 +32,5 @@ protected:
 
 private:
 	UPROPERTY(BlueprintReadOnly, meta = (AllowPrivateAccess = "true"), Category = "Roster")
-	TObjectPtr<class UWorkerData> WorkerData;
+	TObjectPtr<UWorkerData> WorkerData;
 };

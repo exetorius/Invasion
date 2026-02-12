@@ -27,7 +27,7 @@ protected:
 	TObjectPtr<class UScrollBox> WorkerListScrollBox;
 
 	// Class to spawn for each worker tile
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Roster")
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Roster")
 	TSubclassOf<class URosterWorkerTileWidget> WorkerTileClass;
 
 private:
