@@ -32,7 +32,7 @@ protected:
 	virtual void NativeConstruct() override;
 
 	UPROPERTY(meta=(BindWidget))
-	class UWidgetSwitcher* WidgetSwitcher;
+	TObjectPtr<class UWidgetSwitcher> WidgetSwitcher;
 
 	UPROPERTY(meta = (BindWidget))
 	UUserWidget* WBP_WorldScreen;
