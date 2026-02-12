@@ -25,6 +25,7 @@ void ABaseManagerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 
 	// Replicate all properties to owning client only (for now - can change to all clients later if needed)
 	DOREPLIFETIME(ABaseManagerState, OwningPlayerState);
+	DOREPLIFETIME(ABaseManagerState, BaseRegion);
 	DOREPLIFETIME(ABaseManagerState, WorkerRoster);
 	DOREPLIFETIME(ABaseManagerState, Credits);
 	DOREPLIFETIME(ABaseManagerState, Supplies);
@@ -42,13 +43,9 @@ void ABaseManagerState::BeginPlay()
 
 void ABaseManagerState::InitializeBase()
 {
-	UE_LOG(LogTemp, Log, TEXT("BaseManagerState initialized for player: %s"),
-		OwningPlayerState ? *OwningPlayerState->GetPlayerName() : TEXT("Unknown"));
-
-	// Create some test workers for demonstration
-	CreateAndAddWorker("John Smith", 32, ERace::ER_Human, ESpecies::ES_Terran, EWorkerRole::EWR_Soldier);
-	CreateAndAddWorker("Dr. Chen", 45, ERace::ER_Human, ESpecies::ES_Terran, EWorkerRole::EWR_Scientist);
-	CreateAndAddWorker("Zyx-42", 15, ERace::ER_Android, ESpecies::ES_Robotic, EWorkerRole::EWR_Engineer);
+	UE_LOG(LogTemp, Log, TEXT("BaseManagerState initialized for player: %s in region: %s"),
+		OwningPlayerState ? *OwningPlayerState->GetPlayerName() : TEXT("Unknown"),
+		*BaseRegion.ToString());	
 }
 
 void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
@@ -82,33 +79,4 @@ void ABaseManagerState::Server_AddWorker_Implementation(UWorkerData* NewWorker)
 const TArray<UWorkerData*>& ABaseManagerState::GetAllWorkers() const
 {
 	return WorkerRoster;
-}
-
-UWorkerData* ABaseManagerState::CreateAndAddWorker(const FString& Name, int32 Age, ERace Race, ESpecies Species, EWorkerRole WorkerRole)
-{
-	// Only server can create workers
-	if (!HasAuthority())
-	{
-		UE_LOG(LogTemp, Warning, TEXT("Client attempted to create worker - must be done on server"));
-		return nullptr;
-	}
-
-	UWorkerData* NewWorker = NewObject<UWorkerData>(this);
-	if (NewWorker)
-	{
-		NewWorker->UniqueID = FGuid::NewGuid();
-		NewWorker->Name = Name;
-		NewWorker->Age = Age;
-		NewWorker->Race = Race;
-		NewWorker->Species = Species;
-		NewWorker->WorkerRole = WorkerRole;		
-
-		UE_LOG(LogTemp, Log, TEXT("Created Worker: %s (Role: %s)"),
-			*Name,
-			*UEnum::GetValueAsString(WorkerRole));
-		
-		AddWorker(NewWorker);
-	}
-
-	return NewWorker;
 }

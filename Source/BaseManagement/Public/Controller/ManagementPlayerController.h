@@ -31,6 +31,7 @@ private:
 	
 	UFUNCTION()
 	void CreateHUD();
+	void CheckPlayerReady();
 
 	// Cached reference to this player's BaseManagerState
 	UPROPERTY()

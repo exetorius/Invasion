@@ -26,6 +26,10 @@ public:
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Base Manager")
 	TObjectPtr<APlayerState> OwningPlayerState;
 
+	// Which region this base is located in (e.g., "Europe", "US")
+	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Base Manager")
+	FName BaseRegion; 
+
 	// Worker roster for this base
 	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Base Manager")
 	TArray<TObjectPtr<UWorkerData>> WorkerRoster;
@@ -48,13 +52,8 @@ public:
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")
 	const TArray<UWorkerData*>& GetAllWorkers() const;
 
-	UFUNCTION(BlueprintCallable, Category = "Base Manager")
-	UWorkerData* CreateAndAddWorker(const FString& Name, int32 Age, ERace Race, ESpecies Species, EWorkerRole WorkerRole);
-
-
 protected:
 	virtual void BeginPlay() override;
-
 private:
 	void InitializeBase();
 };

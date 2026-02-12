@@ -17,22 +17,25 @@ class BASEMANAGEMENT_API UWorkerData : public UObject
 public:
 	UWorkerData();
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
+	// Enable replication support for UObject
+	virtual bool IsSupportedForNetworking() const override { return true; }
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
+
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
 	FGuid UniqueID;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
 	FString Name;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
 	int32 Age;
 
-	// Maybe swap to ENUM?
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
 	ERace Race;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
 	ESpecies Species;
 
-	UPROPERTY(EditAnywhere, BlueprintReadWrite, Category="Worker")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
 	EWorkerRole WorkerRole;
 };
