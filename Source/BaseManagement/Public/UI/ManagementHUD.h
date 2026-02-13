@@ -14,7 +14,8 @@ enum class EManagementView : uint8
 	EMV_Warehouse	UMETA(DisplayName = "Warehouse"),
 	EMV_Research	UMETA(DisplayName = "Research"),
 	EMV_Engineering UMETA(DisplayName = "Engineering"),
-
+	
+	EMV_ButtonBar	UMETA(DisplayName = "Button Bar"),
 	EMV_DefaultMAX	UMETA(DisplayName="MAX")
 };
 
@@ -54,6 +55,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	UUserWidget* WBP_EngineeringScreen;
+	
+	UPROPERTY(meta = (BindWidget))
+	UUserWidget* WBP_ButtonBar;
 
 private:
 	void SetupViewMap();

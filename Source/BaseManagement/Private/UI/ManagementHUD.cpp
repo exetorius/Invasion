@@ -25,6 +25,7 @@ void UManagementHUD::SetupViewMap()
 	ViewMap.Add(EManagementView::EMV_Warehouse, WBP_WarehouseScreen);
 	ViewMap.Add(EManagementView::EMV_Research, WBP_ResearchScreen);
 	ViewMap.Add(EManagementView::EMV_Engineering, WBP_EngineeringScreen);
+	ViewMap.Add(EManagementView::EMV_ButtonBar, WBP_ButtonBar);
 }
 
 void UManagementHUD::BindNavigationDelegates()
