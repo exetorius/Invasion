@@ -8,9 +8,9 @@ public class BaseManagement : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "UMG" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core"  });
 
-		PrivateDependencyModuleNames.AddRange(new string[] {  });
+		PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "UMG" });
 
 	}
 }
