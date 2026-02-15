@@ -36,28 +36,28 @@ protected:
 	TObjectPtr<class UWidgetSwitcher> WidgetSwitcher;
 
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_WorldScreen;
+	TObjectPtr<UUserWidget> WBP_WorldScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_BaseScreen;
+	TObjectPtr<UUserWidget> WBP_BaseScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_RosterScreen;
+	TObjectPtr<UUserWidget> WBP_RosterScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_CharacterScreen;	
+	TObjectPtr<UUserWidget> WBP_CharacterScreen;	
 
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_WarehouseScreen;
+	TObjectPtr<UUserWidget> WBP_WarehouseScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_ResearchScreen;
+	TObjectPtr<UUserWidget> WBP_ResearchScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_EngineeringScreen;
+	TObjectPtr<UUserWidget> WBP_EngineeringScreen;
 	
 	UPROPERTY(meta = (BindWidget))
-	UUserWidget* WBP_ButtonBar;
+	TObjectPtr<UUserWidget> WBP_ButtonBar;
 
 private:
 	void SetupViewMap();
