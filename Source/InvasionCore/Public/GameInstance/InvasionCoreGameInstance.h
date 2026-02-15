@@ -1,17 +1,17 @@
-// CopyrightNotice
+﻿// CopyrightNotice
 
 #pragma once
 
 #include "CoreMinimal.h"
 #include "AdvancedFriendsGameInstance.h"
 #include "Engine/GameInstance.h"
-#include "InvasionGameInstance.generated.h"
+#include "InvasionCoreGameInstance.generated.h"
 
 /**
  * 
  */
 UCLASS()
-class INVASION_API UInvasionGameInstance : public UAdvancedFriendsGameInstance
+class INVASIONCORE_API UInvasionCoreGameInstance : public UAdvancedFriendsGameInstance
 {
 	GENERATED_BODY()
 	
