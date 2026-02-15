@@ -10,22 +10,32 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "Invasion",
+			"Name": "InvasionTactical",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "BaseManagement",
+			"Name": "InvasionBaseManagement",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "OnlineSessions",
+			"Name": "InvasionOnline",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "GameSettings",
+			"Name": "InvasionGameSettings",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "InvasionSaveSystem",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "InvasionProgression",
 			"Type": "Runtime",
 			"LoadingPhase": "Default"
 		}
