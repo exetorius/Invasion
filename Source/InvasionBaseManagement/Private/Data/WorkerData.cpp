@@ -10,11 +10,24 @@ void UWorkerData::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
+	// Identity
 	DOREPLIFETIME(UWorkerData, UniqueID);
 	DOREPLIFETIME(UWorkerData, Name);
-	DOREPLIFETIME(UWorkerData, Age);
 	DOREPLIFETIME(UWorkerData, Race);
-	DOREPLIFETIME(UWorkerData, Species);
-	DOREPLIFETIME(UWorkerData, WorkerRole);
+	DOREPLIFETIME(UWorkerData, Role);
+	
+	//Combat Stats
+	DOREPLIFETIME(UWorkerData, Health);
+	DOREPLIFETIME(UWorkerData, MaxHealth);
+	DOREPLIFETIME(UWorkerData, CombatSkill);
+	
+	// Work Stats
+	DOREPLIFETIME(UWorkerData, WorkEfficiency);
+	
+	// State
+	DOREPLIFETIME(UWorkerData, Morale);
+	DOREPLIFETIME(UWorkerData, InjurySeverity);
+	DOREPLIFETIME(UWorkerData, bIsDead);
+	DOREPLIFETIME(UWorkerData, CurrentStatus);
 }
 

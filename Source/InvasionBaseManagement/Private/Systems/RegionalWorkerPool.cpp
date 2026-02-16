@@ -42,7 +42,7 @@ TArray<UWorkerData*> ARegionalWorkerPool::GetWorkersByRole(EWorkerRole WorkerRol
 
 	for (UWorkerData* Worker : AvailableWorkers)
 	{
-		if (Worker && Worker->WorkerRole == WorkerRole)
+		if (Worker && Worker->Role == WorkerRole)
 		{
 			FilteredWorkers.Add(Worker);
 		}
@@ -75,7 +75,7 @@ void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker, 
 	UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Hired '%s' (%s)"),
 		*RegionID.ToString(),
 		*Worker->Name,
-		*UEnum::GetValueAsString(Worker->WorkerRole));
+		*UEnum::GetValueAsString(Worker->Role));
 }
 
 void ARegionalWorkerPool::Server_ReturnWorker_Implementation(UWorkerData* Worker)
@@ -162,40 +162,59 @@ TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole Wo
 	UWorkerData* NewWorker = NewObject<UWorkerData>(this);
 	if (!NewWorker)
 	{
+		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Failed to generate worker"));
 		return nullptr;
 	}
-
-	NewWorker->UniqueID = FGuid::NewGuid();
+	
+	// --- IDENTITY ---
 	NewWorker->Name = GenerateRandomName();
-	NewWorker->Age = FMath::RandRange(20, 50);
-	NewWorker->WorkerRole = WorkerRole;
-
-	// Random race and species
-	const int32 RaceRoll = FMath::RandRange(0, 4);
-	switch (RaceRoll)
+	NewWorker->Race = EWorkerRace::EWR_Human;
+	NewWorker->Role = WorkerRole;
+	
+	// --- COMBAT STATS ---
+	NewWorker->MaxHealth = 100.0f;
+	NewWorker->Health = NewWorker->MaxHealth;
+	
+	// Role-based combat skill ranges
+	switch (WorkerRole)
 	{
-	case 0:
-		NewWorker->Race = ERace::ER_Human;
-		NewWorker->Species = ESpecies::ES_Terran;
-		break;
-	case 1:
-		NewWorker->Race = ERace::ER_Reptoid;
-		NewWorker->Species = ESpecies::ES_Alien;
-		break;
-	case 2:
-		NewWorker->Race = ERace::ER_Sectoid;
-		NewWorker->Species = ESpecies::ES_Alien;
-		break;
-	case 3:
-		NewWorker->Race = ERace::ER_Android;
-		NewWorker->Species = ESpecies::ES_Robotic;
+		case EWorkerRole::EWR_Soldier: 
+			NewWorker->CombatSkill = FMath::FRandRange(50.0f, 90.0f); 
+			break;
+		case EWorkerRole::EWR_Medic: 
+			NewWorker->CombatSkill = FMath::FRandRange(30.0f, 60.0f); 
+			break;
+		default: 
+			NewWorker->CombatSkill = FMath::FRandRange(10.0f, 50.0f); 
+			break; // Scientists/Engineers
+	}
+	
+	// --- WORK STATS ---
+	// Role-based work efficiency
+	switch (WorkerRole)
+	{
+	case EWorkerRole::EWR_Scientist:
+	case EWorkerRole::EWR_Engineer:
+		NewWorker->WorkEfficiency = FMath::FRandRange(60.0f, 95.0f); // Specialists: 60-95
 		break;
 	default:
-		NewWorker->Race = ERace::ER_Human;
-		NewWorker->Species = ESpecies::ES_Terran;
+		NewWorker->WorkEfficiency = FMath::FRandRange(40.0f, 75.0f); // Others: 40-75
 		break;
 	}
-
+	
+	// --- STATE ---
+	NewWorker->Morale = FMath::FRandRange(80.0f, 100.0f);
+	NewWorker->InjurySeverity = 0;
+	NewWorker->bIsDead = false;
+	NewWorker->CurrentStatus = EWorkerStatus::EWS_Idle;
+	
+	UE_LOG(LogTemp, Log, TEXT("Generated Worker: %s (%s) | Combat: %.1f | Work: %.1f | Morale: %.1f"),
+		*NewWorker->Name,
+		*UEnum::GetValueAsString(NewWorker->Role),
+		NewWorker->CombatSkill,
+		NewWorker->WorkEfficiency,
+		NewWorker->Morale);
+	
 	return NewWorker;
 }
 

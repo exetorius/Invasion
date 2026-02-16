@@ -18,6 +18,7 @@ class INVASIONBASEMANAGEMENT_API AManagementPlayerController : public APlayerCon
 	GENERATED_BODY()
 
 public:
+	AManagementPlayerController();
 	
 protected:
 	virtual void BeginPlay() override;	

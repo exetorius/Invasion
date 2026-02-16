@@ -5,10 +5,16 @@
 
 #include "EngineUtils.h"
 #include "Blueprint/UserWidget.h"
+#include "CheatManager/InvasionCheatManager.h"
 #include "UI/ManagementHUD.h"
 #include "Core/BaseManagerState.h"
 #include "GameMode/ManagementGameMode.h"
 #include "Kismet/GameplayStatics.h"
+
+AManagementPlayerController::AManagementPlayerController()
+{
+	CheatClass = UInvasionCheatManager::StaticClass();
+}
 
 void AManagementPlayerController::BeginPlay()
 {
@@ -82,7 +88,7 @@ ABaseManagerState* AManagementPlayerController::GetBaseManagerState() const
 	// Server: Use GameMode lookup (faster)
 	if (HasAuthority())
 	{
-		if (AManagementGameMode* GameMode = Cast<AManagementGameMode>(UGameplayStatics::GetGameMode(this)))
+		if (const AManagementGameMode* GameMode = Cast<AManagementGameMode>(UGameplayStatics::GetGameMode(this)))
 		{
 			CachedBaseManagerState = GameMode->GetBaseManagerStateForPlayer(PlayerState);
 			return CachedBaseManagerState;

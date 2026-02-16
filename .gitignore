@@ -101,3 +101,4 @@ Assets/*
 
 # AI generated files
 *.md
+.claude/

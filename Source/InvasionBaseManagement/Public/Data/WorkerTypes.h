@@ -3,27 +3,12 @@
 #include "WorkerTypes.generated.h"
 
 UENUM(BlueprintType)
-enum class ERace : uint8
+enum class EWorkerRace : uint8
 {
-	ER_Unknown		UMETA(DisplayName = "Unknown"),
-	ER_Human		UMETA(DisplayName = "Human"),
-	ER_Reptoid		UMETA(DisplayName = "Reptoid"),
-	ER_Muton 		UMETA(DisplayName = "Muton"),
-	ER_Sectoid		UMETA(DisplayName = "Sectoid"),
-	ER_Android 		UMETA(DisplayName = "Android"),
+	EWR_Unknown		UMETA(DisplayName = "Unknown"),
+	EWR_Human		UMETA(DisplayName = "Human"),
 
-	ER_DefaultMAX	UMETA(DisplayName = "MAX")
-};
-
-UENUM(BlueprintType)
-enum class ESpecies : uint8
-{
-	ES_Undefined	UMETA(DisplayName = "Undefined"),
-	ES_Terran		UMETA(DisplayName = "Terran"),
-	ES_Alien		UMETA(DisplayName = "Alien"),
-	ES_Robotic		UMETA(DisplayName = "Robotic"),
-
-	ES_DefaultMAX	UMETA(DisplayName = "MAX")
+	EWR_DefaultMAX	UMETA(DisplayName = "MAX")
 };
 
 UENUM(BlueprintType)
@@ -37,4 +22,15 @@ enum class EWorkerRole : uint8
 	EWR_Pilot		UMETA(DisplayName = "Pilot"),
 
 	EWR_DefaultMAX	UMETA(DisplayName = "MAX")
+};
+
+UENUM(BlueprintType)
+enum class EWorkerStatus: uint8
+{
+	EWS_Idle		UMETA(DisplayName = "Idle"),
+	EWS_OnMission	UMETA(DisplayName = "On Mission"),
+	EWS_Working		UMETA(DisplayName = "Working"),
+	EWS_Injured		UMETA(DisplayName = "Injured"),
+	
+	EWS_DefaultMAX	UMETA(DisplayName = "MAX")
 };

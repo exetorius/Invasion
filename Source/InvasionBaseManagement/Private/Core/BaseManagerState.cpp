@@ -23,7 +23,7 @@ void ABaseManagerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
-	// Replicate all properties to owning client only (for now - can change to all clients later if needed)
+	// Replicate all properties to the owning client only (for now - can change to all clients later if needed)
 	DOREPLIFETIME(ABaseManagerState, OwningPlayerState);
 	DOREPLIFETIME(ABaseManagerState, BaseRegion);
 	DOREPLIFETIME(ABaseManagerState, WorkerRoster);

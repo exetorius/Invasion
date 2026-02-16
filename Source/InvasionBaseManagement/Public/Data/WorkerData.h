@@ -21,21 +21,44 @@ public:
 	virtual bool IsSupportedForNetworking() const override { return true; }
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
+	// --- IDENTITY ---
+	UPROPERTY(Replicated, VisibleAnywhere, BlueprintReadOnly, Category="Identity")
 	FGuid UniqueID;
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Identity")
 	FString Name;
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
-	int32 Age;
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Identity")
+	EWorkerRace Race;
 
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
-	ERace Race;
-
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
-	ESpecies Species;
-
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Worker")
-	EWorkerRole WorkerRole;
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Identity")
+	EWorkerRole Role;
+	
+	// -- COMBAT STATS ---
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Combat", meta=(ClampMin="0.0"))
+	float Health;
+	
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Combat", meta=(ClampMin="1.0"))
+	float MaxHealth;
+	
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Combat", meta=(ClampMin="0.0", ClampMax="100.0"))
+	float CombatSkill;
+	
+	// --- WORK STATS ---
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Work", meta=(ClampMin="0.0", ClampMax="100.0"))
+	float WorkEfficiency;
+	
+	// --- STATE ---
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="State", meta=(ClampMin="0.0", ClampMax="100.0"))
+	float Morale;
+	
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="State", meta=(ClampMin="1", ClampMax="3"))
+	int32 InjurySeverity;
+	
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="State")
+	bool bIsDead;
+	
+	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="State")
+	EWorkerStatus CurrentStatus;
+	
 };
