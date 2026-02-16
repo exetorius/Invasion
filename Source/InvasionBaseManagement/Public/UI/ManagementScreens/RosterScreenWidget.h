@@ -15,6 +15,7 @@ class INVASIONBASEMANAGEMENT_API URosterScreenWidget : public UBaseManagementScr
 	GENERATED_BODY()
 
 public:
+	void BindWorkerRosterChangeEvents();
 	virtual void NativeConstruct() override;
 
 	// Refresh the worker list from BaseManagerState
@@ -22,6 +23,8 @@ public:
 	void RefreshWorkerList();
 
 protected:
+	void OnWorkerRosterUpdated();
+	
 	// ScrollBox to hold worker tile widgets
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UScrollBox> WorkerListScrollBox;

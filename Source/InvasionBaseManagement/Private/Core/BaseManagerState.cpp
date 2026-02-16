@@ -3,13 +3,18 @@
 #include "Core/BaseManagerState.h"
 #include "Net/UnrealNetwork.h"
 #include "Engine/Engine.h"
+#include "Engine/NetDriver.h"
 #include "GameFramework/PlayerState.h"
+#include "UObject/UObjectGlobals.h"
 
 ABaseManagerState::ABaseManagerState()
 {
 	// Enable replication
 	bReplicates = true;
 	bAlwaysRelevant = true; // Always replicate to all clients
+
+	// CRITICAL: Required for AddReplicatedSubObject() to work
+	bReplicateUsingRegisteredSubObjectList = true;
 
 	// Initialize resources
 	Credits = 1000;
@@ -48,6 +53,14 @@ void ABaseManagerState::InitializeBase()
 		*BaseRegion.ToString());	
 }
 
+void ABaseManagerState::OnRep_WorkerRoster()
+{
+	UE_LOG(LogTemp, Log, TEXT("BaseManagerState: WorkerRoster replicated! Count: %d"), WorkerRoster.Num());
+
+	// Broadcast to UI that roster changed
+	OnWorkerRosterChanged.Broadcast();
+}
+
 void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
 {
 	// Client calls server version
@@ -61,9 +74,16 @@ void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
 	if (NewWorker)
 	{
 		WorkerRoster.Add(NewWorker);
+
+		// CRITICAL: Register as a replicated subobject to replicate to clients
+		AddReplicatedSubObject(NewWorker);
+
 		UE_LOG(LogTemp, Log, TEXT("Added worker: %s to base owned by %s"),
 			*NewWorker->Name,
 			OwningPlayerState ? *OwningPlayerState->GetPlayerName() : TEXT("Unknown"));
+
+		// Broadcast to UI that roster changed
+		OnWorkerRosterChanged.Broadcast();
 	}
 }
 
@@ -72,7 +92,14 @@ void ABaseManagerState::Server_AddWorker_Implementation(UWorkerData* NewWorker)
 	if (NewWorker)
 	{
 		WorkerRoster.Add(NewWorker);
+
+		// CRITICAL: Register as a replicated subobject to replicate to clients
+		AddReplicatedSubObject(NewWorker);
+
 		UE_LOG(LogTemp, Log, TEXT("Server: Added worker: %s"), *NewWorker->Name);
+
+		// Broadcast to UI that roster changed
+		OnWorkerRosterChanged.Broadcast();
 	}
 }
 

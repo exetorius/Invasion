@@ -6,18 +6,29 @@
 #include "Core/BaseManagerState.h"
 #include "Controller/ManagementPlayerController.h"
 #include "Components/ScrollBox.h"
+#include "GameFramework/PlayerState.h"
+
 
 void URosterScreenWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	// Populate worker list when screen is constructed
+	// Populate the worker list when the screen is constructed
 	PopulateWorkerList();
+	
+	// Bind to roster changes RepNotify
+	BindWorkerRosterChangeEvents();	
 }
 
 void URosterScreenWidget::RefreshWorkerList()
 {
 	PopulateWorkerList();
+}
+
+void URosterScreenWidget::OnWorkerRosterUpdated()
+{
+	UE_LOG(LogTemp, Log, TEXT("RosterScreenWidget: Worker roster updated, refreshing UI"));   
+	RefreshWorkerList();
 }
 
 void URosterScreenWidget::PopulateWorkerList()
@@ -62,3 +73,19 @@ void URosterScreenWidget::PopulateWorkerList()
 	}
 }
 
+void URosterScreenWidget::BindWorkerRosterChangeEvents()
+{	
+	if (CachedBaseManagerState)
+	{
+		CachedBaseManagerState->OnWorkerRosterChanged.AddUObject(this, &URosterScreenWidget::OnWorkerRosterUpdated);
+		return;
+	}
+
+	if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
+	{
+		if (ABaseManagerState* BaseState = PC->GetBaseManagerState())
+		{
+			BaseState->OnWorkerRosterChanged.AddUObject(this, &URosterScreenWidget::OnWorkerRosterUpdated);
+		}
+	}
+}

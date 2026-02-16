@@ -17,7 +17,11 @@ class INVASIONBASEMANAGEMENT_API ABaseManagerState : public AInfo
 {
 	GENERATED_BODY()
 
+	
 public:
+	DECLARE_MULTICAST_DELEGATE(FOnWorkerRosterChanged);
+	FOnWorkerRosterChanged OnWorkerRosterChanged;
+	
 	ABaseManagerState();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -31,8 +35,11 @@ public:
 	FName BaseRegion; 
 
 	// Worker roster for this base
-	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Base Manager")
+	UPROPERTY(ReplicatedUsing=OnRep_WorkerRoster, BlueprintReadOnly, Category = "Base Manager")
 	TArray<TObjectPtr<UWorkerData>> WorkerRoster;
+
+	UFUNCTION()
+	void OnRep_WorkerRoster();
 
 	// Base resources
 	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Base Manager")
