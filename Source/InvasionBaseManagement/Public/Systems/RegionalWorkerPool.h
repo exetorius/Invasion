@@ -20,6 +20,9 @@ class INVASIONBASEMANAGEMENT_API ARegionalWorkerPool : public AInfo
 	GENERATED_BODY()
 
 public:
+	DECLARE_MULTICAST_DELEGATE(FOnAvailableWorkersChanged);
+	FOnAvailableWorkersChanged OnAvailableWorkersChanged;
+	
 	ARegionalWorkerPool();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
@@ -29,8 +32,11 @@ public:
 	FName RegionID;
 
 	// Workers available for hire in this region
-	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Regional Pool")
+	UPROPERTY(ReplicatedUsing=OnRep_AvailableWorkers, BlueprintReadOnly, Category = "Regional Pool")
 	TArray<TObjectPtr<UWorkerData>> AvailableWorkers;
+	
+	UFUNCTION()
+	void OnRep_AvailableWorkers();
 
 	// Get all workers of a specific role
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Regional Pool")

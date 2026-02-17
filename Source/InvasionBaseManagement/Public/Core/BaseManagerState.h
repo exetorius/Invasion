@@ -55,6 +55,13 @@ public:
 	// Server-only function to add a worker (with validation)
 	UFUNCTION(Server, Reliable, Category = "Base Manager")
 	void Server_AddWorker(UWorkerData* NewWorker);
+	
+	UFUNCTION(BlueprintCallable, Category = "Base Manager")
+	void RemoveWorker(UWorkerData* OldWorker);
+	
+	// Server-only function to add a worker (with validation)
+	UFUNCTION(Server, Reliable, Category = "Base Manager")
+	void Server_RemoveWorker(UWorkerData* OldWorker);
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")
 	const TArray<UWorkerData*>& GetAllWorkers() const;

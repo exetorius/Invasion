@@ -30,23 +30,13 @@ void AManagementPlayerController::CheckPlayerReady()
 		CreateHUD();
 		return;
 	}
-	
-	ABaseManagerState* ManagerState = GetBaseManagerState();
-	if (!ManagerState)
-	{
-		GetWorldTimerManager().SetTimerForNextTick(this, &AManagementPlayerController::CheckPlayerReady);
-		return;
-	}
 
-	// Check that the WorkerData inside has actually replicated
-	if (ManagerState->GetAllWorkers().IsEmpty())
+	if (ABaseManagerState* ManagerState = GetBaseManagerState())
 	{
-		GetWorldTimerManager().SetTimerForNextTick(this, &AManagementPlayerController::CheckPlayerReady);
-		return;
+		CreateHUD();
 	}
-
-	// Everything is replicated and ready
-	CreateHUD();
+	else
+		GetWorldTimerManager().SetTimerForNextTick(this, &AManagementPlayerController::CheckPlayerReady);
 }
 
 void AManagementPlayerController::CreateHUD()

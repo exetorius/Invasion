@@ -6,7 +6,6 @@
 #include "Core/BaseManagerState.h"
 #include "Controller/ManagementPlayerController.h"
 #include "Components/ScrollBox.h"
-#include "GameFramework/PlayerState.h"
 
 
 void URosterScreenWidget::NativeConstruct()
@@ -42,35 +41,30 @@ void URosterScreenWidget::PopulateWorkerList()
 	// Clear existing tiles
 	WorkerListScrollBox->ClearChildren();
 
-	// Get player's BaseManagerState
-	if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
+	if (CachedBaseManagerState)
 	{
-		CachedBaseManagerState = PC->GetBaseManagerState();
+		const TArray<UWorkerData*>& Workers = CachedBaseManagerState->GetAllWorkers();
 
-		if (CachedBaseManagerState)
+		UE_LOG(LogTemp, Log, TEXT("RosterScreenWidget: Populating %d workers"), Workers.Num());
+
+		// Create a tile for each worker
+		for (UWorkerData* Worker : Workers)
 		{
-			const TArray<UWorkerData*>& Workers = CachedBaseManagerState->GetAllWorkers();
-
-			UE_LOG(LogTemp, Log, TEXT("RosterScreenWidget: Populating %d workers"), Workers.Num());
-
-			// Create a tile for each worker
-			for (UWorkerData* Worker : Workers)
+			if (Worker && WorkerTileClass)
 			{
-				if (Worker && WorkerTileClass)
+				if (URosterWorkerTileWidget* Tile = CreateWidget<URosterWorkerTileWidget>(this, WorkerTileClass))
 				{
-					if (URosterWorkerTileWidget* Tile = CreateWidget<URosterWorkerTileWidget>(this, WorkerTileClass))
-					{
-						Tile->SetWorkerData(Worker);
-						WorkerListScrollBox->AddChild(Tile);
-					}
+					Tile->SetWorkerData(Worker);
+					WorkerListScrollBox->AddChild(Tile);
 				}
 			}
 		}
-		else
-		{
-			UE_LOG(LogTemp, Warning, TEXT("RosterScreenWidget: Could not get BaseManagerState from PlayerController"));
-		}
 	}
+	else
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RosterScreenWidget: Could not get BaseManagerState"));
+	}
+
 }
 
 void URosterScreenWidget::BindWorkerRosterChangeEvents()

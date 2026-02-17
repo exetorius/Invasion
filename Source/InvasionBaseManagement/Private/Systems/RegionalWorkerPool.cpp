@@ -36,6 +36,13 @@ void ARegionalWorkerPool::BeginPlay()
 	}
 }
 
+void ARegionalWorkerPool::OnRep_AvailableWorkers()
+{
+	UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool: WorkerRoster replicated! Count: %d"), AvailableWorkers.Num());
+	
+	OnAvailableWorkersChanged.Broadcast();
+}
+
 TArray<UWorkerData*> ARegionalWorkerPool::GetWorkersByRole(EWorkerRole WorkerRole) const
 {
 	TArray<UWorkerData*> FilteredWorkers;
@@ -76,6 +83,8 @@ void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker, 
 		*RegionID.ToString(),
 		*Worker->Name,
 		*UEnum::GetValueAsString(Worker->Role));
+	
+	OnAvailableWorkersChanged.Broadcast();
 }
 
 void ARegionalWorkerPool::Server_ReturnWorker_Implementation(UWorkerData* Worker)
@@ -85,6 +94,12 @@ void ARegionalWorkerPool::Server_ReturnWorker_Implementation(UWorkerData* Worker
 		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Return failed - invalid worker"));
 		return;
 	}
+	
+	if (AvailableWorkers.Contains(Worker))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Return failed - worker already in pool"));
+		return;
+	}
 
 	// Add back to available pool
 	AvailableWorkers.Add(Worker);
@@ -92,6 +107,8 @@ void ARegionalWorkerPool::Server_ReturnWorker_Implementation(UWorkerData* Worker
 	UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Worker '%s' returned to pool"),
 		*RegionID.ToString(),
 		*Worker->Name);
+	
+	OnAvailableWorkersChanged.Broadcast();
 }
 
 void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 ScientistsCount, int32 EngineersCount, int32 MedicsCount, int32 PilotsCount)
@@ -155,6 +172,8 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Generated %d workers"),
 		*RegionID.ToString(),
 		AvailableWorkers.Num());
+	
+	OnAvailableWorkersChanged.Broadcast();
 }
 
 TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole WorkerRole)

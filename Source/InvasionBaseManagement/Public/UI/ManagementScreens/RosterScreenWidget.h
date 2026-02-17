@@ -35,8 +35,4 @@ protected:
 
 private:
 	void PopulateWorkerList();
-
-	// Cached reference to player's BaseManagerState
-	UPROPERTY()
-	TObjectPtr<class ABaseManagerState> CachedBaseManagerState;
 };

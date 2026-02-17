@@ -18,7 +18,14 @@ public:
 	DECLARE_DELEGATE_OneParam(FOnNavigationButtonPressed, EManagementView);
 	FOnNavigationButtonPressed OnNavigationButtonPressed;
 	
+	virtual void NativeConstruct() override;
+	
 protected:
 	UFUNCTION(BlueprintCallable)
 	void NavigationButtonPressed(const EManagementView View) const;
+	
+	void InitialiseScreenData();
+	
+	UPROPERTY()
+	TObjectPtr<class ABaseManagerState> CachedBaseManagerState;
 };

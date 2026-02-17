@@ -103,6 +103,55 @@ void ABaseManagerState::Server_AddWorker_Implementation(UWorkerData* NewWorker)
 	}
 }
 
+void ABaseManagerState::RemoveWorker(UWorkerData* OldWorker)
+{	
+	// Client calls server version
+	if (!HasAuthority())
+	{
+		Server_RemoveWorker(OldWorker);
+		return;
+	}
+	
+	// Check if worker exists in this pool
+	if (!OldWorker || !WorkerRoster.Contains(OldWorker))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: RemoveWorker called with invalid or unknown worker"));
+		return;
+	}
+
+	// Server-side execution
+	WorkerRoster.Remove(OldWorker);
+
+	// CRITICAL: Remove as a replicated subobject to reduce overheads
+	RemoveReplicatedSubObject(OldWorker);
+
+	UE_LOG(LogTemp, Log, TEXT("Removed worker: %s back to pool"),
+		*OldWorker->Name);
+
+	// Broadcast to UI that roster changed
+	OnWorkerRosterChanged.Broadcast();
+}
+
+void ABaseManagerState::Server_RemoveWorker_Implementation(UWorkerData* OldWorker)
+{
+	// Check if worker exists in this pool
+	if (!OldWorker || !WorkerRoster.Contains(OldWorker))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: RemoveWorker called with invalid or unknown worker"));
+		return;
+	}
+
+	WorkerRoster.Remove(OldWorker);
+
+	// CRITICAL: Remove as a replicated subobject to reduce overheads
+	RemoveReplicatedSubObject(OldWorker);
+
+	UE_LOG(LogTemp, Log, TEXT("Server: Removed worker: %s"), *OldWorker->Name);
+
+	// Broadcast to UI that roster changed
+	OnWorkerRosterChanged.Broadcast();
+}
+
 const TArray<UWorkerData*>& ABaseManagerState::GetAllWorkers() const
 {
 	return WorkerRoster;
