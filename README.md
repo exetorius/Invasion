@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 0 in progress |
+| **Status** | Early development — Sprint 0 complete |
 
 ---
 
@@ -71,7 +71,7 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 `UWorkerData` is a replicated `UObject`. Key implementation details:
 - `bReplicateUsingRegisteredSubObjectList = true` on both `ABaseManagerState` and `ARegionalWorkerPool`
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
-- `ReplicatedUsing=OnRep_WorkerRoster` triggers UI updates on clients
+- Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
 
 ---
@@ -84,12 +84,12 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 |---|---|---|---|
 | #2 | Finalise Multiplayer Model | 2 | ✅ Done |
 | #3 | Worker Hiring UI | 5 | ✅ Done |
-| #4 | Fire Workers Feature | 2 | ⏳ To Do |
+| #4 | Fire Workers Feature | 2 | ✅ Done |
 | #5 | Bug: Player 2 tile lists empty | — | ✅ Done |
 | #6 | Fix WorkerTileClass null on client | 2 | ✅ Done |
-| #7 | Hiring UI — Stats, Cost & Credits | 3 | ⏳ To Do |
+| #7 | Hiring UI — Stats, Cost & Credits | 3 | ⏳ Next Sprint |
 
-**Planned:** 9 SP | **Completed:** 9 SP
+**Planned:** 9 SP | **Completed:** 9 SP ✅
 
 ---
 
@@ -112,8 +112,8 @@ Notable decisions logged so far:
 - [x] Per-player BaseManagerState
 - [x] Regional worker pools
 - [x] Hiring UI (single player + multiplayer)
+- [x] Fire workers (returns to pool, multiplayer tested)
 - [ ] Hiring UI polish (stats, cost, credits validation)
-- [ ] Fire workers
 - [ ] Nation selection screen
 - [ ] Save system
 - [ ] Research system
