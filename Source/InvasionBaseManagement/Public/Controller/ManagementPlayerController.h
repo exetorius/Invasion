@@ -20,6 +20,9 @@ class INVASIONBASEMANAGEMENT_API AManagementPlayerController : public APlayerCon
 public:
 	AManagementPlayerController();
 	
+	UFUNCTION(Server, Reliable, Category = "UI")
+	void Server_RequestHireWorker(class UWorkerData* Worker, class ARegionalWorkerPool* Pool);
+	
 protected:
 	virtual void BeginPlay() override;	
 	

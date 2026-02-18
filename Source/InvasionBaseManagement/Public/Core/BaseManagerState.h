@@ -59,7 +59,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Base Manager")
 	void RemoveWorker(UWorkerData* OldWorker);
 	
-	// Server-only function to add a worker (with validation)
+	// Server-only function to remove a worker (with validation)
 	UFUNCTION(Server, Reliable, Category = "Base Manager")
 	void Server_RemoveWorker(UWorkerData* OldWorker);
 

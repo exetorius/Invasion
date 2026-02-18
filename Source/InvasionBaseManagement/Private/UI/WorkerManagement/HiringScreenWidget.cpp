@@ -4,6 +4,7 @@
 #include "UI/WorkerManagement/HiringScreenWidget.h"
 
 #include "Components/ScrollBox.h"
+#include "Controller/ManagementPlayerController.h"
 #include "Core/BaseManagerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Systems/RegionalWorkerPool.h"
@@ -61,18 +62,6 @@ void UHiringScreenWidget::PopulateHiringWorkerList()
 		return;
 	}
 	
-	if (!CachedBaseManagerState)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HiringScreenWidget: No BaseManagerState found for player"));
-		return;
-	}
-	
-	if (!CachedRegionalPool)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("HiringScreenWidget: No RegionalWorkerPool found in level"));
-		return;
-	}
-	
 	UE_LOG(LogTemp, Log, TEXT("HiringScreenWidget: Populating worker list"));
 	
 	WorkerListScrollBox->ClearChildren();	
@@ -87,11 +76,8 @@ void UHiringScreenWidget::PopulateHiringWorkerList()
 		{
 			if (Worker && WorkerTileClass)
 			{
-				UE_LOG(LogTemp, Log, TEXT("HiringScreenWidget: WorkerTileClass valid: %s"), WorkerTileClass ? TEXT("YES") : TEXT("NO"));
 				if (UHiringWorkerTileWidget* Tile = CreateWidget<UHiringWorkerTileWidget>(this, WorkerTileClass))
 				{
-					UE_LOG(LogTemp, Log, TEXT("HiringScreenWidget: Processing worker %s"), *Worker->Name);
-
 					Tile->SetWorkerData(Worker);					
 					Tile->OnHireClicked.BindUObject(this, &UHiringScreenWidget::OnWorkerHired);
 					WorkerListScrollBox->AddChild(Tile);
@@ -107,9 +93,16 @@ void UHiringScreenWidget::PopulateHiringWorkerList()
 
 void UHiringScreenWidget::OnWorkerHired(UWorkerData* Worker)
 {
-	if (CachedRegionalPool)
+	if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
 	{
-		CachedRegionalPool->Server_HireWorker(Worker, CachedBaseManagerState);
+		if (CachedRegionalPool)
+		{
+			PC->Server_RequestHireWorker(Worker, CachedRegionalPool);
+		}
+		else
+		{
+			UE_LOG(LogTemp, Warning, TEXT("HiringScreenWidget: Could not get RegionalWorkerPool"));
+		}
 	}
 }
 

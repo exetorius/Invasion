@@ -33,7 +33,7 @@ public:
 
 	// Workers available for hire in this region
 	UPROPERTY(ReplicatedUsing=OnRep_AvailableWorkers, BlueprintReadOnly, Category = "Regional Pool")
-	TArray<TObjectPtr<UWorkerData>> AvailableWorkers;
+	TArray<TObjectPtr<UWorkerData>> AvailableWorkers;	
 	
 	UFUNCTION()
 	void OnRep_AvailableWorkers();	
@@ -59,6 +59,9 @@ private:
 
 	// Helper: Random name generation
 	FString GenerateRandomName();
+	
+	// Server-only function to add a worker (with validation)
+	void AddWorkerToPool(UWorkerData* NewWorker);
 	
 // Getters & Setters
 public:

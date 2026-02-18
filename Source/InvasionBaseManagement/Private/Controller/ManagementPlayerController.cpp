@@ -10,10 +10,22 @@
 #include "Core/BaseManagerState.h"
 #include "GameMode/ManagementGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "Systems/RegionalWorkerPool.h"
 
 AManagementPlayerController::AManagementPlayerController()
 {
 	CheatClass = UInvasionCheatManager::StaticClass();
+}
+
+void AManagementPlayerController::Server_RequestHireWorker_Implementation(UWorkerData* Worker,
+	ARegionalWorkerPool* Pool)
+{
+	if (!Worker || !Pool) { return;}
+	
+	if (ABaseManagerState* Base = GetBaseManagerState())
+	{
+		Pool->Server_HireWorker(Worker, Base);
+	}	
 }
 
 void AManagementPlayerController::BeginPlay()

@@ -10,6 +10,9 @@ ARegionalWorkerPool::ARegionalWorkerPool()
 	// Enable replication
 	bReplicates = true;
 	bAlwaysRelevant = true; // All clients should see available workers
+	
+	// CRITICAL: Required for AddReplicatedSubObject() to work
+	bReplicateUsingRegisteredSubObjectList = true;
 
 	// Default region
 	RegionID = FName("DefaultRegion");
@@ -33,6 +36,23 @@ void ARegionalWorkerPool::BeginPlay()
 	if (HasAuthority())
 	{
 		UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s' initialized"), *RegionID.ToString());
+	}
+}
+
+void ARegionalWorkerPool::AddWorkerToPool(UWorkerData* NewWorker)
+{
+	if (NewWorker)
+	{
+		AvailableWorkers.Add(NewWorker);
+		
+		// CRITICAL: Register as a replicated subobject to replicate to clients
+		AddReplicatedSubObject(NewWorker);
+		
+		UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Added worker: %s"),
+			*RegionID.ToString(),
+			*NewWorker->Name);
+		
+		OnAvailableWorkersChanged.Broadcast();
 	}
 }
 
@@ -60,6 +80,9 @@ void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker, 
 
 	// Remove from available pool
 	AvailableWorkers.Remove(Worker);
+	
+	// CRITICAL: De-register as a replicated subobject to replicate to clients
+	RemoveReplicatedSubObject(Worker);
 
 	// Add to hiring base
 	HiringBase->AddWorker(Worker);
@@ -87,13 +110,7 @@ void ARegionalWorkerPool::Server_ReturnWorker_Implementation(UWorkerData* Worker
 	}
 
 	// Add back to available pool
-	AvailableWorkers.Add(Worker);
-
-	UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Worker '%s' returned to pool"),
-		*RegionID.ToString(),
-		*Worker->Name);
-	
-	OnAvailableWorkersChanged.Broadcast();
+	AddWorkerToPool(Worker);
 }
 
 void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 ScientistsCount, int32 EngineersCount, int32 MedicsCount, int32 PilotsCount)
@@ -110,7 +127,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Soldier);
 		if (Worker)
 		{
-			AvailableWorkers.Add(Worker);
+			AddWorkerToPool(Worker);
 		}
 	}
 
@@ -120,7 +137,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Scientist);
 		if (Worker)
 		{
-			AvailableWorkers.Add(Worker);
+			AddWorkerToPool(Worker);
 		}
 	}
 
@@ -130,7 +147,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Engineer);
 		if (Worker)
 		{
-			AvailableWorkers.Add(Worker);
+			AddWorkerToPool(Worker);
 		}
 	}
 
@@ -140,7 +157,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Medic);
 		if (Worker)
 		{
-			AvailableWorkers.Add(Worker);
+			AddWorkerToPool(Worker);
 		}
 	}
 
@@ -150,7 +167,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Pilot);
 		if (Worker)
 		{
-			AvailableWorkers.Add(Worker);
+			AddWorkerToPool(Worker);
 		}
 	}
 
