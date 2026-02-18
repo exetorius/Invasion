@@ -22,7 +22,7 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Hiring")
 	void OnHireButtonClicked();
 	
-	// Set the worker data and update UI
+	// Set the worker data and update the UI
 	UFUNCTION(BlueprintCallable, Category = "Hiring")
 	void SetWorkerData(UWorkerData* Worker);
 	

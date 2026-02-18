@@ -93,6 +93,8 @@ void UHiringScreenWidget::PopulateHiringWorkerList()
 
 void UHiringScreenWidget::OnWorkerHired(UWorkerData* Worker)
 {
+	if (!Worker) { return;}
+	
 	if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
 	{
 		if (CachedRegionalPool)

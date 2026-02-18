@@ -24,8 +24,33 @@ void AManagementPlayerController::Server_RequestHireWorker_Implementation(UWorke
 	
 	if (ABaseManagerState* Base = GetBaseManagerState())
 	{
-		Pool->Server_HireWorker(Worker, Base);
+		// Already server-authoritative, call implementation directly
+		Pool->Server_HireWorker_Implementation(Worker, Base);
 	}	
+}
+
+void AManagementPlayerController::Server_RequestFireWorker_Implementation(UWorkerData* Worker)
+{
+	if (!Worker) { return;}
+	
+	if (ABaseManagerState* Base = GetBaseManagerState())
+	{
+		TArray<AActor*> FoundActors;
+		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARegionalWorkerPool::StaticClass(), FoundActors);
+		for (AActor* Actor : FoundActors)
+		{
+			if (ARegionalWorkerPool* Pool = Cast<ARegionalWorkerPool>(Actor))
+			{
+				if (Pool->RegionID == Base->BaseRegion)
+				{
+					// Already server-authoritative, call implementation directly
+					Pool->Server_ReturnWorker_Implementation(Worker);
+					Base->RemoveWorker(Worker);					
+					break;
+				}
+			}
+		}		
+	}
 }
 
 void AManagementPlayerController::BeginPlay()
@@ -35,6 +60,7 @@ void AManagementPlayerController::BeginPlay()
 	CheckPlayerReady();
 }
 
+// TODO: Redundant calls? Can use GetBaseManagerState helper 
 void AManagementPlayerController::CheckPlayerReady()
 {
 	if (CachedBaseManagerState)

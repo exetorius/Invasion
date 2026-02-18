@@ -61,7 +61,7 @@ private:
 	FString GenerateRandomName();
 	
 	// Server-only function to add a worker (with validation)
-	void AddWorkerToPool(UWorkerData* NewWorker);
+	void AddGeneratedWorker(UWorkerData* NewWorker);
 	
 // Getters & Setters
 public:

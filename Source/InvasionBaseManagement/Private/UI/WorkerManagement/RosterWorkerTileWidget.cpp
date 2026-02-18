@@ -3,6 +3,11 @@
 #include "UI/WorkerManagement//RosterWorkerTileWidget.h"
 #include "Data/WorkerData.h"
 
+void URosterWorkerTileWidget::OnFireButtonClicked()
+{
+	OnFireClicked.ExecuteIfBound( WorkerData);
+}
+
 void URosterWorkerTileWidget::SetWorkerData(UWorkerData* Worker)
 {
 	WorkerData = Worker;

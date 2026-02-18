@@ -6,6 +6,7 @@
 #include "Blueprint/UserWidget.h"
 #include "RosterWorkerTileWidget.generated.h"
 
+class UWorkerData;
 /**
  * Widget representing a single worker in the roster list
  * Displays worker name, role, age, race, species
@@ -16,9 +17,15 @@ class INVASIONBASEMANAGEMENT_API URosterWorkerTileWidget : public UUserWidget
 	GENERATED_BODY()
 
 public:
+	DECLARE_DELEGATE_OneParam(FOnFireClicked, UWorkerData*);
+	FOnFireClicked OnFireClicked;
+	
+	UFUNCTION(BlueprintCallable, Category = "Roster")
+	void OnFireButtonClicked();
+	
 	// Set the worker data and update UI
 	UFUNCTION(BlueprintCallable, Category = "Roster")
-	void SetWorkerData(class UWorkerData* Worker);
+	void SetWorkerData(UWorkerData* Worker);
 
 	// Get the current worker data
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Roster")

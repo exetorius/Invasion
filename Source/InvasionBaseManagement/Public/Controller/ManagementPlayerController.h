@@ -23,6 +23,9 @@ public:
 	UFUNCTION(Server, Reliable, Category = "UI")
 	void Server_RequestHireWorker(class UWorkerData* Worker, class ARegionalWorkerPool* Pool);
 	
+	UFUNCTION(Server, Reliable, Category = "UI")
+	void Server_RequestFireWorker(UWorkerData* Worker);
+	
 protected:
 	virtual void BeginPlay() override;	
 	

@@ -35,4 +35,5 @@ protected:
 
 private:
 	void PopulateWorkerList();
+	void OnWorkerFired(class UWorkerData* Worker);
 };

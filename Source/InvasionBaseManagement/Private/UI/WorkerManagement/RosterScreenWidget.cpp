@@ -55,7 +55,8 @@ void URosterScreenWidget::PopulateWorkerList()
 			{
 				if (URosterWorkerTileWidget* Tile = CreateWidget<URosterWorkerTileWidget>(this, WorkerTileClass))
 				{
-					Tile->SetWorkerData(Worker);					
+					Tile->SetWorkerData(Worker);
+					Tile->OnFireClicked.BindUObject(this, &URosterScreenWidget::OnWorkerFired);
 					WorkerListScrollBox->AddChild(Tile);
 				}
 			}
@@ -64,6 +65,16 @@ void URosterScreenWidget::PopulateWorkerList()
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("RosterScreenWidget: Could not get BaseManagerState"));
+	}
+}
+
+void URosterScreenWidget::OnWorkerFired( UWorkerData* Worker)
+{
+	if (!Worker) { return;}
+	
+	if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
+	{
+		PC->Server_RequestFireWorker(Worker);
 	}
 }
 
