@@ -36,11 +36,7 @@ public:
 	TArray<TObjectPtr<UWorkerData>> AvailableWorkers;
 	
 	UFUNCTION()
-	void OnRep_AvailableWorkers();
-
-	// Get all workers of a specific role
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Regional Pool")
-	TArray<UWorkerData*> GetWorkersByRole(EWorkerRole WorkerRole) const;
+	void OnRep_AvailableWorkers();	
 
 	// Server: Hire a worker from this pool (removes from pool)
 	UFUNCTION(Server, Reliable, Category = "Regional Pool")
@@ -63,4 +59,12 @@ private:
 
 	// Helper: Random name generation
 	FString GenerateRandomName();
+	
+// Getters & Setters
+public:
+	// Get all workers of a specific role
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Regional Pool")
+	TArray<UWorkerData*> GetWorkersByRole(EWorkerRole WorkerRole) const;
+	
+	FORCEINLINE const TArray<UWorkerData*>& GetAvailableWorkers() const { return AvailableWorkers; }
 };

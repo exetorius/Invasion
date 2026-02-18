@@ -4,12 +4,14 @@
 #include "Blueprint/UserWidget.h"
 #include "ManagementHUD.generated.h"
 
+//TODO: Move EManagementView into a dedicated UITypes enum class
 UENUM(BlueprintType)
 enum class EManagementView : uint8
 {
 	EMV_World		UMETA(DisplayName = "World"),
 	EMV_Base		UMETA(DisplayName = "Base"),
 	EMV_Roster		UMETA(DisplayName = "Roster"),
+	EMV_Hiring		UMETA(DisplayName = "Hiring"),
 	EMV_Character	UMETA(DisplayName = "Character"),
 	EMV_Warehouse	UMETA(DisplayName = "Warehouse"),
 	EMV_Research	UMETA(DisplayName = "Research"),
@@ -43,6 +45,9 @@ protected:
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UUserWidget> WBP_RosterScreen;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UUserWidget> WBP_HiringScreen;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UUserWidget> WBP_CharacterScreen;	

@@ -1,8 +1,8 @@
 // CopyrightNotice
 
 
-#include "UI/ManagementScreens/RosterScreenWidget.h"
-#include "UI/ManagementScreens/Roster/RosterWorkerTileWidget.h"
+#include "UI/WorkerManagement/RosterScreenWidget.h"
+#include "UI/WorkerManagement/RosterWorkerTileWidget.h"
 #include "Core/BaseManagerState.h"
 #include "Controller/ManagementPlayerController.h"
 #include "Components/ScrollBox.h"
@@ -19,6 +19,7 @@ void URosterScreenWidget::NativeConstruct()
 	BindWorkerRosterChangeEvents();	
 }
 
+//TODO: Comb this class for inconsistencies like this redundant function call
 void URosterScreenWidget::RefreshWorkerList()
 {
 	PopulateWorkerList();
@@ -54,7 +55,7 @@ void URosterScreenWidget::PopulateWorkerList()
 			{
 				if (URosterWorkerTileWidget* Tile = CreateWidget<URosterWorkerTileWidget>(this, WorkerTileClass))
 				{
-					Tile->SetWorkerData(Worker);
+					Tile->SetWorkerData(Worker);					
 					WorkerListScrollBox->AddChild(Tile);
 				}
 			}
@@ -64,9 +65,9 @@ void URosterScreenWidget::PopulateWorkerList()
 	{
 		UE_LOG(LogTemp, Warning, TEXT("RosterScreenWidget: Could not get BaseManagerState"));
 	}
-
 }
 
+//TODO: Parent class now has a InitialiseScreenData function to cache the base manager. Remove the lower half of this
 void URosterScreenWidget::BindWorkerRosterChangeEvents()
 {	
 	if (CachedBaseManagerState)

@@ -16,11 +16,13 @@ void UManagementHUD::NativeConstruct()
 	SwitchToView(EManagementView::EMV_World);
 }
 
+//TODO: Pull out ButtonBar and remove redundant binds to screens with no buttons 
 void UManagementHUD::SetupViewMap()
 {
 	ViewMap.Add(EManagementView::EMV_World, WBP_WorldScreen);
 	ViewMap.Add(EManagementView::EMV_Base, WBP_BaseScreen);
 	ViewMap.Add(EManagementView::EMV_Roster, WBP_RosterScreen);
+	ViewMap.Add(EManagementView::EMV_Hiring, WBP_HiringScreen);
 	ViewMap.Add(EManagementView::EMV_Character, WBP_CharacterScreen);
 	ViewMap.Add(EManagementView::EMV_Warehouse, WBP_WarehouseScreen);
 	ViewMap.Add(EManagementView::EMV_Research, WBP_ResearchScreen);

@@ -43,21 +43,6 @@ void ARegionalWorkerPool::OnRep_AvailableWorkers()
 	OnAvailableWorkersChanged.Broadcast();
 }
 
-TArray<UWorkerData*> ARegionalWorkerPool::GetWorkersByRole(EWorkerRole WorkerRole) const
-{
-	TArray<UWorkerData*> FilteredWorkers;
-
-	for (UWorkerData* Worker : AvailableWorkers)
-	{
-		if (Worker && Worker->Role == WorkerRole)
-		{
-			FilteredWorkers.Add(Worker);
-		}
-	}
-
-	return FilteredWorkers;
-}
-
 void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker, ABaseManagerState* HiringBase)
 {
 	if (!Worker || !HiringBase)
@@ -256,4 +241,19 @@ FString ARegionalWorkerPool::GenerateRandomName()
 	const FString LastName = LastNames[FMath::RandRange(0, LastNames.Num() - 1)];
 
 	return FString::Printf(TEXT("%s %s"), *FirstName, *LastName);
+}
+
+TArray<UWorkerData*> ARegionalWorkerPool::GetWorkersByRole(EWorkerRole WorkerRole) const
+{
+	TArray<UWorkerData*> FilteredWorkers;
+
+	for (UWorkerData* Worker : AvailableWorkers)
+	{
+		if (Worker && Worker->Role == WorkerRole)
+		{
+			FilteredWorkers.Add(Worker);
+		}
+	}
+
+	return FilteredWorkers;
 }

@@ -1,6 +1,6 @@
 // CopyrightNotice
 
-#include "UI/ManagementScreens/Roster/RosterWorkerTileWidget.h"
+#include "UI/WorkerManagement//RosterWorkerTileWidget.h"
 #include "Data/WorkerData.h"
 
 void URosterWorkerTileWidget::SetWorkerData(UWorkerData* Worker)
