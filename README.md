@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 0 complete |
+| **Status** | Early development — Sprint 1 in progress |
 
 ---
 
@@ -78,7 +78,20 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 
 ## Current Sprint
 
-**Sprint 0 — Foundation** | Feb 16–23, 2026
+**Sprint 1 — Base Activity** | Feb 19–25, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #7 | Hiring UI — Stat Display on Tiles | 1 | ⏳ To Do |
+| #8 | Task Foundation + Research Screen | 3 | ⏳ To Do |
+| #9 | Engineering Screen | 1 | ⏳ To Do |
+| #10 | Base Overview Dashboard | 2 | ⏳ To Do |
+
+**Planned:** 7 SP | **Completed:** 0 SP
+
+---
+
+## Sprint 0 — Foundation | Feb 16–18, 2026
 
 | # | Task | Points | Status |
 |---|---|---|---|
@@ -87,7 +100,6 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 | #4 | Fire Workers Feature | 2 | ✅ Done |
 | #5 | Bug: Player 2 tile lists empty | — | ✅ Done |
 | #6 | Fix WorkerTileClass null on client | 2 | ✅ Done |
-| #7 | Hiring UI — Stats, Cost & Credits | 3 | ⏳ Next Sprint |
 
 **Planned:** 9 SP | **Completed:** 9 SP ✅
 
