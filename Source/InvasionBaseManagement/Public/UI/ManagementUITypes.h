@@ -15,5 +15,5 @@ enum class EManagementView : uint8
 	EMV_Engineering UMETA(DisplayName = "Engineering"),
 	EMV_ButtonBar	UMETA(DisplayName = "Button Bar"), // TODO: Remove this - its not a screen, currently using to bind the navigation event 
 	
-	EMV_DefaultMAX UMETA(DisplayName = "MAX")
+	EMV_MAX UMETA(DisplayName = "MAX")
 };

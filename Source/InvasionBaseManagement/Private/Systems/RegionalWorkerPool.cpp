@@ -130,7 +130,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate soldiers
 	for (int32 i = 0; i < SoldiersCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Soldier);
+		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Soldier);
 		if (Worker)
 		{
 			AddGeneratedWorker(Worker);
@@ -140,7 +140,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate scientists
 	for (int32 i = 0; i < ScientistsCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Scientist);
+		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Scientist);
 		if (Worker)
 		{
 			AddGeneratedWorker(Worker);
@@ -150,7 +150,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate engineers
 	for (int32 i = 0; i < EngineersCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Engineer);
+		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Engineer);
 		if (Worker)
 		{
 			AddGeneratedWorker(Worker);
@@ -160,7 +160,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate medics
 	for (int32 i = 0; i < MedicsCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Medic);
+		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Medic);
 		if (Worker)
 		{
 			AddGeneratedWorker(Worker);
@@ -170,7 +170,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate pilots
 	for (int32 i = 0; i < PilotsCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWR_Pilot);
+		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Pilot);
 		if (Worker)
 		{
 			AddGeneratedWorker(Worker);
@@ -205,11 +205,11 @@ TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole Wo
 	// Role-based combat skill ranges
 	switch (WorkerRole)
 	{
-		case EWorkerRole::EWR_Soldier: 
-			NewWorker->CombatSkill = FMath::FRandRange(50.0f, 90.0f); 
+		case EWorkerRole::EWRO_Soldier:
+			NewWorker->CombatSkill = FMath::FRandRange(50.0f, 90.0f);
 			break;
-		case EWorkerRole::EWR_Medic: 
-			NewWorker->CombatSkill = FMath::FRandRange(30.0f, 60.0f); 
+		case EWorkerRole::EWRO_Medic:
+			NewWorker->CombatSkill = FMath::FRandRange(30.0f, 60.0f);
 			break;
 		default: 
 			NewWorker->CombatSkill = FMath::FRandRange(10.0f, 50.0f); 
@@ -220,8 +220,8 @@ TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole Wo
 	// Role-based work efficiency
 	switch (WorkerRole)
 	{
-	case EWorkerRole::EWR_Scientist:
-	case EWorkerRole::EWR_Engineer:
+	case EWorkerRole::EWRO_Scientist:
+	case EWorkerRole::EWRO_Engineer:
 		NewWorker->WorkEfficiency = FMath::FRandRange(60.0f, 95.0f); // Specialists: 60-95
 		break;
 	default:
@@ -245,6 +245,7 @@ TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole Wo
 	return NewWorker;
 }
 
+// TODO: Come up with a better name generation system 
 FString ARegionalWorkerPool::GenerateRandomName()
 {
 	// Simple name generation - can be expanded later

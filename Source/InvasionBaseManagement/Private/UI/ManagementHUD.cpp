@@ -37,6 +37,7 @@ void UManagementHUD::SetupViewMap()
 	ViewMap.Add(EManagementView::EMV_Engineering, WBP_EngineeringScreen);
 }
 
+// TODO: Implement navigation button binding for each screen when implementing subscreen navigation
 void UManagementHUD::BindNavigationDelegates()
 {
 	/*

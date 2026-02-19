@@ -6,20 +6,20 @@ enum class EWorkerRace : uint8
 	EWR_Unknown,
 	EWR_Human,	
 
-	EWR_DefaultMAX	
+	EWR_MAX	
 };
 
 UENUM()
 enum class EWorkerRole : uint8
 {
-	EWR_None,
-	EWR_Soldier,
-	EWR_Scientist,
-	EWR_Engineer,
-	EWR_Medic,
-	EWR_Pilot,
+	EWRO_None,
+	EWRO_Soldier,
+	EWRO_Scientist,
+	EWRO_Engineer,
+	EWRO_Medic,
+	EWRO_Pilot,
 
-	EWR_DefaultMAX	UMETA(DisplayName = "MAX")
+	EWRO_MAX	UMETA(DisplayName = "MAX")
 };
 
 UENUM()
@@ -30,5 +30,5 @@ enum class EWorkerStatus: uint8
 	EWS_Working,
 	EWS_Injured,
 	
-	EWS_DefaultMAX	UMETA(DisplayName = "MAX")
+	EWS_MAX	UMETA(DisplayName = "MAX")
 };

@@ -31,6 +31,7 @@ public:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Identity")
 	EWorkerRace Race;
 
+	// TODO: Display role as text on the Widget instead of EWR_ROLE 
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="Identity")
 	EWorkerRole Role;
 	
