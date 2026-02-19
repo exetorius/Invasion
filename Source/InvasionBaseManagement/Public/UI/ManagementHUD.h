@@ -2,24 +2,8 @@
 
 #include "CoreMinimal.h"
 #include "Blueprint/UserWidget.h"
+#include "ManagementUITypes.h"
 #include "ManagementHUD.generated.h"
-
-//TODO: Move EManagementView into a dedicated UITypes enum class
-UENUM(BlueprintType)
-enum class EManagementView : uint8
-{
-	EMV_World		UMETA(DisplayName = "World"),
-	EMV_Base		UMETA(DisplayName = "Base"),
-	EMV_Roster		UMETA(DisplayName = "Roster"),
-	EMV_Hiring		UMETA(DisplayName = "Hiring"),
-	EMV_Character	UMETA(DisplayName = "Character"),
-	EMV_Warehouse	UMETA(DisplayName = "Warehouse"),
-	EMV_Research	UMETA(DisplayName = "Research"),
-	EMV_Engineering UMETA(DisplayName = "Engineering"),
-	
-	EMV_ButtonBar	UMETA(DisplayName = "Button Bar"),
-	EMV_DefaultMAX	UMETA(DisplayName="MAX")
-};
 
 UCLASS()
 class INVASIONBASEMANAGEMENT_API UManagementHUD : public UUserWidget
@@ -38,31 +22,31 @@ protected:
 	TObjectPtr<class UWidgetSwitcher> WidgetSwitcher;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_WorldScreen;
+	TObjectPtr<class UWorldScreenWidget> WBP_WorldScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_BaseScreen;
+	TObjectPtr<class UBaseScreenWidget> WBP_BaseScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_RosterScreen;
+	TObjectPtr<class URosterScreenWidget> WBP_RosterScreen;
 	
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_HiringScreen;
+	TObjectPtr<class UHiringScreenWidget> WBP_HiringScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_CharacterScreen;	
+	TObjectPtr<class UCharacterScreenWidget> WBP_CharacterScreen;	
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_WarehouseScreen;
+	TObjectPtr<class UWarehouseScreenWidget> WBP_WarehouseScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_ResearchScreen;
+	TObjectPtr<class UResearchScreenWidget> WBP_ResearchScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_EngineeringScreen;
+	TObjectPtr<class UEngineeringScreenWidget> WBP_EngineeringScreen;
 	
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<UUserWidget> WBP_ButtonBar;
+	TObjectPtr<class UManagementNavigationWidget> WBP_ButtonBar;
 
 private:
 	void SetupViewMap();

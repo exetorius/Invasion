@@ -2,28 +2,22 @@
 
 #pragma once
 
-#include "Blueprint/UserWidget.h"
-#include "UI/ManagementHUD.h"
+#include "UI/ManagementNavigationWidget.h"
 #include "BaseManagementScreenWidget.generated.h"
 
  /**
  * Base management screen widget class that all other screen widgets inherit from.
+ * Extends UManagementNavigationWidget with screen data and state concerns.
  */
 UCLASS()
-class INVASIONBASEMANAGEMENT_API UBaseManagementScreenWidget : public UUserWidget
+class INVASIONBASEMANAGEMENT_API UBaseManagementScreenWidget : public UManagementNavigationWidget
 {
 	GENERATED_BODY()
 
 public:
-	DECLARE_DELEGATE_OneParam(FOnNavigationButtonPressed, EManagementView);
-	FOnNavigationButtonPressed OnNavigationButtonPressed;
-	
 	virtual void NativeConstruct() override;
-	
+
 protected:
-	UFUNCTION(BlueprintCallable)
-	void NavigationButtonPressed(const EManagementView View) const;
-	
 	void InitialiseScreenData();
 	
 	UPROPERTY()

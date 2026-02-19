@@ -1,6 +1,15 @@
 ﻿#include "UI/ManagementHUD.h"
+#include "UI/ManagementScreens/BaseScreenWidget.h"
+#include "UI/ManagementScreens/CharacterScreenWidget.h"
+#include "UI/ManagementScreens/EngineeringScreenWidget.h"
+#include "UI/ManagementScreens/WorldScreenWidget.h"
+#include "UI/WorkerManagement/RosterScreenWidget.h"
+#include "UI/WorkerManagement/HiringScreenWidget.h"
+#include "UI/ManagementScreens/WarehouseScreenWidget.h"
+#include "UI/ManagementScreens/ResearchScreenWidget.h"
+#include "UI/ManagementNavigationWidget.h"
+
 #include "Components/WidgetSwitcher.h"
-#include "UI/ManagementScreens/BaseManagementScreenWidget.h"
 
 
 
@@ -16,7 +25,6 @@ void UManagementHUD::NativeConstruct()
 	SwitchToView(EManagementView::EMV_World);
 }
 
-//TODO: Pull out ButtonBar and remove redundant binds to screens with no buttons 
 void UManagementHUD::SetupViewMap()
 {
 	ViewMap.Add(EManagementView::EMV_World, WBP_WorldScreen);
@@ -27,17 +35,22 @@ void UManagementHUD::SetupViewMap()
 	ViewMap.Add(EManagementView::EMV_Warehouse, WBP_WarehouseScreen);
 	ViewMap.Add(EManagementView::EMV_Research, WBP_ResearchScreen);
 	ViewMap.Add(EManagementView::EMV_Engineering, WBP_EngineeringScreen);
-	ViewMap.Add(EManagementView::EMV_ButtonBar, WBP_ButtonBar);
 }
 
 void UManagementHUD::BindNavigationDelegates()
 {
+	/*
 	for (const TTuple<EManagementView, UUserWidget*>& ScreenPair : ViewMap)
 	{
 		if (UBaseManagementScreenWidget* Screen = Cast<UBaseManagementScreenWidget>(ScreenPair.Value))
 		{
 			Screen->OnNavigationButtonPressed.BindUObject(this, &UManagementHUD::SwitchToView);
 		}
+	}
+	*/
+	if (WBP_ButtonBar)
+	{
+		WBP_ButtonBar->OnNavigationButtonPressed.BindUObject(this, &UManagementHUD::SwitchToView);
 	}
 }
 

@@ -1,36 +1,34 @@
 ﻿#pragma once
 
-#include "WorkerTypes.generated.h"
-
-UENUM(BlueprintType)
+UENUM()
 enum class EWorkerRace : uint8
 {
-	EWR_Unknown		UMETA(DisplayName = "Unknown"),
-	EWR_Human		UMETA(DisplayName = "Human"),
+	EWR_Unknown,
+	EWR_Human,	
 
-	EWR_DefaultMAX	UMETA(DisplayName = "MAX")
+	EWR_DefaultMAX	
 };
 
-UENUM(BlueprintType)
+UENUM()
 enum class EWorkerRole : uint8
 {
-	EWR_None		UMETA(DisplayName = "None"),
-	EWR_Soldier		UMETA(DisplayName = "Soldier"),
-	EWR_Scientist	UMETA(DisplayName = "Scientist"),
-	EWR_Engineer    UMETA(DisplayName = "Engineer"),
-	EWR_Medic		UMETA(DisplayName = "Medic"),
-	EWR_Pilot		UMETA(DisplayName = "Pilot"),
+	EWR_None,
+	EWR_Soldier,
+	EWR_Scientist,
+	EWR_Engineer,
+	EWR_Medic,
+	EWR_Pilot,
 
 	EWR_DefaultMAX	UMETA(DisplayName = "MAX")
 };
 
-UENUM(BlueprintType)
+UENUM()
 enum class EWorkerStatus: uint8
 {
-	EWS_Idle		UMETA(DisplayName = "Idle"),
-	EWS_OnMission	UMETA(DisplayName = "On Mission"),
-	EWS_Working		UMETA(DisplayName = "Working"),
-	EWS_Injured		UMETA(DisplayName = "Injured"),
+	EWS_Idle,
+	EWS_OnMission,
+	EWS_Working,
+	EWS_Injured,
 	
 	EWS_DefaultMAX	UMETA(DisplayName = "MAX")
 };

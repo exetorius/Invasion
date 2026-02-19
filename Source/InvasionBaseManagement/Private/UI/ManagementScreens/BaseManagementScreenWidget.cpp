@@ -5,13 +5,8 @@
 void UBaseManagementScreenWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
-	
-	InitialiseScreenData();
-}
 
-void UBaseManagementScreenWidget::NavigationButtonPressed(const EManagementView View) const
-{
-	OnNavigationButtonPressed.ExecuteIfBound(View);
+	InitialiseScreenData();
 }
 
 void UBaseManagementScreenWidget::InitialiseScreenData()

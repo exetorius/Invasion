@@ -19,7 +19,7 @@ void URosterScreenWidget::NativeConstruct()
 	BindWorkerRosterChangeEvents();	
 }
 
-//TODO: Comb this class for inconsistencies like this redundant function call
+// Button functionality called from BP
 void URosterScreenWidget::RefreshWorkerList()
 {
 	PopulateWorkerList();
@@ -28,7 +28,7 @@ void URosterScreenWidget::RefreshWorkerList()
 void URosterScreenWidget::OnWorkerRosterUpdated()
 {
 	UE_LOG(LogTemp, Log, TEXT("RosterScreenWidget: Worker roster updated, refreshing UI"));   
-	RefreshWorkerList();
+	PopulateWorkerList();
 }
 
 void URosterScreenWidget::PopulateWorkerList()
@@ -78,7 +78,6 @@ void URosterScreenWidget::OnWorkerFired( UWorkerData* Worker)
 	}
 }
 
-//TODO: Parent class now has a InitialiseScreenData function to cache the base manager. Remove the lower half of this
 void URosterScreenWidget::BindWorkerRosterChangeEvents()
 {	
 	if (CachedBaseManagerState)
@@ -87,11 +86,6 @@ void URosterScreenWidget::BindWorkerRosterChangeEvents()
 		return;
 	}
 
-	if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
-	{
-		if (ABaseManagerState* BaseState = PC->GetBaseManagerState())
-		{
-			BaseState->OnWorkerRosterChanged.AddUObject(this, &URosterScreenWidget::OnWorkerRosterUpdated);
-		}
-	}
+	InitialiseScreenData();
+	CachedBaseManagerState->OnWorkerRosterChanged.AddUObject(this, &URosterScreenWidget::OnWorkerRosterUpdated);
 }

@@ -60,21 +60,16 @@ void AManagementPlayerController::BeginPlay()
 	CheckPlayerReady();
 }
 
-// TODO: Redundant calls? Can use GetBaseManagerState helper 
 void AManagementPlayerController::CheckPlayerReady()
 {
-	if (CachedBaseManagerState)
-	{
-		CreateHUD();
-		return;
-	}
-
-	if (ABaseManagerState* ManagerState = GetBaseManagerState())
+	if (GetBaseManagerState())
 	{
 		CreateHUD();
 	}
 	else
-		GetWorldTimerManager().SetTimerForNextTick(this, &AManagementPlayerController::CheckPlayerReady);
+	{
+		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &AManagementPlayerController::CheckPlayerReady);
+	}
 }
 
 void AManagementPlayerController::CreateHUD()
