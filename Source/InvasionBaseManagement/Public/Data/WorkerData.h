@@ -59,6 +59,7 @@ public:
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="State")
 	bool bIsDead;
 	
+	// TODO: Add a field to display worker's current task, activity or status
 	UPROPERTY(Replicated, EditAnywhere, BlueprintReadWrite, Category="State")
 	EWorkerStatus CurrentStatus;
 	

@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/TaskTypes.h"
 #include "GameFramework/Info.h"
 #include "Data/WorkerData.h"
 #include "BaseManagerState.generated.h"
@@ -21,6 +22,8 @@ class INVASIONBASEMANAGEMENT_API ABaseManagerState : public AInfo
 public:
 	DECLARE_MULTICAST_DELEGATE(FOnWorkerRosterChanged);
 	FOnWorkerRosterChanged OnWorkerRosterChanged;
+	DECLARE_MULTICAST_DELEGATE(FOnTasksChanged);
+	FOnTasksChanged OnTasksChanged;
 	
 	ABaseManagerState();
 
@@ -65,9 +68,28 @@ public:
 
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")
 	const TArray<UWorkerData*>& GetAllWorkers() const;
+	
+	UFUNCTION(BlueprintCallable, Category = "Base Manager")
+	void AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID);
+	
+	UFUNCTION(BlueprintCallable, Category = "Base Manager")
+	void UnassignWorkerFromTask(UWorkerData* Worker, FGuid TaskID);
+	
+	UWorkerData* FindWorkerByGUID(FGuid WorkerID) const;
+	
+	// Task handling
+	UPROPERTY(ReplicatedUsing=OnRep_ActiveTasks, BlueprintReadOnly, Category = "Base Manager")
+	TArray<FBaseTask> ActiveTasks;
+	
+	UFUNCTION()
+	void OnRep_ActiveTasks();	
 
 protected:
 	virtual void BeginPlay() override;
 private:
 	void InitializeBase();
+	
+	// Task timer handling
+	FTimerHandle TaskTimerHandle;
+	void OnProgressUpdate();
 };

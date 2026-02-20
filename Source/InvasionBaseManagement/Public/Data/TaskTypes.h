@@ -18,7 +18,7 @@ struct FBaseTask
 	GENERATED_BODY()
 	
 	UPROPERTY()
-	FGuid TaskID;
+	FGuid TaskID = FGuid::NewGuid();
 	
 	UPROPERTY()
 	FString TaskName;
