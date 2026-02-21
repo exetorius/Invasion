@@ -10,14 +10,14 @@ Track your story point velocity over time to improve sprint planning accuracy.
 **Start Date:** 2026-02-19  
 **End Date:** 2026-02-25  
 **Planned Story Points:** 7  
-**Completed Story Points:** 1
+**Completed Story Points:** 4
 
 ### Sprint Backlog
 
 | Issue # | Task | Story Points | Status |
 |---------|------|--------------|--------|
 | 7 | Worker Hiring UI — Stat Display on Tiles | 1 | ✅ Done |
-| 8 | Task Foundation + Research Screen | 3 | ⏳ To Do |
+| 8 | Task Foundation + Research Screen | 3 | ✅ Done |
 | 9 | Engineering Screen | 1 | ⏳ To Do |
 | 10 | Base Overview Dashboard | 2 | ⏳ To Do |
 | **TOTAL** | | **7** | |

@@ -10,7 +10,7 @@ class ABaseManagerState;
 
 /**
  * PlayerController for base management
- * Creates HUD and provides access to player's BaseManagerState
+ * Creates HUD and provides access to the player's BaseManagerState
  */
 UCLASS()
 class INVASIONBASEMANAGEMENT_API AManagementPlayerController : public APlayerController
@@ -25,6 +25,12 @@ public:
 	
 	UFUNCTION(Server, Reliable, Category = "UI")
 	void Server_RequestFireWorker(UWorkerData* Worker);
+	
+	UFUNCTION(Server, Reliable, Category = "UI")
+	void Server_RequestAssignWorker(UWorkerData* Worker, FGuid TaskID);
+	
+	UFUNCTION(Server, Reliable, Category = "UI")
+	void Server_RequestUnassignWorker(UWorkerData* Worker, FGuid TaskID);
 	
 protected:
 	virtual void BeginPlay() override;	

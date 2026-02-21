@@ -43,7 +43,7 @@ void ABaseManagerState::OnRep_WorkerRoster()
 {
 	UE_LOG(LogTemp, Log, TEXT("BaseManagerState: WorkerRoster replicated! Count: %d"), WorkerRoster.Num());
 
-	// Broadcast to UI that roster changed
+	// Broadcast to UI that the roster changed
 	OnWorkerRosterChanged.Broadcast();
 }
 
@@ -63,6 +63,7 @@ void ABaseManagerState::OnProgressUpdate()
 		
 		FBaseTask ModifiedTask = Task;		
 		ModifiedTask.Progress += 1.f * Task.AssignedWorkerIDs.Num();
+		UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Task %s progress updated to %f"), *Task.TaskID.ToString(), ModifiedTask.Progress);
 		if (ModifiedTask.Progress >= ModifiedTask.BaseDuration)
 		{
 			ModifiedTask.Progress = 0;				
@@ -80,7 +81,7 @@ void ABaseManagerState::BeginPlay()
 	if (HasAuthority())
 	{
 		InitializeBase();
-		// TODO: Per task timer functiionality tweaks / polish
+		// TODO: Per task timer functionality tweaks / polish
 		GetWorld()->GetTimerManager().SetTimer(TaskTimerHandle, this, &ABaseManagerState::OnProgressUpdate, 1.f, true);
 	}
 }
@@ -134,7 +135,7 @@ void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
 			*NewWorker->Name,
 			OwningPlayerState ? *OwningPlayerState->GetPlayerName() : TEXT("Unknown"));
 
-		// Broadcast to UI that roster changed
+		// Broadcast to UI that the roster changed
 		OnWorkerRosterChanged.Broadcast();
 	}
 }
@@ -150,7 +151,7 @@ void ABaseManagerState::Server_AddWorker_Implementation(UWorkerData* NewWorker)
 
 		UE_LOG(LogTemp, Log, TEXT("Server: Added worker: %s"), *NewWorker->Name);
 
-		// Broadcast to UI that roster changed
+		// Broadcast to UI that the roster changed
 		OnWorkerRosterChanged.Broadcast();
 	}
 }
@@ -164,7 +165,7 @@ void ABaseManagerState::RemoveWorker(UWorkerData* OldWorker)
 		return;
 	}
 	
-	// Check if worker exists in this pool
+	// Check if this worker exists in this pool
 	if (!OldWorker || !WorkerRoster.Contains(OldWorker))
 	{
 		UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: RemoveWorker called with invalid or unknown worker"));
@@ -180,7 +181,7 @@ void ABaseManagerState::RemoveWorker(UWorkerData* OldWorker)
 	UE_LOG(LogTemp, Log, TEXT("Removed worker: %s back to pool"),
 		*OldWorker->Name);
 
-	// Broadcast to UI that roster changed
+	// Broadcast to UI that the roster changed
 	OnWorkerRosterChanged.Broadcast();
 }
 
@@ -249,7 +250,7 @@ void ABaseManagerState::AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID)
 			OnTasksChanged.Broadcast();
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: UnassignWorkerFromTask - TaskID not found in ActiveTasks"))
+	UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: AssignWorkerFromTask - TaskID not found in ActiveTasks"))
 }
 
 void ABaseManagerState::UnassignWorkerFromTask(UWorkerData* Worker, FGuid TaskID)

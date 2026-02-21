@@ -27,7 +27,7 @@ protected:
 	TObjectPtr<class UScrollBox> WorkerListScrollBox;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<class UHiringWorkerTileWidget> WorkerTileClass;
+	TSubclassOf<class UHiringWorkerTileWidget> WorkerTileWidget;
 	
 private:
 	void PopulateHiringWorkerList();

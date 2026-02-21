@@ -18,6 +18,7 @@ class INVASIONBASEMANAGEMENT_API ABaseManagerState : public AInfo
 {
 	GENERATED_BODY()
 
+	//TODO : BIG - Move task management into its own class / sublcass? There is going to be a lot of logic perhaps 
 	
 public:
 	DECLARE_MULTICAST_DELEGATE(FOnWorkerRosterChanged);

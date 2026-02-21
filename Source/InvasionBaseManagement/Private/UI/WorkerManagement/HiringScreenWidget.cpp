@@ -25,33 +25,32 @@ void UHiringScreenWidget::RefreshWorkerList()
 
 void UHiringScreenWidget::InitialiseRegionalPool()
 {
-	if (CachedBaseManagerState)
+	if (!CachedBaseManagerState)
 	{
-		// Get all the RegionalWorkerPools from the World (there due to AlwaysRelevant)
-		TArray<AActor*> FoundActors;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARegionalWorkerPool::StaticClass(), FoundActors);
+		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &UHiringScreenWidget::InitialiseRegionalPool);
+		return;
+	}
 
-		// Iterate over the found actors to find the correct pool for this region
-		for (AActor* Pool : FoundActors)
+	// Get all the RegionalWorkerPools from the World (there due to AlwaysRelevant)
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARegionalWorkerPool::StaticClass(), FoundActors);
+
+	// Iterate over the found actors to find the correct pool for this region
+	for (AActor* Pool : FoundActors)
+	{
+		const ARegionalWorkerPool* CastedPool = Cast<ARegionalWorkerPool>(Pool);
+		if (CastedPool && CastedPool->RegionID == CachedBaseManagerState->BaseRegion)
 		{
-			const ARegionalWorkerPool* CastedPool = Cast<ARegionalWorkerPool>(Pool);
-			if (CastedPool && CastedPool->RegionID == CachedBaseManagerState->BaseRegion)
-			{
-				CachedRegionalPool = Cast<ARegionalWorkerPool>(Pool);
-				CachedRegionalPool->OnAvailableWorkersChanged.AddUObject(this, &UHiringScreenWidget::OnRegionalPoolChanged);
-				PopulateHiringWorkerList();
-				break;
-			}
-		}
-		if (!CachedRegionalPool)
-		{
-			GetWorld()->GetTimerManager().SetTimerForNextTick(this, &UHiringScreenWidget::InitialiseRegionalPool);
+			CachedRegionalPool = Cast<ARegionalWorkerPool>(Pool);
+			CachedRegionalPool->OnAvailableWorkersChanged.AddUObject(this, &UHiringScreenWidget::OnRegionalPoolChanged);
+			PopulateHiringWorkerList();
+			break;
 		}
 	}
-	else
+	if (!CachedRegionalPool)
 	{
-		InitialiseScreenData();
-	}	
+		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &UHiringScreenWidget::InitialiseRegionalPool);
+	}
 }
 
 void UHiringScreenWidget::PopulateHiringWorkerList()
@@ -74,9 +73,9 @@ void UHiringScreenWidget::PopulateHiringWorkerList()
 		
 		for (UWorkerData* Worker : AvailableWorkers)
 		{
-			if (Worker && WorkerTileClass)
+			if (Worker && WorkerTileWidget)
 			{
-				if (UHiringWorkerTileWidget* Tile = CreateWidget<UHiringWorkerTileWidget>(this, WorkerTileClass))
+				if (UHiringWorkerTileWidget* Tile = CreateWidget<UHiringWorkerTileWidget>(this, WorkerTileWidget))
 				{
 					Tile->SetWorkerData(Worker);					
 					Tile->OnHireClicked.BindUObject(this, &UHiringScreenWidget::OnWorkerHired);

@@ -14,9 +14,9 @@ class INVASIONBASEMANAGEMENT_API URosterScreenWidget : public UBaseManagementScr
 {
 	GENERATED_BODY()
 
-public:
-	void BindWorkerRosterChangeEvents();
+public:	
 	virtual void NativeConstruct() override;
+	
 
 	// Refresh the worker list from BaseManagerState
 	UFUNCTION(BlueprintCallable, Category = "Roster")
@@ -34,6 +34,8 @@ protected:
 	TSubclassOf<class URosterWorkerTileWidget> WorkerTileClass;
 
 private:
+	void InitialiseRosterScreen();
 	void PopulateWorkerList();
+	void BindWorkerRosterChangeEvents();
 	void OnWorkerFired(class UWorkerData* Worker);
 };

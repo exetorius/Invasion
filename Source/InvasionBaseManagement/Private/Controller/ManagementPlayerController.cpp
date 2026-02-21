@@ -53,6 +53,26 @@ void AManagementPlayerController::Server_RequestFireWorker_Implementation(UWorke
 	}
 }
 
+void AManagementPlayerController::Server_RequestAssignWorker_Implementation(UWorkerData* Worker, FGuid TaskID)
+{
+	if (!Worker || !TaskID.IsValid()) { return;}
+	
+	if (ABaseManagerState* Base = GetBaseManagerState())
+	{
+		Base->AssignWorkerToTask(Worker, TaskID);
+	}
+}
+
+void AManagementPlayerController::Server_RequestUnassignWorker_Implementation(UWorkerData* Worker, FGuid TaskID)
+{
+	if (!Worker || !TaskID.IsValid()) { return;}
+	
+	if (ABaseManagerState* Base = GetBaseManagerState())
+	{
+		Base->UnassignWorkerFromTask(Worker, TaskID);
+	}
+}
+
 void AManagementPlayerController::BeginPlay()
 {
 	Super::BeginPlay();

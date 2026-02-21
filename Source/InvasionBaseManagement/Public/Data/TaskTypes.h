@@ -17,24 +17,24 @@ struct FBaseTask
 {
 	GENERATED_BODY()
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	FGuid TaskID = FGuid::NewGuid();
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	FString TaskName;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	ETaskType TaskType;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	int32 MaxWorkers;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	TArray<FGuid> AssignedWorkerIDs;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	float Progress;
 	
-	UPROPERTY()
+	UPROPERTY(BlueprintReadOnly)
 	float BaseDuration;
 };

@@ -12,11 +12,7 @@ void URosterScreenWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
-	// Populate the worker list when the screen is constructed
-	PopulateWorkerList();
-	
-	// Bind to roster changes RepNotify
-	BindWorkerRosterChangeEvents();	
+	InitialiseRosterScreen();	
 }
 
 // Button functionality called from BP
@@ -31,8 +27,20 @@ void URosterScreenWidget::OnWorkerRosterUpdated()
 	PopulateWorkerList();
 }
 
+void URosterScreenWidget::InitialiseRosterScreen()
+{
+	if (!CachedBaseManagerState)
+	{
+		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &URosterScreenWidget::InitialiseRosterScreen);
+		return;
+	}
+	PopulateWorkerList();	
+	BindWorkerRosterChangeEvents();	
+}
+
 void URosterScreenWidget::PopulateWorkerList()
 {
+	// TODO: Display workers in a list by Role - Soldiers, Scientists, Engineers, Medics etc
 	if (!WorkerListScrollBox)
 	{
 		UE_LOG(LogTemp, Error, TEXT("RosterScreenWidget: WorkerListScrollBox is null - ensure it's bound in Blueprint"));
@@ -68,6 +76,11 @@ void URosterScreenWidget::PopulateWorkerList()
 	}
 }
 
+void URosterScreenWidget::BindWorkerRosterChangeEvents()
+{	
+	CachedBaseManagerState->OnWorkerRosterChanged.AddUObject(this, &URosterScreenWidget::OnWorkerRosterUpdated);
+}
+
 void URosterScreenWidget::OnWorkerFired( UWorkerData* Worker)
 {
 	if (!Worker) { return;}
@@ -76,16 +89,4 @@ void URosterScreenWidget::OnWorkerFired( UWorkerData* Worker)
 	{
 		PC->Server_RequestFireWorker(Worker);
 	}
-}
-
-void URosterScreenWidget::BindWorkerRosterChangeEvents()
-{	
-	if (CachedBaseManagerState)
-	{
-		CachedBaseManagerState->OnWorkerRosterChanged.AddUObject(this, &URosterScreenWidget::OnWorkerRosterUpdated);
-		return;
-	}
-
-	InitialiseScreenData();
-	CachedBaseManagerState->OnWorkerRosterChanged.AddUObject(this, &URosterScreenWidget::OnWorkerRosterUpdated);
 }
