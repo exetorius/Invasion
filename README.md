@@ -84,10 +84,10 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 |---|---|---|---|
 | #7 | Hiring + Roster UI — Stat Display on Tiles | 1 | ✅ Done |
 | #8 | Task Foundation + Research Screen | 3 | ✅ Done |
-| #9 | Engineering Screen | 1 | ⏳ To Do |
+| #9 | Engineering Screen | 1 | ✅ Done |
 | #10 | Base Overview Dashboard | 2 | ⏳ To Do |
 
-**Planned:** 7 SP | **Completed:** 4 SP
+**Planned:** 7 SP | **Completed:** 5 SP
 
 ---
 
@@ -127,7 +127,7 @@ Notable decisions logged so far:
 - [x] Fire workers (returns to pool, multiplayer tested)
 - [x] Hiring + Roster UI stat display (Blueprint tiles)
 - [x] Task data layer + Research screen (assign/unassign workers, 1s progress timer, multiplayer tested)
-- [ ] Engineering screen
+- [x] Engineering screen (mirrors research, Engineer role filter)
 - [ ] Base overview dashboard
 - [ ] Nation selection screen
 - [ ] Save system
