@@ -61,6 +61,7 @@ void ABaseManagerState::OnProgressUpdate()
 	{
 		if (Task.AssignedWorkerIDs.Num() == 0) { continue; }
 		
+		// Copy - modify -- assign
 		FBaseTask ModifiedTask = Task;		
 		ModifiedTask.Progress += 1.f * Task.AssignedWorkerIDs.Num();
 		UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Task %s progress updated to %f"), *Task.TaskID.ToString(), ModifiedTask.Progress);
@@ -92,6 +93,7 @@ void ABaseManagerState::InitializeBase()
 		OwningPlayerState ? *OwningPlayerState->GetPlayerName() : TEXT("Unknown"),
 		*BaseRegion.ToString());	
 	
+	// --- SCIENCE TASKS ---
 	FBaseTask AlienAlloyTask;
 	AlienAlloyTask.TaskName = TEXT("Alien Alloy Analysis");
 	AlienAlloyTask.TaskType = ETaskType::ETT_Research;
@@ -112,6 +114,28 @@ void ABaseManagerState::InitializeBase()
 	NeuralInterfaceTask.MaxWorkers = 2;
 	NeuralInterfaceTask.BaseDuration = 45;	
 	ActiveTasks.Add(NeuralInterfaceTask);
+	
+	// --- ENGINEERING TASKS ---
+	FBaseTask ParticleAccelerator;
+	ParticleAccelerator.TaskName = TEXT("Particle Accelerator Design");
+	ParticleAccelerator.TaskType = ETaskType::ETT_Engineering;
+	ParticleAccelerator.MaxWorkers = 3;
+	ParticleAccelerator.BaseDuration = 30;	
+	ActiveTasks.Add(ParticleAccelerator);
+	
+	FBaseTask QuantumMissile;
+	QuantumMissile.TaskName = TEXT("Quantum Missile Testing");
+	QuantumMissile.TaskType = ETaskType::ETT_Engineering;
+	QuantumMissile.MaxWorkers = 2;
+	QuantumMissile.BaseDuration = 60;	
+	ActiveTasks.Add(QuantumMissile);
+	
+	FBaseTask EmpGrenade;
+	EmpGrenade.TaskName = TEXT("EMP Grenade Manufacture");
+	EmpGrenade.TaskType = ETaskType::ETT_Engineering;
+	EmpGrenade.MaxWorkers = 2;
+	EmpGrenade.BaseDuration = 45;	
+	ActiveTasks.Add(EmpGrenade);
 }
 
 void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
@@ -250,7 +274,6 @@ void ABaseManagerState::AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID)
 			OnTasksChanged.Broadcast();
 		}
 	}
-	UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: AssignWorkerFromTask - TaskID not found in ActiveTasks"))
 }
 
 void ABaseManagerState::UnassignWorkerFromTask(UWorkerData* Worker, FGuid TaskID)
@@ -279,7 +302,6 @@ void ABaseManagerState::UnassignWorkerFromTask(UWorkerData* Worker, FGuid TaskID
 			UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: Worker %s not assigned to task %s"), *Worker->Name, *TaskID.ToString());
 		}			
 	}
-	UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: UnassignWorkerFromTask - TaskID not found in ActiveTasks"));
 }
 
 UWorkerData* ABaseManagerState::FindWorkerByGUID(FGuid WorkerID) const

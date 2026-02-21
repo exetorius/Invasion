@@ -97,8 +97,8 @@ void UResearchScreenWidget::OnUnassignClicked(FGuid TaskID)
 		{
 			if (Task.TaskID == TaskID && Task.AssignedWorkerIDs.Num() > 0)
 			{
-				// Get the first available worker
-				if (UWorkerData* WorkerToRemove = CachedBaseManagerState->FindWorkerByGUID(Task.AssignedWorkerIDs[0]))
+				// Get the last added worker
+				if (UWorkerData* WorkerToRemove = CachedBaseManagerState->FindWorkerByGUID(Task.AssignedWorkerIDs[Task.AssignedWorkerIDs.Num() - 1]))
 				{
 					if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
 					{
