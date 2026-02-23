@@ -19,7 +19,7 @@ enum class EWorkerRole : uint8
 	EWRO_Medic,
 	EWRO_Pilot,
 
-	EWRO_MAX	UMETA(DisplayName = "MAX")
+	EWRO_MAX
 };
 
 UENUM()
@@ -30,5 +30,16 @@ enum class EWorkerStatus: uint8
 	EWS_Working,
 	EWS_Injured,
 	
-	EWS_MAX	UMETA(DisplayName = "MAX")
+	EWS_MAX
+};
+
+UENUM()
+enum class EWorkerInjurySeverity : uint8
+{
+	EWIS_None,
+	EWIS_Minor,
+	EWIS_Major,
+	EWIS_Critical,
+	
+	EWIS_MAX
 };

@@ -54,10 +54,10 @@ void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker, 
 		return;
 	}
 
-	// Check if worker exists in this pool
+	// Check if this worker exists in this pool
 	if (!AvailableWorkers.Contains(Worker))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Worker '%s' not found in pool"), *Worker->Name);
+		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Worker '%s' not found in pool"), *Worker->GetWorkerName());
 		return;
 	}
 
@@ -72,8 +72,8 @@ void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker, 
 
 	UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Hired '%s' (%s)"),
 		*RegionID.ToString(),
-		*Worker->Name,
-		*UEnum::GetValueAsString(Worker->Role));
+		*Worker->GetWorkerName(),
+		*UEnum::GetValueAsString(Worker->GetRole()));
 	
 	OnAvailableWorkersChanged.Broadcast();
 }
@@ -99,7 +99,7 @@ void ARegionalWorkerPool::Server_ReturnWorker_Implementation(UWorkerData* Worker
 	
 	UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Added worker: %s"),
 		*RegionID.ToString(),
-		*Worker->Name);
+		*Worker->GetWorkerName());
 	
 	OnAvailableWorkersChanged.Broadcast();
 }
@@ -115,7 +115,7 @@ void ARegionalWorkerPool::AddGeneratedWorker(UWorkerData* NewWorker)
 		
 		UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Added worker: %s"),
 			*RegionID.ToString(),
-			*NewWorker->Name);		
+			*NewWorker->GetWorkerName());		
 	}
 }
 
@@ -186,7 +186,8 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 
 TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole WorkerRole)
 {
-	UWorkerData* NewWorker = NewObject<UWorkerData>(this);
+	// TODO: Update method so race can be random instead of fixed Human
+	UWorkerData* NewWorker = UWorkerData::CreateWorker(this, WorkerRole, EWorkerRace::EWR_Human);
 	if (!NewWorker)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Failed to generate worker"));
@@ -194,25 +195,23 @@ TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole Wo
 	}
 	
 	// --- IDENTITY ---
-	NewWorker->Name = GenerateRandomName();
-	NewWorker->Race = EWorkerRace::EWR_Human;
-	NewWorker->Role = WorkerRole;
+	NewWorker->SetWorkerName(GenerateRandomName());
 	
 	// --- COMBAT STATS ---
-	NewWorker->MaxHealth = 100.0f;
-	NewWorker->Health = NewWorker->MaxHealth;
+	NewWorker->SetMaxHealth(100.0f);
+	NewWorker->SetHealth(NewWorker->GetMaxHealth());
 	
 	// Role-based combat skill ranges
 	switch (WorkerRole)
 	{
 		case EWorkerRole::EWRO_Soldier:
-			NewWorker->CombatSkill = FMath::FRandRange(50.0f, 90.0f);
+			NewWorker->SetCombatSkill(FMath::FRandRange(50.0f, 90.0f));
 			break;
 		case EWorkerRole::EWRO_Medic:
-			NewWorker->CombatSkill = FMath::FRandRange(30.0f, 60.0f);
+			NewWorker->SetCombatSkill(FMath::FRandRange(30.0f, 60.0f));
 			break;
 		default: 
-			NewWorker->CombatSkill = FMath::FRandRange(10.0f, 50.0f); 
+			NewWorker->SetCombatSkill(FMath::FRandRange(10.0f, 50.0f)); 
 			break; // Scientists/Engineers
 	}
 	
@@ -222,25 +221,24 @@ TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole Wo
 	{
 	case EWorkerRole::EWRO_Scientist:
 	case EWorkerRole::EWRO_Engineer:
-		NewWorker->WorkEfficiency = FMath::FRandRange(60.0f, 95.0f); // Specialists: 60-95
+		NewWorker->SetWorkEfficiency(FMath::FRandRange(60.0f, 95.0f)); // Specialists: 60-95
 		break;
 	default:
-		NewWorker->WorkEfficiency = FMath::FRandRange(40.0f, 75.0f); // Others: 40-75
+		NewWorker->SetWorkEfficiency(FMath::FRandRange(40.0f, 75.0f)); // Others: 40-75
 		break;
 	}
 	
 	// --- STATE ---
-	NewWorker->Morale = FMath::FRandRange(80.0f, 100.0f);
-	NewWorker->InjurySeverity = 0;
-	NewWorker->bIsDead = false;
-	NewWorker->CurrentStatus = EWorkerStatus::EWS_Idle;
+	NewWorker->SetMorale(FMath::FRandRange(80.0f, 100.0f));
+	NewWorker->SetInjurySeverity(EWorkerInjurySeverity::EWIS_None);
+	NewWorker->SetCurrentStatus(EWorkerStatus::EWS_Idle);
 	
 	UE_LOG(LogTemp, Log, TEXT("Generated Worker: %s (%s) | Combat: %.1f | Work: %.1f | Morale: %.1f"),
-		*NewWorker->Name,
-		*UEnum::GetValueAsString(NewWorker->Role),
-		NewWorker->CombatSkill,
-		NewWorker->WorkEfficiency,
-		NewWorker->Morale);
+		*NewWorker->GetWorkerName(),
+		*UEnum::GetValueAsString(NewWorker->GetRole()),
+		NewWorker->GetCombatSkill(),
+		NewWorker->GetWorkEfficiency(),
+		NewWorker->GetMorale());
 	
 	return NewWorker;
 }
@@ -273,7 +271,7 @@ TArray<UWorkerData*> ARegionalWorkerPool::GetWorkersByRole(EWorkerRole WorkerRol
 
 	for (UWorkerData* Worker : AvailableWorkers)
 	{
-		if (Worker && Worker->Role == WorkerRole)
+		if (Worker && Worker->GetRole() == WorkerRole)
 		{
 			FilteredWorkers.Add(Worker);
 		}

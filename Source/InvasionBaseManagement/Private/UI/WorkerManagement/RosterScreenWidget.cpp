@@ -10,15 +10,18 @@
 
 void URosterScreenWidget::NativeConstruct()
 {
-	Super::NativeConstruct();
-
-	InitialiseRosterScreen();	
+	Super::NativeConstruct();	
 }
 
 // Button functionality called from BP
 void URosterScreenWidget::RefreshWorkerList()
 {
 	PopulateWorkerList();
+}
+
+void URosterScreenWidget::OnScreenDataReady()
+{
+	InitialiseRosterScreen();	
 }
 
 void URosterScreenWidget::OnWorkerRosterUpdated()
@@ -29,11 +32,6 @@ void URosterScreenWidget::OnWorkerRosterUpdated()
 
 void URosterScreenWidget::InitialiseRosterScreen()
 {
-	if (!CachedBaseManagerState)
-	{
-		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &URosterScreenWidget::InitialiseRosterScreen);
-		return;
-	}
 	PopulateWorkerList();	
 	BindWorkerRosterChangeEvents();	
 }

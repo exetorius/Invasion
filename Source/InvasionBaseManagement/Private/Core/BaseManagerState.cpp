@@ -156,7 +156,7 @@ void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
 		AddReplicatedSubObject(NewWorker);
 
 		UE_LOG(LogTemp, Log, TEXT("Added worker: %s to base owned by %s"),
-			*NewWorker->Name,
+			*NewWorker->GetWorkerName(),
 			OwningPlayerState ? *OwningPlayerState->GetPlayerName() : TEXT("Unknown"));
 
 		// Broadcast to UI that the roster changed
@@ -173,7 +173,7 @@ void ABaseManagerState::Server_AddWorker_Implementation(UWorkerData* NewWorker)
 		// CRITICAL: Register as a replicated subobject to replicate to clients
 		AddReplicatedSubObject(NewWorker);
 
-		UE_LOG(LogTemp, Log, TEXT("Server: Added worker: %s"), *NewWorker->Name);
+		UE_LOG(LogTemp, Log, TEXT("Server: Added worker: %s"), *NewWorker->GetWorkerName());
 
 		// Broadcast to UI that the roster changed
 		OnWorkerRosterChanged.Broadcast();
@@ -203,7 +203,7 @@ void ABaseManagerState::RemoveWorker(UWorkerData* OldWorker)
 	RemoveReplicatedSubObject(OldWorker);
 
 	UE_LOG(LogTemp, Log, TEXT("Removed worker: %s back to pool"),
-		*OldWorker->Name);
+		*OldWorker->GetWorkerName());
 
 	// Broadcast to UI that the roster changed
 	OnWorkerRosterChanged.Broadcast();
@@ -223,15 +223,10 @@ void ABaseManagerState::Server_RemoveWorker_Implementation(UWorkerData* OldWorke
 	// CRITICAL: Remove as a replicated subobject to reduce overheads
 	RemoveReplicatedSubObject(OldWorker);
 
-	UE_LOG(LogTemp, Log, TEXT("Server: Removed worker: %s"), *OldWorker->Name);
+	UE_LOG(LogTemp, Log, TEXT("Server: Removed worker: %s"), *OldWorker->GetWorkerName());
 
 	// Broadcast to UI that the roster changed
 	OnWorkerRosterChanged.Broadcast();
-}
-
-const TArray<UWorkerData*>& ABaseManagerState::GetAllWorkers() const
-{
-	return WorkerRoster;
 }
 
 void ABaseManagerState::AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID)
@@ -253,23 +248,23 @@ void ABaseManagerState::AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID)
 			// Check the worker isn't already assigned, can't assign the same worker twice
 			for (FGuid AssignedWorkerID : Task.AssignedWorkerIDs)
 			{				
-				if (Worker && Worker->UniqueID == AssignedWorkerID)
+				if (Worker && Worker->GetWorkerUniqueID() == AssignedWorkerID)
 				{
-					UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Worker %s already assigned to task %s"), *Worker->Name, *TaskID.ToString());
+					UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Worker %s already assigned to task %s"), *Worker->GetWorkerName(), *TaskID.ToString());
 					return;
 				}
 			}
 			
 			// Copy - modify - assign to mark struct dirty for replication
 			FBaseTask ModifiedTask = Task;
-			ModifiedTask.AssignedWorkerIDs.Add(Worker->UniqueID);
+			ModifiedTask.AssignedWorkerIDs.Add(Worker->GetWorkerUniqueID());
 			Task = ModifiedTask;
 			
 			// Assign worker status
 			// TODO: Add a field to worker to display what task they are doing
-			Worker->CurrentStatus = EWorkerStatus::EWS_Working;
+			Worker->SetCurrentStatus(EWorkerStatus::EWS_Working);
 			
-			UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Assigned worker %s to task %s"), *Worker->Name, *TaskID.ToString());
+			UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Assigned worker %s to task %s"), *Worker->GetWorkerName(), *TaskID.ToString());
 			
 			OnTasksChanged.Broadcast();
 		}
@@ -287,19 +282,19 @@ void ABaseManagerState::UnassignWorkerFromTask(UWorkerData* Worker, FGuid TaskID
 		if (Task.TaskID == TaskID)
 		{
 			// We found the user assigned to the task
-			if (Task.AssignedWorkerIDs.Contains(Worker->UniqueID))
+			if (Task.AssignedWorkerIDs.Contains(Worker->GetWorkerUniqueID()))
 			{
 				FBaseTask ModifiedTask = Task;
-				ModifiedTask.AssignedWorkerIDs.Remove(Worker->UniqueID);
+				ModifiedTask.AssignedWorkerIDs.Remove(Worker->GetWorkerUniqueID());
 				Task = ModifiedTask;
 			
-				Worker->CurrentStatus = EWorkerStatus::EWS_Idle;
-				UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Unassigned worker %s from task %s"), *Worker->Name, *TaskID.ToString());
+				Worker->SetCurrentStatus(EWorkerStatus::EWS_Idle);
+				UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Unassigned worker %s from task %s"), *Worker->GetWorkerName(), *TaskID.ToString());
 				OnTasksChanged.Broadcast();
 			
 				return;
 			}
-			UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: Worker %s not assigned to task %s"), *Worker->Name, *TaskID.ToString());
+			UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: Worker %s not assigned to task %s"), *Worker->GetWorkerName(), *TaskID.ToString());
 		}			
 	}
 }
@@ -310,7 +305,7 @@ UWorkerData* ABaseManagerState::FindWorkerByGUID(FGuid WorkerID) const
 	
 	for (UWorkerData* Worker : WorkerRoster)
 	{
-		if (Worker && Worker->UniqueID == WorkerID)
+		if (Worker && Worker->GetWorkerUniqueID() == WorkerID)
 		{
 			UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Found worker with GUID: %s"), *WorkerID.ToString());
 			return Worker;

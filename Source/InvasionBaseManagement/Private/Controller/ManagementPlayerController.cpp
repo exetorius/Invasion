@@ -41,7 +41,7 @@ void AManagementPlayerController::Server_RequestFireWorker_Implementation(UWorke
 		{
 			if (ARegionalWorkerPool* Pool = Cast<ARegionalWorkerPool>(Actor))
 			{
-				if (Pool->RegionID == Base->BaseRegion)
+				if (Pool->GetRegionID() == Base->GetBaseRegion())
 				{
 					// Already server-authoritative, call implementation directly
 					Pool->Server_ReturnWorker_Implementation(Worker);
@@ -143,7 +143,7 @@ ABaseManagerState* AManagementPlayerController::GetBaseManagerState() const
 		for (TActorIterator<ABaseManagerState> It(GetWorld()); It; ++It)
 		{
 			ABaseManagerState* State = *It;
-			if (State && State->OwningPlayerState == PlayerState)
+			if (State && State->GetOwningPlayerState() == PlayerState)
 			{
 				CachedBaseManagerState = State;
 				UE_LOG(LogTemp, Log, TEXT("ManagementPlayerController: Client found BaseManagerState via TActorIterator"));

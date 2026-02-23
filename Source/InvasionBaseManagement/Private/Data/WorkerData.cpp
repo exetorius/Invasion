@@ -6,6 +6,20 @@ UWorkerData::UWorkerData()
 	UniqueID = FGuid::NewGuid();
 }
 
+TObjectPtr<UWorkerData> UWorkerData::CreateWorker(UObject* Outer, EWorkerRole InRole, EWorkerRace InRace)
+{
+	UWorkerData* Worker = NewObject<UWorkerData>(Outer);
+	if (!Worker)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("WorkerData: Failed to generate worker"));
+		return nullptr;
+	}
+	
+	Worker->Role = InRole;
+	Worker->Race = InRace;
+	return Worker;
+}
+
 void UWorkerData::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const
 {
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);

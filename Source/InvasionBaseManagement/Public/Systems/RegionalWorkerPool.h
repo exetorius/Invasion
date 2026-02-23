@@ -26,18 +26,11 @@ public:
 	ARegionalWorkerPool();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	// Region identifier (e.g., "Europe", "US", "Asia")
-	UPROPERTY(Replicated, EditAnywhere, BlueprintReadOnly, Category = "Regional Pool")
-	FName RegionID;
-
-	// Workers available for hire in this region
-	UPROPERTY(ReplicatedUsing=OnRep_AvailableWorkers, BlueprintReadOnly, Category = "Regional Pool")
-	TArray<TObjectPtr<UWorkerData>> AvailableWorkers;	
 	
-	UFUNCTION()
-	void OnRep_AvailableWorkers();	
-
+	// Server: Generate initial worker pool
+	UFUNCTION(BlueprintCallable, Category = "Regional Pool")
+	void GenerateInitialWorkerPool(int32 SoldiersCount, int32 ScientistsCount, int32 EngineersCount, int32 MedicsCount, int32 PilotsCount);
+	
 	// Server: Hire a worker from this pool (removes from pool)
 	UFUNCTION(Server, Reliable, Category = "Regional Pool")
 	void Server_HireWorker(UWorkerData* Worker, class ABaseManagerState* HiringBase);
@@ -46,14 +39,19 @@ public:
 	UFUNCTION(Server, Reliable, Category = "Regional Pool")
 	void Server_ReturnWorker(UWorkerData* Worker);
 
-	// Server: Generate initial worker pool
-	UFUNCTION(BlueprintCallable, Category = "Regional Pool")
-	void GenerateInitialWorkerPool(int32 SoldiersCount, int32 ScientistsCount, int32 EngineersCount, int32 MedicsCount, int32 PilotsCount);
-
+	
 protected:
 	virtual void BeginPlay() override;
 
 private:
+	// Region identifier (e.g., "Europe", "US", "Asia")
+	UPROPERTY(Replicated, EditAnywhere)
+	FName RegionID;
+
+	// Workers available for hire in this region
+	UPROPERTY(ReplicatedUsing=OnRep_AvailableWorkers)
+	TArray<TObjectPtr<UWorkerData>> AvailableWorkers;		
+
 	// Generate a random worker of a specified role
 	TObjectPtr<UWorkerData> GenerateRandomWorker(EWorkerRole WorkerRole);
 
@@ -63,11 +61,16 @@ private:
 	// Server-only function to add a worker (with validation)
 	void AddGeneratedWorker(UWorkerData* NewWorker);
 	
+	// Client side functionality
+	UFUNCTION()
+	void OnRep_AvailableWorkers();	
+	
 // Getters & Setters
 public:
+	const TArray<UWorkerData*>& GetAvailableWorkers() const { return AvailableWorkers; }
+	FName GetRegionID() const { return RegionID; }
+	
 	// Get all workers of a specific role
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Regional Pool")
 	TArray<UWorkerData*> GetWorkersByRole(EWorkerRole WorkerRole) const;
-	
-	FORCEINLINE const TArray<UWorkerData*>& GetAvailableWorkers() const { return AvailableWorkers; }
 };

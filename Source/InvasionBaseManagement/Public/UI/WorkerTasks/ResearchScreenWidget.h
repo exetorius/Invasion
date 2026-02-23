@@ -19,14 +19,14 @@ public:
 	
 	
 protected:
+	virtual void OnScreenDataReady() override;
 	// ScrollBox to hold task tile widgets
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UScrollBox> TaskListScrollBox;
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<class UTaskTileWidget> TaskTileWidget;
-	
-	
+		
 private:
 	void InitialiseResearchScreen();
 	void PopulateTaskList();

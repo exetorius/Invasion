@@ -1,7 +1,7 @@
 // CopyrightNotice
 
 
-#include "UI/ManagementScreens/ResearchScreenWidget.h"
+#include "UI/WorkerTasks/EngineeringScreenWidget.h"
 
 #include "Components/ScrollBox.h"
 #include "Controller/ManagementPlayerController.h"
@@ -9,78 +9,78 @@
 #include "Data/TaskTypes.h"
 #include "UI/WorkerTasks/TaskTileWidget.h"
 
-void UResearchScreenWidget::NativeConstruct()
+void UEngineeringScreenWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-	InitialiseResearchScreen();	
+	
 }
 
-void UResearchScreenWidget::InitialiseResearchScreen()
+void UEngineeringScreenWidget::OnScreenDataReady()
 {
-	if (!CachedBaseManagerState)
-	{
-		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &UResearchScreenWidget::InitialiseResearchScreen);
-		return;
-	}
+	InitialiseEngineeringScreen();
+}
+
+void UEngineeringScreenWidget::InitialiseEngineeringScreen()
+{
 	BindTaskChangeDelegates();
 	PopulateTaskList();	
 }
 
-void UResearchScreenWidget::PopulateTaskList()
+void UEngineeringScreenWidget::PopulateTaskList()
 {
 	if (!TaskListScrollBox)
 	{
-		UE_LOG(LogTemp, Error, TEXT("ResearchScreenWidget: TaskListScrollBox is null - ensure it's bound in Blueprint"));
+		UE_LOG(LogTemp, Error, TEXT("EngineeringScreenWidget: TaskListScrollBox is null - ensure it's bound in Blueprint"));
 		return;
 	}
 	
-	UE_LOG(LogTemp, Log, TEXT("ResearchScreenWidget: Populating task list"));
+	UE_LOG(LogTemp, Log, TEXT("EngineeringScreenWidget: Populating task list"));
 	
 	TaskListScrollBox->ClearChildren();
 	
 	if (CachedBaseManagerState)
 	{
-		for (const FBaseTask& Task : CachedBaseManagerState->ActiveTasks)
+		for (const FBaseTask& Task : CachedBaseManagerState->GetActiveTasks())
 		{
-			if (Task.TaskType != ETaskType::ETT_Research) { continue; }
+			if (Task.TaskType != ETaskType::ETT_Engineering) { continue; }
 			if (UTaskTileWidget* TaskTile = CreateWidget<UTaskTileWidget>(this, TaskTileWidget))
 			{
 				TaskTile->SetTaskData(Task);
-				TaskTile->OnAssignClicked.BindUObject(this, &UResearchScreenWidget::OnAssignClicked);
-				TaskTile->OnUnassignClicked.BindUObject(this, &UResearchScreenWidget::OnUnassignClicked);
+				TaskTile->OnAssignClicked.BindUObject(this, &UEngineeringScreenWidget::OnAssignClicked);
+				TaskTile->OnUnassignClicked.BindUObject(this, &UEngineeringScreenWidget::OnUnassignClicked);
 				TaskListScrollBox->AddChild(TaskTile);		
 			}
 		}
 	}
 	else
 	{
-		UE_LOG(LogTemp, Warning, TEXT("ResearchScreenWidget: Could not get BaseManagerState"));
+		UE_LOG(LogTemp, Warning, TEXT("EngineeringScreenWidget: Could not get BaseManagerState"));
 	}
 }
 
-void UResearchScreenWidget::BindTaskChangeDelegates()
+void UEngineeringScreenWidget::BindTaskChangeDelegates()
 {
 	/* TODO: #8 - PopulateTaskList rebuilds all tiles every 1s driven by OnProgressUpdate timer.
 	   Better approach: update individual tile data via SetTaskData() rather than clear + recreate.
 	   Requires tiles to expose an Update method and screen to hold references to live tiles. */ 
-	CachedBaseManagerState->OnTasksChanged.AddUObject(this, &UResearchScreenWidget::PopulateTaskList);
+	CachedBaseManagerState->OnTasksChanged.AddUObject(this, &UEngineeringScreenWidget::PopulateTaskList);
 }
 
-void UResearchScreenWidget::OnAssignClicked(FGuid TaskID)
+void UEngineeringScreenWidget::OnAssignClicked(FGuid TaskID)
 {
 	// TODO: Future, check for research/scientists only instead? Could be a separate list from soldiers and engineers 
 	// TODO: Select specific worker rather than grabbing first idle worker
-	if (CachedBaseManagerState && CachedBaseManagerState->WorkerRoster.Num() > 0)
+	if (CachedBaseManagerState && CachedBaseManagerState->GetAllWorkers().Num() > 0)
 	{				
-		TArray<UWorkerData*> WorkerRoster = CachedBaseManagerState->WorkerRoster;
+		TArray<UWorkerData*> WorkerRoster = CachedBaseManagerState->GetAllWorkers();
 		for (UWorkerData* Worker : WorkerRoster)
 		{
-			if (Worker->Role == EWorkerRole::EWRO_Scientist && Worker->CurrentStatus == EWorkerStatus::EWS_Idle)
+			if (Worker->GetRole() == EWorkerRole::EWRO_Engineer && Worker->GetCurrentStatus() == EWorkerStatus::EWS_Idle)
 			{
 				if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
 				{
-					UE_LOG(LogTemp, Log, TEXT("ResearchScreenWidget: Assigning worker to task"));
+					UE_LOG(LogTemp, Log, TEXT("EngineeringScreenWidget: Assigning worker to task"));
 					PC->Server_RequestAssignWorker(Worker, TaskID);
 					return;
 				}				
@@ -89,11 +89,11 @@ void UResearchScreenWidget::OnAssignClicked(FGuid TaskID)
 	}
 }
 
-void UResearchScreenWidget::OnUnassignClicked(FGuid TaskID)
+void UEngineeringScreenWidget::OnUnassignClicked(FGuid TaskID)
 {
 	if (CachedBaseManagerState)
 	{
-		for (FBaseTask& Task : CachedBaseManagerState->ActiveTasks)
+		for (const FBaseTask& Task : CachedBaseManagerState->GetActiveTasks())
 		{
 			if (Task.TaskID == TaskID && Task.AssignedWorkerIDs.Num() > 0)
 			{
@@ -102,7 +102,7 @@ void UResearchScreenWidget::OnUnassignClicked(FGuid TaskID)
 				{
 					if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
 					{
-						UE_LOG(LogTemp, Log, TEXT("ResearchScreenWidget: Unassigning worker from task"));
+						UE_LOG(LogTemp, Log, TEXT("EngineeringScreenWidget: Unassigning worker from task"));
 						PC->Server_RequestUnassignWorker(WorkerToRemove, TaskID);
 					}
 				}		

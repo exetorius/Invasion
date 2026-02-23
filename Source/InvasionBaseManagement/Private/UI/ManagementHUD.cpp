@@ -1,12 +1,12 @@
 ﻿#include "UI/ManagementHUD.h"
-#include "UI/ManagementScreens/BaseScreenWidget.h"
+#include "UI/ManagementScreens/BaseOverviewScreenWidget.h"
 #include "UI/ManagementScreens/CharacterScreenWidget.h"
-#include "UI/ManagementScreens/EngineeringScreenWidget.h"
+#include "UI/WorkerTasks/EngineeringScreenWidget.h"
 #include "UI/ManagementScreens/WorldScreenWidget.h"
 #include "UI/WorkerManagement/RosterScreenWidget.h"
 #include "UI/WorkerManagement/HiringScreenWidget.h"
 #include "UI/ManagementScreens/WarehouseScreenWidget.h"
-#include "UI/ManagementScreens/ResearchScreenWidget.h"
+#include "UI/WorkerTasks/ResearchScreenWidget.h"
 #include "UI/ManagementNavigationWidget.h"
 
 #include "Components/WidgetSwitcher.h"
@@ -28,7 +28,7 @@ void UManagementHUD::NativeConstruct()
 void UManagementHUD::SetupViewMap()
 {
 	ViewMap.Add(EManagementView::EMV_World, WBP_WorldScreen);
-	ViewMap.Add(EManagementView::EMV_Base, WBP_BaseScreen);
+	ViewMap.Add(EManagementView::EMV_BaseOverview, WBP_BaseOverviewScreen);
 	ViewMap.Add(EManagementView::EMV_Roster, WBP_RosterScreen);
 	ViewMap.Add(EManagementView::EMV_Hiring, WBP_HiringScreen);
 	ViewMap.Add(EManagementView::EMV_Character, WBP_CharacterScreen);

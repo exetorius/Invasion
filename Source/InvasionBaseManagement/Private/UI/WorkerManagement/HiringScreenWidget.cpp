@@ -15,7 +15,6 @@ void UHiringScreenWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 	
-	InitialiseRegionalPool();	
 }
 
 void UHiringScreenWidget::RefreshWorkerList()
@@ -23,14 +22,13 @@ void UHiringScreenWidget::RefreshWorkerList()
 	PopulateHiringWorkerList();
 }
 
+void UHiringScreenWidget::OnScreenDataReady()
+{
+	InitialiseRegionalPool();	
+}
+
 void UHiringScreenWidget::InitialiseRegionalPool()
 {
-	if (!CachedBaseManagerState)
-	{
-		GetWorld()->GetTimerManager().SetTimerForNextTick(this, &UHiringScreenWidget::InitialiseRegionalPool);
-		return;
-	}
-
 	// Get all the RegionalWorkerPools from the World (there due to AlwaysRelevant)
 	TArray<AActor*> FoundActors;
 	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARegionalWorkerPool::StaticClass(), FoundActors);
@@ -39,7 +37,7 @@ void UHiringScreenWidget::InitialiseRegionalPool()
 	for (AActor* Pool : FoundActors)
 	{
 		const ARegionalWorkerPool* CastedPool = Cast<ARegionalWorkerPool>(Pool);
-		if (CastedPool && CastedPool->RegionID == CachedBaseManagerState->BaseRegion)
+		if (CastedPool && CastedPool->GetRegionID() == CachedBaseManagerState->GetBaseRegion())
 		{
 			CachedRegionalPool = Cast<ARegionalWorkerPool>(Pool);
 			CachedRegionalPool->OnAvailableWorkersChanged.AddUObject(this, &UHiringScreenWidget::OnRegionalPoolChanged);

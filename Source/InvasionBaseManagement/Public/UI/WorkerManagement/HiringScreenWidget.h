@@ -22,6 +22,7 @@ public:
 	void RefreshWorkerList();
 	
 protected:
+	virtual void OnScreenDataReady() override;
 	// ScrollBox to hold worker tile widgets
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UScrollBox> WorkerListScrollBox;

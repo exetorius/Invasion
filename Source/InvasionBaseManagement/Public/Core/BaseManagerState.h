@@ -18,7 +18,7 @@ class INVASIONBASEMANAGEMENT_API ABaseManagerState : public AInfo
 {
 	GENERATED_BODY()
 
-	//TODO : BIG - Move task management into its own class / sublcass? There is going to be a lot of logic perhaps 
+	//TODO : BIG - Move task management into its own class / subclass? There is going to be a lot of logic perhaps 
 	
 public:
 	DECLARE_MULTICAST_DELEGATE(FOnWorkerRosterChanged);
@@ -28,29 +28,7 @@ public:
 	
 	ABaseManagerState();
 
-	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;
-
-	// Player who owns this base
-	UPROPERTY(Replicated, BlueprintReadOnly, Category = "Base Manager")
-	TObjectPtr<APlayerState> OwningPlayerState;
-
-	// Which region this base is located in (e.g., "Europe", "US")
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Base Manager")
-	FName BaseRegion; 
-
-	// Worker roster for this base
-	UPROPERTY(ReplicatedUsing=OnRep_WorkerRoster, BlueprintReadOnly, Category = "Base Manager")
-	TArray<TObjectPtr<UWorkerData>> WorkerRoster;
-
-	UFUNCTION()
-	void OnRep_WorkerRoster();
-
-	// Base resources
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Base Manager")
-	int32 Credits;
-
-	UPROPERTY(Replicated, BlueprintReadWrite, Category = "Base Manager")
-	int32 Supplies;
+	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;		
 
 	// Worker management
 	UFUNCTION(BlueprintCallable, Category = "Base Manager")
@@ -65,10 +43,7 @@ public:
 	
 	// Server-only function to remove a worker (with validation)
 	UFUNCTION(Server, Reliable, Category = "Base Manager")
-	void Server_RemoveWorker(UWorkerData* OldWorker);
-
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")
-	const TArray<UWorkerData*>& GetAllWorkers() const;
+	void Server_RemoveWorker(UWorkerData* OldWorker);	
 	
 	UFUNCTION(BlueprintCallable, Category = "Base Manager")
 	void AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID);
@@ -76,21 +51,61 @@ public:
 	UFUNCTION(BlueprintCallable, Category = "Base Manager")
 	void UnassignWorkerFromTask(UWorkerData* Worker, FGuid TaskID);
 	
-	UWorkerData* FindWorkerByGUID(FGuid WorkerID) const;
-	
-	// Task handling
-	UPROPERTY(ReplicatedUsing=OnRep_ActiveTasks, BlueprintReadOnly, Category = "Base Manager")
-	TArray<FBaseTask> ActiveTasks;
-	
-	UFUNCTION()
-	void OnRep_ActiveTasks();	
+	UWorkerData* FindWorkerByGUID(FGuid WorkerID) const;	
 
 protected:
 	virtual void BeginPlay() override;
+	
 private:
+	// Player who owns this base
+	UPROPERTY(Replicated)
+	TObjectPtr<APlayerState> OwningPlayerState;
+
+	// Which region this base is located in (e.g., "Europe", "US")
+	UPROPERTY(Replicated)
+	FName BaseRegion; 
+	
+	// Worker roster for this base
+	UPROPERTY(ReplicatedUsing=OnRep_WorkerRoster)
+	TArray<TObjectPtr<UWorkerData>> WorkerRoster;
+	
+	// Task handling
+	UPROPERTY(ReplicatedUsing=OnRep_ActiveTasks)
+	TArray<FBaseTask> ActiveTasks;	
+	
+	// Base resources
+	UPROPERTY(Replicated)
+	int32 Credits;
+
+	UPROPERTY(Replicated)
+	int32 Supplies;
+	
 	void InitializeBase();
 	
 	// Task timer handling
 	FTimerHandle TaskTimerHandle;
 	void OnProgressUpdate();
+	
+	// Client side functionality
+	UFUNCTION()
+	void OnRep_WorkerRoster();
+	UFUNCTION()
+	void OnRep_ActiveTasks();	
+	
+	// Getters & Setters
+public:	
+	APlayerState* GetOwningPlayerState() const { return OwningPlayerState; }
+	void SetOwningPlayerState(APlayerState* NewPlayerState) { OwningPlayerState = NewPlayerState; }
+	FName GetBaseRegion() const { return BaseRegion; }
+	void SetBaseRegion(FName NewRegion) { BaseRegion = NewRegion; }
+	int32 GetCredits() const { return Credits; }
+	void AddCredits(int32 CreditsToAdd) { Credits += CreditsToAdd; }
+	void RemoveCredits(int32 CreditsToRemove) { Credits = FMath::Max(Credits - CreditsToRemove, 0); }
+	int32 GetSupplies() const { return Supplies; }
+	void AddSupplies(int32 SuppliesToAdd) { Supplies += SuppliesToAdd; }
+	void RemoveSupplies(int32 SuppliesToRemove) { Supplies = FMath::Max(Supplies - SuppliesToRemove, 0); }
+	const TArray<FBaseTask>& GetActiveTasks() const { return ActiveTasks; }
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")
+	const TArray<UWorkerData*>& GetAllWorkers() const { return WorkerRoster; }
 };

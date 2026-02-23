@@ -22,10 +22,18 @@ void UBaseManagementScreenWidget::InitialiseScreenData()
 			{
 				World->GetTimerManager().SetTimerForNextTick(this, &UBaseManagementScreenWidget::InitialiseScreenData);
 			}			
-		}			
+		}
+		else
+		{
+			OnScreenDataReady();
+		}
 	}
 	else
 	{
 		UE_LOG(LogTemp, Warning, TEXT("BaseManagementScreenWidget: Could not get PlayerController"));
 	}		
+}
+
+void UBaseManagementScreenWidget::OnScreenDataReady()
+{
 }

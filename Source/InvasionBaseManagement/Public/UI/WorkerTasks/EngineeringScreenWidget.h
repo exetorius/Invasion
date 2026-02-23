@@ -19,6 +19,7 @@ public:
 	
 	
 protected:
+	virtual void OnScreenDataReady() override;
 	// ScrollBox to hold task tile widgets
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UScrollBox> TaskListScrollBox;

@@ -25,7 +25,7 @@ protected:
 	TObjectPtr<class UWorldScreenWidget> WBP_WorldScreen;
 
 	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UBaseScreenWidget> WBP_BaseScreen;
+	TObjectPtr<class UBaseOverviewScreenWidget> WBP_BaseOverviewScreen;
 
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class URosterScreenWidget> WBP_RosterScreen;

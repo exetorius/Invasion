@@ -20,6 +20,8 @@ public:
 protected:
 	void InitialiseScreenData();
 	
+	virtual void OnScreenDataReady();
+	
 	UPROPERTY()
 	TObjectPtr<class ABaseManagerState> CachedBaseManagerState;
 };

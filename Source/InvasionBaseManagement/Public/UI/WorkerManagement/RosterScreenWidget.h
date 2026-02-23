@@ -23,6 +23,7 @@ public:
 	void RefreshWorkerList();
 
 protected:
+	virtual void OnScreenDataReady() override;
 	void OnWorkerRosterUpdated();
 	
 	// ScrollBox to hold worker tile widgets

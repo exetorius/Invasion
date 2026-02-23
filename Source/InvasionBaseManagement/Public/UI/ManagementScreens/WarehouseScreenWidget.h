@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "UI/ManagementScreens/BaseManagementScreenWidget.h"
+#include "BaseManagementScreenWidget.h"
 #include "WarehouseScreenWidget.generated.h"
 
 /**

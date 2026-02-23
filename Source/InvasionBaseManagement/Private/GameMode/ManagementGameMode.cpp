@@ -73,8 +73,8 @@ void AManagementGameMode::CreateBaseManagerStateForPlayer(APlayerController* New
 
 	if (NewBaseState)
 	{
-		NewBaseState->OwningPlayerState = NewPlayer->PlayerState;
-		NewBaseState->BaseRegion = DefaultPlayerRegion; // Assign default region
+		NewBaseState->SetOwningPlayerState(NewPlayer->PlayerState);
+		NewBaseState->SetBaseRegion(DefaultPlayerRegion); // Assign default region
 		PlayerBaseStates.Add(NewPlayer->PlayerState, NewBaseState);
 
 		UE_LOG(LogTemp, Log, TEXT("ManagementGameMode: Created BaseManagerState for player %s in region %s"),
@@ -111,7 +111,7 @@ void AManagementGameMode::SpawnRegionalWorkerPools()
 
 		if (Pool)
 		{
-			Pool->RegionID = RegionName;
+			Pool->GetRegionID() = RegionName;
 			RegionalWorkerPools.Add(RegionName, Pool);
 
 			// Generate initial workers (5 of each type for testing)

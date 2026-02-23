@@ -36,7 +36,7 @@ void UInvasionCheatManager::HireWorkersFromPool(int32 Count)
 		UE_LOG(LogTemp, Warning, TEXT("HireWorkersFromPool: No RegionalWorkerPool found in level"));
 		return;
 	}
-	if (Pool->AvailableWorkers.Num() == 0)
+	if (Pool->GetAvailableWorkers().Num() == 0)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("HireWorkersFromPool: Pool is empty! Generate workers first with GenerateWorkerPool"));
 		return;
@@ -45,9 +45,9 @@ void UInvasionCheatManager::HireWorkersFromPool(int32 Count)
 	UE_LOG(LogTemp, Warning, TEXT("=== Hiring %d Workers from Pool ==="), Count);
 	
 	int32 HiredCount = 0;
-	for (int32 i = 0; i < Count && Pool->AvailableWorkers.Num() > 0; i++)
+	for (int32 i = 0; i < Count && Pool->GetAvailableWorkers().Num() > 0; i++)
 	{
-		UWorkerData* Worker = Pool->AvailableWorkers[FMath::RandRange(0, Pool->AvailableWorkers.Num() - 1)];
+		UWorkerData* Worker = Pool->GetAvailableWorkers()[FMath::RandRange(0, Pool->GetAvailableWorkers().Num() - 1)];
 		
 		Pool->Server_HireWorker(Worker, BaseState);
 		HiredCount++;
@@ -56,7 +56,7 @@ void UInvasionCheatManager::HireWorkersFromPool(int32 Count)
 	UE_LOG(LogTemp, Warning, TEXT("=== Hired %d Workers | Roster: %d | Pool Remaining: %d ==="), 
 		HiredCount, 
 		BaseState->GetAllWorkers().Num(),
-		Pool->AvailableWorkers.Num());
+		Pool->GetAvailableWorkers().Num());
 }
 
 void UInvasionCheatManager::AddCredits(int32 Amount)
@@ -67,8 +67,8 @@ void UInvasionCheatManager::AddCredits(int32 Amount)
 		UE_LOG(LogTemp, Warning, TEXT("AddCredits: No BaseManagerState found for player"));
 		return;
 	}
-	BaseState->Credits += Amount;
-	UE_LOG(LogTemp, Warning, TEXT("Added %d credits. Total: %d"), Amount, BaseState->Credits);
+	BaseState->AddCredits(Amount);
+	UE_LOG(LogTemp, Warning, TEXT("Added %d credits. Total: %d"), Amount, BaseState->GetCredits());
 }
 
 void UInvasionCheatManager::AddSupplies(int32 Amount)
@@ -79,8 +79,8 @@ void UInvasionCheatManager::AddSupplies(int32 Amount)
 		UE_LOG(LogTemp, Warning, TEXT("AddSupplies: No BaseManagerState found for player"));
 		return;
 	}
-	BaseState->Supplies += Amount;
-	UE_LOG(LogTemp, Warning, TEXT("Added %d supplies. Total: %d"), Amount, BaseState->Supplies);
+	BaseState->AddSupplies(Amount);
+	UE_LOG(LogTemp, Warning, TEXT("Added %d supplies. Total: %d"), Amount, BaseState->GetSupplies());
 }
 
 ABaseManagerState* UInvasionCheatManager::GetPlayerBaseState() const
