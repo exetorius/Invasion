@@ -9,11 +9,6 @@
 #include "Data/TaskTypes.h"
 #include "UI/WorkerTasks/TaskTileWidget.h"
 
-void UResearchScreenWidget::NativeConstruct()
-{
-	Super::NativeConstruct();	
-}
-
 void UResearchScreenWidget::OnScreenDataReady()
 {
 	InitialiseResearchScreen();	

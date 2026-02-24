@@ -66,7 +66,7 @@ void UWorkerData::SetHealth(float NewHealth)
 
 void UWorkerData::AddMaxHealth(float MaxHealthToAdd)
 {
-	MaxHealth += MaxHealthToAdd;
+	MaxHealth = FMath::Min(MaxHealth + MaxHealthToAdd, 100.f);
 }
 
 void UWorkerData::RemoveMaxHealth(float MaxHealthToRemove)

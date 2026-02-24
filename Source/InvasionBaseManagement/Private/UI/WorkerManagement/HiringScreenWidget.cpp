@@ -10,21 +10,14 @@
 #include "Systems/RegionalWorkerPool.h"
 #include "UI/WorkerManagement/HiringWorkerTileWidget.h"
 
-
-void UHiringScreenWidget::NativeConstruct()
+void UHiringScreenWidget::OnScreenDataReady()
 {
-	Super::NativeConstruct();
-	
+	InitialiseRegionalPool();	
 }
 
 void UHiringScreenWidget::RefreshWorkerList()
 {
 	PopulateHiringWorkerList();
-}
-
-void UHiringScreenWidget::OnScreenDataReady()
-{
-	InitialiseRegionalPool();	
 }
 
 void UHiringScreenWidget::InitialiseRegionalPool()

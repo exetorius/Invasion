@@ -7,12 +7,6 @@
 #include "Controller/ManagementPlayerController.h"
 #include "Components/ScrollBox.h"
 
-
-void URosterScreenWidget::NativeConstruct()
-{
-	Super::NativeConstruct();	
-}
-
 // Button functionality called from BP
 void URosterScreenWidget::RefreshWorkerList()
 {

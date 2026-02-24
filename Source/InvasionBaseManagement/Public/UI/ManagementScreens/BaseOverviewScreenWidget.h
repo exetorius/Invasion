@@ -17,7 +17,12 @@ class INVASIONBASEMANAGEMENT_API UBaseOverviewScreenWidget : public UBaseManagem
 	GENERATED_BODY()
 	
 protected:
-	virtual void OnScreenDataReady() override;
+	virtual void OnScreenDataReady() override;	
+private:
+	void InitialiseOverviewScreen();
+	
+	void PopulateOverviewScreen();
+	void BindChangeDelegates();
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> WorkerDataText;
@@ -33,10 +38,4 @@ protected:
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<UTextBlock> SuppliesDataText;
-	
-private:
-	void InitialiseOverviewScreen();
-	
-	void PopulateOverviewScreen();
-	void BindChangeDelegates();
 };

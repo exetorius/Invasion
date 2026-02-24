@@ -9,13 +9,6 @@
 #include "Data/TaskTypes.h"
 #include "UI/WorkerTasks/TaskTileWidget.h"
 
-void UEngineeringScreenWidget::NativeConstruct()
-{
-	Super::NativeConstruct();
-	
-	
-}
-
 void UEngineeringScreenWidget::OnScreenDataReady()
 {
 	InitialiseEngineeringScreen();

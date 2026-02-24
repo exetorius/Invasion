@@ -14,18 +14,13 @@ class INVASIONBASEMANAGEMENT_API UHiringScreenWidget : public UBaseManagementScr
 {
 	GENERATED_BODY()
 	
-public:
-	virtual void NativeConstruct() override;
-	
+public:	
 	// Refresh the worker list from BaseManagerState
 	UFUNCTION(BlueprintCallable, Category = "Roster")
 	void RefreshWorkerList();
 	
 protected:
-	virtual void OnScreenDataReady() override;
-	// ScrollBox to hold worker tile widgets
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UScrollBox> WorkerListScrollBox;
+	virtual void OnScreenDataReady() override;	
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<class UHiringWorkerTileWidget> WorkerTileWidget;
@@ -35,6 +30,9 @@ private:
 	void InitialiseRegionalPool();
 	void OnWorkerHired(class UWorkerData* Worker);
 	void OnRegionalPoolChanged();
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UScrollBox> WorkerListScrollBox;
 	
 	UPROPERTY()
 	TObjectPtr<class ARegionalWorkerPool> CachedRegionalPool;

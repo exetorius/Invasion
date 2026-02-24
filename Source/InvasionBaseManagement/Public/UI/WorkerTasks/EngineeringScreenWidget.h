@@ -13,15 +13,9 @@ UCLASS()
 class INVASIONBASEMANAGEMENT_API UEngineeringScreenWidget : public UBaseManagementScreenWidget
 {
 	GENERATED_BODY()
-	
-public:
-	virtual void NativeConstruct() override;	
-	
+
 protected:
-	virtual void OnScreenDataReady() override;
-	// ScrollBox to hold task tile widgets
-	UPROPERTY(meta = (BindWidget))
-	TObjectPtr<class UScrollBox> TaskListScrollBox;
+	virtual void OnScreenDataReady() override;	
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<class UTaskTileWidget> TaskTileWidget;
@@ -30,6 +24,10 @@ private:
 	void InitialiseEngineeringScreen();
 	void PopulateTaskList();
 	void BindTaskChangeDelegates();
+	
+	// ScrollBox to hold task tile widgets
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UScrollBox> TaskListScrollBox;
 	
 	void OnAssignClicked(FGuid TaskID);
 	void OnUnassignClicked(FGuid TaskID);
