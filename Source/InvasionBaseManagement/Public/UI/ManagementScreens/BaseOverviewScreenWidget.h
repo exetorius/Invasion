@@ -6,6 +6,8 @@
 #include "BaseManagementScreenWidget.h"
 #include "BaseOverviewScreenWidget.generated.h"
 
+class UTextBlock;
+
 /**
  * 
  */
@@ -14,12 +16,27 @@ class INVASIONBASEMANAGEMENT_API UBaseOverviewScreenWidget : public UBaseManagem
 {
 	GENERATED_BODY()
 	
-public:
-	virtual void NativeConstruct() override;
-	
 protected:
+	virtual void OnScreenDataReady() override;
 	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> WorkerDataText;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> ResearchDataText;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> EngineeringDataText;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> CreditDataText;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<UTextBlock> SuppliesDataText;
 	
 private:
+	void InitialiseOverviewScreen();
 	
+	void PopulateOverviewScreen();
+	void BindChangeDelegates();
 };

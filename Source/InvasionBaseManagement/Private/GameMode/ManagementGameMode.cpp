@@ -111,7 +111,7 @@ void AManagementGameMode::SpawnRegionalWorkerPools()
 
 		if (Pool)
 		{
-			Pool->GetRegionID() = RegionName;
+			Pool->SetRegionID(RegionName);
 			RegionalWorkerPools.Add(RegionName, Pool);
 
 			// Generate initial workers (5 of each type for testing)

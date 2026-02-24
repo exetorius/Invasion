@@ -38,6 +38,8 @@ public:
 	// Server: Return a worker to the pool (fired/dismissed)
 	UFUNCTION(Server, Reliable, Category = "Regional Pool")
 	void Server_ReturnWorker(UWorkerData* Worker);
+	
+	void SetRegionID(FName NewRegionID) { RegionID = NewRegionID; }
 
 	
 protected:

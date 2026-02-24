@@ -15,8 +15,7 @@ class INVASIONBASEMANAGEMENT_API UEngineeringScreenWidget : public UBaseManageme
 	GENERATED_BODY()
 	
 public:
-	virtual void NativeConstruct() override;
-	
+	virtual void NativeConstruct() override;	
 	
 protected:
 	virtual void OnScreenDataReady() override;
@@ -26,8 +25,7 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<class UTaskTileWidget> TaskTileWidget;
-	
-	
+		
 private:
 	void InitialiseEngineeringScreen();
 	void PopulateTaskList();

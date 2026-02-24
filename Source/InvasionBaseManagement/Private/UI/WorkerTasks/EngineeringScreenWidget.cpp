@@ -29,11 +29,7 @@ void UEngineeringScreenWidget::InitialiseEngineeringScreen()
 
 void UEngineeringScreenWidget::PopulateTaskList()
 {
-	if (!TaskListScrollBox)
-	{
-		UE_LOG(LogTemp, Error, TEXT("EngineeringScreenWidget: TaskListScrollBox is null - ensure it's bound in Blueprint"));
-		return;
-	}
+	if (!ensure(TaskListScrollBox))	{ return; }
 	
 	UE_LOG(LogTemp, Log, TEXT("EngineeringScreenWidget: Populating task list"));
 	

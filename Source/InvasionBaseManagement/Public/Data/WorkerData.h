@@ -43,16 +43,16 @@ public:
 	// --- HEALTH ---
 	UFUNCTION(BlueprintPure, Category = "Worker")
 	float GetHealth() const { return Health; }
-	void AddHealth(float HealthToAdd) { Health = FMath::Min(Health + HealthToAdd, MaxHealth); }
-	void RemoveHealth(float HealthToRemove) { Health = FMath::Max(Health - HealthToRemove, 0.f); }
-	void SetHealth(float NewHealth) { Health = FMath::Clamp(NewHealth, 0.f, MaxHealth); }
+	void AddHealth(float HealthToAdd);
+	void RemoveHealth(float HealthToRemove);
+	void SetHealth(float NewHealth);
 
 	// --- MAX HEALTH ---
 	UFUNCTION(BlueprintPure, Category = "Worker")
 	float GetMaxHealth() const { return MaxHealth; }
-	void AddMaxHealth(float MaxHealthToAdd) { MaxHealth += MaxHealthToAdd; }
-	void RemoveMaxHealth(float MaxHealthToRemove) { MaxHealth = FMath::Max(MaxHealth - MaxHealthToRemove, 0); } // TODO: System to reduce based on current MaxHealth
-	void SetMaxHealth(float NewMaxHealth) { MaxHealth = FMath::Clamp(NewMaxHealth, 0, 100); } // TODO: Make dynamic based from buffs etc so it can go higher
+	void AddMaxHealth(float MaxHealthToAdd);
+	void RemoveMaxHealth(float MaxHealthToRemove); // TODO: System to reduce based on current MaxHealth
+	void SetMaxHealth(float NewMaxHealth); // TODO: Make dynamic based from buffs etc so it can go higher
 	
 	void Kill() { bIsDead = true; }
 	UFUNCTION(BlueprintPure, Category = "Worker")
@@ -71,9 +71,9 @@ public:
 	// --- MORALE ---
 	UFUNCTION(BlueprintPure, Category = "Worker")
 	float GetMorale() const { return Morale; }
-	void AddMorale(float MoraleToAdd) { Morale = FMath::Clamp(Morale + MoraleToAdd, 0.f, 100.f); } // TODO: Increase max for inspired effect?
-	void RemoveMorale(float MoraleToRemove) { Morale = FMath::Clamp(Morale - MoraleToRemove, 0.f, 100.f); } // TODO: Lower than 0 for psychosis? 
-	void SetMorale(float NewMorale) { Morale = FMath::Clamp(NewMorale, 0.f, 100.f); }
+	void AddMorale(float MoraleToAdd); // TODO: Increase max for inspired effect?
+	void RemoveMorale(float MoraleToRemove); // TODO: Lower than 0 for psychosis?
+	void SetMorale(float NewMorale);
 	
 	// --- INJURY SEVERITY ---
 	UFUNCTION(BlueprintPure, Category = "Worker")

@@ -6,28 +6,34 @@ Track your story point velocity over time to improve sprint planning accuracy.
 
 ## Current Sprint
 
-**Sprint:** Sprint 1 - Base Activity  
-**Start Date:** 2026-02-19  
-**End Date:** 2026-02-25  
-**Planned Story Points:** 7  
-**Completed Story Points:** 5
-
-### Sprint Backlog
-
-| Issue # | Task | Story Points | Status |
-|---------|------|--------------|--------|
-| 7 | Worker Hiring UI — Stat Display on Tiles | 1 | ✅ Done |
-| 8 | Task Foundation + Research Screen | 3 | ✅ Done |
-| 9 | Engineering Screen | 1 | ✅ Done |
-| 10 | Base Overview Dashboard | 2 | ⏳ To Do |
-| **TOTAL** | | **7** | |
-
-> Note: #7 is carry-over from Sprint 0 (Blueprint-only, no C++ required).
-> #9 and #10 depend on #8 — start with #7 and #8.
+_Sprint 2 not yet planned._
 
 ---
 
 ## Velocity History
+
+### Sprint 1 — Base Activity (Feb 19–25, 2026)
+- **Planned:** 7 SP
+- **Completed:** 10 SP (7 planned + 3 mid-sprint additions)
+- **Velocity:** 10
+- **Issues:** #7 ✅, #8 ✅, #9 ✅, #10 ✅, #11 ✅ (mid-sprint), #12 ✅ (mid-sprint)
+
+| Issue # | Task | Story Points | Notes |
+|---------|------|--------------|-------|
+| 7 | Worker Hiring UI — Stat Display on Tiles | 1 | Carry-over from Sprint 0 |
+| 8 | Task Foundation + Research Screen | 3 | |
+| 9 | Engineering Screen | 1 | |
+| 10 | Base Overview Dashboard | 2 | |
+| 11 | UWorkerData Refactor — Private Members & Accessors | 2 | Mid-sprint, dependency for #10 |
+| 12 | OnScreenDataReady pattern — base class retry | 1 | Mid-sprint, dependency for #10 |
+| **TOTAL** | | **10** | |
+
+- **What went well:** All goals delivered. Multiplayer tested in PIE. UWorkerData refactor clean. Task system and all four screens functional.
+- **Scope bleed:** #11 and #12 justified as blockers for #10. Pattern discussion resolved — non-blockers go to backlog in future.
+- **Bug found:** `GetRegionID()` returned by value — privatisation caused silent regression in `ManagementGameMode`. Assignment-to-temporary compiles without warning. Fixed via `SetRegionID()` setter.
+- **Action items:** Raise non-blocker cleanup tasks as issues rather than absorbing into the sprint.
+
+---
 
 ### Sprint 0 — Foundation (Feb 16–18, 2026)
 - **Planned:** 9 SP
