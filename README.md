@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 1 in progress |
+| **Status** | Early development — Sprint 1 complete, Sprint 2 planning |
 
 ---
 
@@ -76,22 +76,22 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 
 ---
 
-## Current Sprint
-
-**Sprint 1 — Base Activity** | Feb 19–25, 2026
+## Sprint 1 — Base Activity ✅ | Feb 19–25, 2026
 
 | # | Task | Points | Status |
 |---|---|---|---|
 | #7 | Hiring + Roster UI — Stat Display on Tiles | 1 | ✅ Done |
 | #8 | Task Foundation + Research Screen | 3 | ✅ Done |
 | #9 | Engineering Screen | 1 | ✅ Done |
-| #10 | Base Overview Dashboard | 2 | ⏳ To Do |
+| #10 | Base Overview Dashboard | 2 | ✅ Done |
+| #11 | UWorkerData Refactor — Private Members & Accessors | 2 | ✅ Done (mid-sprint) |
+| #12 | OnScreenDataReady pattern — base class retry | 1 | ✅ Done (mid-sprint) |
 
-**Planned:** 7 SP | **Completed:** 5 SP
+**Planned:** 7 SP | **Completed:** 10 SP
 
 ---
 
-## Sprint 0 — Foundation | Feb 16–18, 2026
+## Sprint 0 — Foundation ✅ | Feb 16–18, 2026
 
 | # | Task | Points | Status |
 |---|---|---|---|
@@ -128,7 +128,7 @@ Notable decisions logged so far:
 - [x] Hiring + Roster UI stat display (Blueprint tiles)
 - [x] Task data layer + Research screen (assign/unassign workers, 1s progress timer, multiplayer tested)
 - [x] Engineering screen (mirrors research, Engineer role filter)
-- [ ] Base overview dashboard
+- [x] Base overview dashboard (worker counts, task progress, resources)
 - [ ] Nation selection screen
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
