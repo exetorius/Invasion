@@ -1,24 +1,24 @@
 # Invasion - Game Design Document
 
-**Version:** 1.0  
-**Last Updated:** 2025-02-16  
-**Status:** Pre-Production / Design Phase
+**Version:** 1.1
+**Last Updated:** 2026-02-24
+**Status:** Active Development — Sprint 2 Planning
 
 ---
 
 ## Executive Summary
 
-**Genre:** Turn-based Tactical Strategy / Base Management  
-**Platform:** PC (Steam)  
-**Multiplayer:** 2-4 Players (Co-op/Competitive - TBD)  
-**Inspiration:** XCOM, Phoenix Point, Phantom Brigade  
-**USP:** Multiplayer XCOM-like with competitive/cooperative elements
+**Genre:** Turn-based Tactical Strategy / Base Management
+**Platform:** PC (Steam)
+**Multiplayer:** 2-4 Players — Sovereign Bases model (see `04_Multiplayer.md`)
+**Inspiration:** XCOM, Phoenix Point, Phantom Brigade
+**USP:** Multiplayer XCOM-like where each player commands a sovereign national base
 
 ---
 
 ## Core Vision
 
-> Players manage a secret organization defending Earth from alien invasion. Each player operates their own base (or shares one - TBD), recruits soldiers, researches alien technology, and deploys tactical squads to combat the alien threat.
+> Players manage a secret organization defending Earth from alien invasion. Each player operates their own sovereign national base, recruits personnel, researches alien technology, and deploys tactical squads to combat the alien threat.
 
 ---
 
@@ -34,10 +34,11 @@
 - Environmental interaction
 - Risk vs reward positioning
 
-### 3. **Multiplayer Tension** (Design Pending)
-- Competitive: Race to defeat aliens first
-- Co-op: Shared threat, individual bases
-- Asymmetric: Different regions, different challenges
+### 3. **Multiplayer Tension**
+- Sovereign bases — each player commands their own national HQ
+- Shared global threat creates cooperative pressure without shared dependency
+- Difficulty scales per additional player (diminishing returns) — pressure, not punishment
+- Future: trading, facility sharing, mission cooperation (not yet scheduled)
 
 ### 4. **Progression & Customization**
 - Worker specialization and growth
@@ -65,8 +66,9 @@
 ### **Phase 1: Foundation (Current)**
 - ✅ Worker management system
 - ✅ Multiplayer replication
-- ⏳ Core base management UI
-- ⏳ Resource economy
+- ✅ Core base management UI (hire, fire, research, engineering, overview — Sprint 0–1)
+- ⏳ Resource economy (Credits/Supplies exist, constraints not yet applied)
+- ⏳ Nation selection screen (UI only — Sprint 2 target)
 
 ### **Phase 2: Core Loop**
 - Mission system
@@ -87,53 +89,30 @@
 
 ---
 
-## Critical Design Decisions Needed
+## Design Decision Status
 
-### 🚨 **HIGH PRIORITY - Must Decide Soon:**
-
-1. **Multiplayer Model**
-   - [ ] Competitive (players race to complete objectives)
-   - [ ] Co-op (players help each other)
-   - [ ] Asymmetric (different roles/regions)
-   - [ ] Hybrid (competitive with co-op elements)
-
-2. **Base Ownership**
-   - [ ] Per-Player Bases (current architecture)
-   - [ ] Shared Global Base (requires refactor)
-
-3. **Resource Economy**
-   - [ ] Individual resources per player
-   - [ ] Shared resource pool
-   - [ ] Tradeable resources between players
-
-4. **Mission System**
-   - [ ] Solo missions (each player fights separately)
-   - [ ] Combined squads (players can team up)
-   - [ ] Competitive missions (PvP or race)
-
----
-
-## Next Steps
-
-1. Complete critical design decisions above
-2. Create detailed system designs (see `/GDD` folder)
-3. Build Product Backlog in `/Agile`
-4. Prioritize features for MVP
+| Decision | Status | Detail |
+|---|---|---|
+| Multiplayer model | ✅ Decided | Sovereign Bases — see `04_Multiplayer.md` |
+| Base ownership | ✅ Decided | Per-player, sovereign — no shared base |
+| Resource economy | ⚠️ Partial | Income model decided (subsidies + inventory sales — see `06_Economy.md`). Hire costs and income tick not yet implemented. |
+| Mission system | ⏳ Open | Solo missions per player is the intent; specifics not yet designed |
+| Movement mode (tactical) | ⏳ Open | Awaiting design decision — see `03_TacticalCombat.md` |
 
 ---
 
 ## Document Structure
 
-This GDD is split into multiple documents:
+This GDD is split into multiple documents. Architecture and implementation patterns live in `CLAUDE.md`.
 
-- `00_Overview.md` (this file) - High-level vision
-- `01_CoreLoop.md` - Gameplay loop and progression
-- `02_BaseManagement.md` - Base building and workers
-- `03_TacticalCombat.md` - Combat system design
-- `04_Multiplayer.md` - Multiplayer mechanics
-- `05_Progression.md` - Tech tree, unlocks, upgrades
-- `06_Economy.md` - Resources, costs, balance
-- `07_UI_UX.md` - Interface and user experience
-- `08_TechnicalDesign.md` - Architecture and implementation
-
-**Note:** Design documents should drive code, not the other way around!
+| File | Status | Contents |
+|---|---|---|
+| `00_Overview.md` | ✅ This file | High-level vision, phases, design status |
+| `01_CoreLoop.md` | ❌ Not created | Gameplay loop, session structure, win/loss |
+| `02_BaseManagement.md` | ✅ Active | Base screens, worker system, economy design |
+| `03_TacticalCombat.md` | ✅ Active (pre-prod) | Combat design — many open questions |
+| `04_Multiplayer.md` | ✅ Locked | Sovereign Bases model — final decision |
+| `05_Progression.md` | ❌ Not created | Tech tree, unlocks, worker progression |
+| `06_Economy.md` | ❌ Not created | Resources, costs, income sources |
+| `07_UI_UX.md` | ✅ Active | Layout, navigation, interaction patterns |
+| `08_TechnicalDesign.md` | ❌ Not created | Architecture lives in `CLAUDE.md` instead |

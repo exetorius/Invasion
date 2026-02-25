@@ -23,6 +23,7 @@ Each player commands a **sovereign national base**. Solo play is a complete, fir
 | Hot-drop (join mid-campaign)? | ❌ No | Too many edge cases, too little gain |
 | Difficulty scaling? | ✅ Yes, diminishing returns | Each player adds pressure, not punishment |
 | Facility sharing / RBAC? | 🔮 Future | Architecturally possible, not scheduled |
+| Region exclusivity? | ✅ Shared allowed | Players may co-habit a region — opt-in scarcity. Decided Feb 25, 2026. |
 
 ### Difficulty Scaling Formula
 
@@ -49,9 +50,19 @@ Each player selects a **nation** — their base is that nation's HQ. This:
 - Opens door to passive national bonuses (future, not blocking anything now)
 - Maps cleanly to existing `BaseRegion` enum (rename/expand when ready)
 
+**Nation determines region (decided Feb 25, 2026):** Nation and region are not separate choices.
+Picking a nation implicitly sets the player's starting region. If separation is ever needed, it
+is a clean additive change — add `RegionID` alongside `NationID` on `ABaseManagerState`.
+
+**Region co-habitation (decided Feb 25, 2026):** Multiple players may start in the same region.
+This is intentional — it creates organic tension over a shared worker pool and tighter resource
+competition. Cooperation is opt-in. Players in the same region share a hiring pool, face closer
+proximity to each other's missions, and may choose to coordinate or compete as they see fit.
+Future: inter-player deals, trade agreements, or betrayal mechanics may build on this.
+
 **SMART Scope:**
 - Sprint 0: Model decided ✅
-- Sprint 1-2: Nation selection screen (UI only, no mechanics)
+- Sprint 2: Nation selection screen (UI only, no mechanics) 🎯
 - Sprint 3+: National passive bonuses (optional, additive)
 
 ### Session Model

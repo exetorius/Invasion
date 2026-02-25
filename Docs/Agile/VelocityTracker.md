@@ -6,7 +6,16 @@ Track your story point velocity over time to improve sprint planning accuracy.
 
 ## Current Sprint
 
-_Sprint 2 not yet planned._
+### Sprint 2 — Worker Assignment & Identity (March 2–6, 2026)
+- **Goal:** Give players meaningful worker assignment choices and national identity before campaign start
+- **Planned:** 8 SP
+- **Status:** In Planning
+
+| Issue # | Task | Story Points | Notes |
+|---------|------|--------------|-------|
+| #15 | Worker Pane — Manual Assignment | 5 | Architecture discussion required before coding |
+| #16 | Nation Selection Screen | 3 | |
+| **TOTAL** | | **8** | |
 
 ---
 
@@ -42,8 +51,8 @@ _Sprint 2 not yet planned._
 - **Notes:** First sprint. Delivered hire + fire worker UI end-to-end including multiplayer. Two mid-sprint bugs (#5, #6) resolved same sprint. Issue #7 deferred (stat display, Blueprint-only). Actual calendar time: 3 days (faster than 1-week estimate).
 
 ### Sprint Summary
-- **Average Velocity:** 9 SP (1 sprint — too early to average)
-- **Trend:** Baseline established
+- **Average Velocity:** 9.5 SP (2 sprints — Sprint 0: 9, Sprint 1: 10)
+- **Trend:** Consistent. Sprint 2 planned at 8 SP (80% buffer).
 
 ---
 

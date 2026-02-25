@@ -20,7 +20,7 @@ inside your base is your responsibility.
 ## Screens
 
 ### Base Overview (Dashboard)
-**Status:** In Progress (Sprint 1, Issue #10)
+**Status:** ✅ Done (Sprint 1, Issue #10)
 
 The default screen when entering base management. A read-only dashboard surfacing key
 information from across all other screens in one place.
@@ -130,6 +130,26 @@ Warehouse (see below). Sub-types added as filters when the list grows.
 
 ---
 
+### Nation Selection Screen
+**Status:** Sprint 2 target 🎯
+
+Shown at campaign start, before the player enters base management. A one-time choice that
+sets the player's national identity for the campaign.
+
+**Design intent:** This screen is about ownership and identity, not mechanics. The player
+should feel like they are *claiming* something, not filling in a form. No bonuses, no
+stats — just the flag, the name, and the commitment.
+
+- Player selects a nation from a list (4-6 at launch, expandable)
+- Nation determines starting region — they are the same choice, not two separate selectors
+- Stores `FName NationID` on `ABaseManagerState`
+- Multiple players may select nations from the same region (co-habitation is allowed — see `04_Multiplayer.md`)
+- Future: national passive bonuses wire to `NationID` when designed
+
+**Out of scope for Sprint 2:** Bonuses, nation lore, flags/artwork (placeholder acceptable).
+
+---
+
 ### Equip Agent
 **Status:** Phase 2 — Not Yet Scheduled
 
@@ -175,6 +195,41 @@ The Roster screen shows all workers and uses the same widget with no role filter
 
 ---
 
+## Bases & Outposts
+**Status:** Phase 2 — Not Yet Scheduled (HQ only for now)
+
+Players begin with a single **HQ** — their primary base, tied to their nation and region.
+It is their most prized possession. Losing it is a serious setback, not an inconvenience.
+
+**HQ:** Full base management capability. All screens (Research, Engineering, Roster, etc.)
+operate from here. This is where the player's identity lives.
+
+**Outposts:** Lightweight forward bases built in other regions to reduce mission reaction times.
+Not a second HQ — no full management screens. Purpose: faster deployment, regional presence.
+Scope and capability TBD when the mission system exists.
+
+**Expansion model:** Players expand reach, not redundancy. The HQ remains the strategic heart.
+Outposts are tactical tools, not fallback command centres — with one exception (see below).
+
+### Backup HQ — Research-Gated Fallback *(Future Idea — Not Scheduled)*
+
+**Concept (noted Feb 25, 2026):** A mid-to-late research tree unlock that allows a pre-designated
+outpost to step up as a degraded HQ if the primary base is overrun. Prevents player elimination
+without removing the consequence of losing the HQ.
+
+**Intent:**
+- Losing the HQ is painful — the fallback HQ operates at reduced capacity (fewer task slots,
+  limited research tiers, reduced worker capacity)
+- Players who invested in this research bought insurance; players who didn't gambled and lost
+- Counter-attack to reclaim the original HQ is possible — the player is wounded, not out
+- Creates a meaningful research choice: defensive resilience vs offensive capability
+
+**Implementation note:** Depends on the outpost system and mission system existing. Do not
+design further until both are in scope. This is a research tree node, not a base management
+feature.
+
+---
+
 ## Base Construction
 **Status:** Phase 2 — Not Yet Scheduled
 
@@ -202,17 +257,27 @@ fund a fighter jet.
 Current state: hiring is free, manufacturing is free. This is intentional grey-boxing — get
 the loop visible first, add friction in a dedicated economy sprint.
 
+**Income model (decided Feb 25, 2026):** Passive subsidies from regional command (scaled by
+reputation), plus sales of manufactured inventory. Performance bonuses are possible but not yet
+designed. Full design in `06_Economy.md`.
+
 Economy sprint scope (future):
 - Hire costs wired to Credits
 - Manufacturing costs wired to Credits and Supplies
-- Income sources designed and implemented
+- Subsidy income ticking on a server timer
+- Inventory sales flow from Warehouse
 - Balance pass
 
 ---
 
 ## Open Design Questions
 
-- [ ] What are the income sources? How does the player earn Credits between missions?
-- [ ] Does Research output a blueprint item, or does it directly unlock Engineering tasks?
+- [x] **What are the income sources? How does the player earn Credits between missions?**
+  Resolved (Feb 25, 2026): Passive subsidies from regional command based on reputation, plus
+  inventory sales (X-COM style). Performance bonuses possible later. Full income system is a
+  future sprint — see `06_Economy.md`. Enough to seed starting Credits and unblock hire costs.
+- [x] **Does Research output a blueprint item, or does it directly unlock Engineering tasks?**
+  Resolved (Feb 25, 2026): Directly unlocks Engineering tasks (option A). No blueprint item,
+  no Warehouse dependency. Completing a research task flips an unlock flag on the Engineering task.
 - [ ] Transport mechanic for global hiring — how is interception risk calculated and resolved?
 - [ ] Room adjacency bonuses in base construction — do these exist and what do they provide?
