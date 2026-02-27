@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "Data/CampaignTypes.h"
 #include "Data/TaskTypes.h"
 #include "GameFramework/Info.h"
 #include "Data/WorkerData.h"
@@ -61,6 +62,9 @@ private:
 	UPROPERTY(Replicated)
 	TObjectPtr<APlayerState> OwningPlayerState;
 
+	UPROPERTY(Replicated)
+	ENation PlayerNation; //   TODO: Player level data - move to PlayerState (check for other player level data properties)
+	
 	// Which region this base is located in (e.g., "Europe", "US")
 	UPROPERTY(Replicated)
 	FName BaseRegion; 
@@ -86,16 +90,21 @@ private:
 	FTimerHandle TaskTimerHandle;
 	void OnProgressUpdate();
 	
+	FName DeriveRegionFromNation(ENation Nation) const;
+	
 	// Client side functionality
 	UFUNCTION()
 	void OnRep_WorkerRoster();
 	UFUNCTION()
 	void OnRep_ActiveTasks();	
 	
-	// Getters & Setters
+// Getters & Setters
 public:	
 	APlayerState* GetOwningPlayerState() const { return OwningPlayerState; }
 	void SetOwningPlayerState(APlayerState* NewPlayerState) { OwningPlayerState = NewPlayerState; }
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")
+	ENation GetPlayerNation() const { return PlayerNation; }
+	void SetPlayerNation(ENation NewNation);
 	FName GetBaseRegion() const { return BaseRegion; }
 	void SetBaseRegion(FName NewRegion) { BaseRegion = NewRegion; }
 	int32 GetCredits() const { return Credits; }

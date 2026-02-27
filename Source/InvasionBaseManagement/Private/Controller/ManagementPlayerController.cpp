@@ -17,8 +17,18 @@ AManagementPlayerController::AManagementPlayerController()
 	CheatClass = UInvasionCheatManager::StaticClass();
 }
 
+void AManagementPlayerController::Server_RequestSetNation_Implementation(ENation NewNation)
+{
+	if (NewNation == ENation::EN_None) { return;}
+	
+	if (ABaseManagerState* Base = GetBaseManagerState())
+	{
+		Base->SetPlayerNation(NewNation);
+	}
+}
+
 void AManagementPlayerController::Server_RequestHireWorker_Implementation(UWorkerData* Worker,
-	ARegionalWorkerPool* Pool)
+                                                                          ARegionalWorkerPool* Pool)
 {
 	if (!Worker || !Pool) { return;}
 	

@@ -29,6 +29,7 @@ void ABaseManagerState::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& Ou
 	Super::GetLifetimeReplicatedProps(OutLifetimeProps);
 
 	// Replicate all properties to the owning client only (for now - can change to all clients later if needed)
+	DOREPLIFETIME(ABaseManagerState, PlayerNation);
 	DOREPLIFETIME(ABaseManagerState, OwningPlayerState);
 	DOREPLIFETIME(ABaseManagerState, BaseRegion);
 	DOREPLIFETIME(ABaseManagerState, Credits);
@@ -52,6 +53,26 @@ void ABaseManagerState::OnRep_ActiveTasks()
 	UE_LOG(LogTemp, Log, TEXT("BaseManagerState: ActiveTasks replicated! Count: %d"), ActiveTasks.Num());
 	
 	OnTasksChanged.Broadcast();
+}
+
+void ABaseManagerState::SetPlayerNation(ENation NewNation)
+{
+	if (PlayerNation != ENation::EN_None) { return; }
+	PlayerNation = NewNation;
+	BaseRegion = DeriveRegionFromNation(NewNation);
+}
+
+FName ABaseManagerState::DeriveRegionFromNation(ENation Nation) const
+{
+	switch (Nation)
+	{
+		case ENation::EN_UK:	return  FName("Europe");
+		case ENation::EN_FRA:	return FName("Europe");
+		case ENation::EN_US:	return FName("NorthAmerica");
+		case ENation::EN_AUS:	return FName("Australia");
+		case ENation::EN_CHN:	return FName("Asia");
+		default:				return FName("None");
+	}
 }
 
 void ABaseManagerState::OnProgressUpdate()

@@ -40,7 +40,7 @@ void UWorkerPaneWidget::InitialiseWorkerPane()
 		UE_LOG(LogTemp, Error, TEXT("WorkerPaneWidget: WorkerTileWidget class not set — assign it in Blueprint defaults"));
 		return;
 	}
-
+	
 	WorkerList->ClearChildren();
 
 	for (UWorkerData* Worker : CachedBaseManagerState->GetAllWorkers())
