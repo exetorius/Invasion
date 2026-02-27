@@ -5,6 +5,8 @@
 #include "ManagementUITypes.h"
 #include "ManagementHUD.generated.h"
 
+enum class EWorkerRole : uint8;
+
 UCLASS()
 class INVASIONBASEMANAGEMENT_API UManagementHUD : public UUserWidget
 {
@@ -13,6 +15,9 @@ class INVASIONBASEMANAGEMENT_API UManagementHUD : public UUserWidget
 public:
 	UFUNCTION(BlueprintCallable, Category="UI")
 	void SwitchToView(EManagementView NewView);	
+	
+	void ShowWorkerPane(class ABaseManagerState* BaseManagerState, EWorkerRole WorkerRole, FGuid TaskID, FOnAssignClicked Callback);
+	void HideWorkerPane();
 
 protected:
 	void BindNavigationDelegates();
@@ -47,11 +52,13 @@ protected:
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UManagementNavigationWidget> WBP_ButtonBar;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UWorkerPaneWidget> WBP_WorkerPaneWidget;
 
 private:
 	void SetupViewMap();
 	
 	UPROPERTY()
-	TMap<EManagementView, UUserWidget*> ViewMap;
-	
+	TMap<EManagementView, UUserWidget*> ViewMap;	
 };

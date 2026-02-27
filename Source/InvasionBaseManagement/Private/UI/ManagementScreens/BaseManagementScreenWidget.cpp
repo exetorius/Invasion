@@ -12,9 +12,11 @@ void UBaseManagementScreenWidget::NativeConstruct()
 void UBaseManagementScreenWidget::InitialiseScreenData()
 {
 	// Get player's BaseManagerState
-	if (const AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
+	if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
 	{
+		CachedPlayerController = PC;
 		CachedBaseManagerState = PC->GetBaseManagerState();
+		CachedManagementHUD = PC->GetManagementHUD();
 		
 		if (!CachedBaseManagerState)
 		{

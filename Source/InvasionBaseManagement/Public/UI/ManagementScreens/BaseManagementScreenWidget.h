@@ -23,5 +23,11 @@ protected:
 	virtual void OnScreenDataReady();
 	
 	UPROPERTY()
+	TObjectPtr<class AManagementPlayerController> CachedPlayerController;
+	
+	UPROPERTY()
 	TObjectPtr<class ABaseManagerState> CachedBaseManagerState;
+	
+	UPROPERTY()
+	TObjectPtr<class UManagementHUD> CachedManagementHUD;
 };

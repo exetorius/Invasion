@@ -20,16 +20,16 @@ public:
 	void RefreshWorkerList();
 	
 protected:
-	virtual void OnScreenDataReady() override;	
-	
-	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
-	TSubclassOf<class UHiringWorkerTileWidget> WorkerTileWidget;
+	virtual void OnScreenDataReady() override;		
 	
 private:
 	void PopulateHiringWorkerList();
 	void InitialiseRegionalPool();
 	void OnWorkerHired(class UWorkerData* Worker);
 	void OnRegionalPoolChanged();
+	
+	UPROPERTY(EditDefaultsOnly, Category = "UI")
+	TSubclassOf<class UHiringWorkerTileWidget> WorkerTileWidget;
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UScrollBox> WorkerListScrollBox;

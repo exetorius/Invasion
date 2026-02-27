@@ -2,7 +2,7 @@
 
 
 #include "UI/WorkerManagement/RosterScreenWidget.h"
-#include "UI/WorkerManagement/RosterWorkerTileWidget.h"
+#include "UI/Tiles/RosterWorkerTileWidget.h"
 #include "Core/BaseManagerState.h"
 #include "Controller/ManagementPlayerController.h"
 #include "Components/ScrollBox.h"
@@ -56,7 +56,8 @@ void URosterScreenWidget::PopulateWorkerList()
 				if (URosterWorkerTileWidget* Tile = CreateWidget<URosterWorkerTileWidget>(this, WorkerTileClass))
 				{
 					Tile->SetWorkerData(Worker);
-					Tile->OnFireClicked.BindUObject(this, &URosterScreenWidget::OnWorkerFired);
+					Tile->SetActionLabel(FText::FromString("Fire"));
+					Tile->OnActionClicked.BindUObject(this, &URosterScreenWidget::OnWorkerFired);
 					WorkerListScrollBox->AddChild(Tile);
 				}
 			}

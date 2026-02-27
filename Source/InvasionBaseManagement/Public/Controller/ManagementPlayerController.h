@@ -55,4 +55,7 @@ public:
 	// Get this player's BaseManagerState
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")	
 	ABaseManagerState* GetBaseManagerState() const;
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "UI")
+	UManagementHUD* GetManagementHUD() const { return HUD; }
 };

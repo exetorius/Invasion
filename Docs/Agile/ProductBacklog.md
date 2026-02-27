@@ -1,8 +1,8 @@
 # Product Backlog
 
-**Last Updated:** 2026-02-25
+**Last Updated:** 2026-02-27
 **Sprint History:** Sprint 0 ✅ (9 SP) · Sprint 1 ✅ (10 SP)
-**Current Sprint:** Sprint 2 — not yet planned
+**Current Sprint:** Sprint 2 — in progress
 
 > ⚠️ **Maintenance Note:** After finalising any sprint plan or roadmap, re-verify this document
 > still reflects current priorities. See reminder in CLAUDE.md → Task Management.
@@ -41,12 +41,12 @@ and giving task completion an output.
 
 ### 🟠 P1
 
-- [ ] **Worker Pane — Manual Assignment** (~5 SP)
+- [ ] **Worker Pane — Manual Assignment** (~5 SP) — **C++ complete, Blueprint + PIE test remaining**
   As a player, I want to select a specific worker to assign to a task so that the choice feels meaningful.
-  - New `UWorkerPaneWidget` — shared component, filtered by role per screen
-  - Research screen: Scientists only, player picks one to assign
-  - Engineering screen: Engineers only
-  - Replaces current auto-assign (first idle worker) on both screens
+  - `UWorkerTileBase` created — abstract tile base, role-specific display via Blueprint subclass
+  - `UWorkerPaneWidget` implemented — filters idle workers by role, callback-driven assignment
+  - Research + Engineering screens wired — auto-assign replaced with pane call
+  - Blueprint work remaining: `WBP_WorkerPane`, tile Blueprint subclass, PIE test
   - Roster screen uses the same widget with no role filter (future)
   - Multiplayer test required (+1 SP)
   - _Design: `02_BaseManagement.md` → Worker Pane Pattern_

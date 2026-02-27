@@ -7,7 +7,11 @@
 #include "Controller/ManagementPlayerController.h"
 #include "Core/BaseManagerState.h"
 #include "Data/TaskTypes.h"
-#include "UI/WorkerTasks/TaskTileWidget.h"
+#include "Data/WorkerData.h"
+#include "Data/WorkerTypes.h"
+#include "UI/ManagementHUD.h"
+#include "UI/ManagementUITypes.h"
+#include "UI/Tiles/TaskTileWidget.h"
 
 void UEngineeringScreenWidget::OnScreenDataReady()
 {
@@ -58,24 +62,21 @@ void UEngineeringScreenWidget::BindTaskChangeDelegates()
 
 void UEngineeringScreenWidget::OnAssignClicked(FGuid TaskID)
 {
-	// TODO: Future, check for research/scientists only instead? Could be a separate list from soldiers and engineers 
-	// TODO: Select specific worker rather than grabbing first idle worker
-	if (CachedBaseManagerState && CachedBaseManagerState->GetAllWorkers().Num() > 0)
-	{				
-		TArray<UWorkerData*> WorkerRoster = CachedBaseManagerState->GetAllWorkers();
-		for (UWorkerData* Worker : WorkerRoster)
-		{
-			if (Worker->GetRole() == EWorkerRole::EWRO_Engineer && Worker->GetCurrentStatus() == EWorkerStatus::EWS_Idle)
-			{
-				if (AManagementPlayerController* PC = Cast<AManagementPlayerController>(GetOwningPlayer()))
-				{
-					UE_LOG(LogTemp, Log, TEXT("EngineeringScreenWidget: Assigning worker to task"));
-					PC->Server_RequestAssignWorker(Worker, TaskID);
-					return;
-				}				
-			}
-		}		
-	}
+	if (!ensure(CachedManagementHUD)) { return; }
+
+	CachedManagementHUD->ShowWorkerPane(
+		CachedBaseManagerState,
+		EWorkerRole::EWRO_Engineer,
+		TaskID,
+		FOnAssignClicked::CreateUObject(this, &UEngineeringScreenWidget::OnWorkerAssigned));
+}
+
+void UEngineeringScreenWidget::OnWorkerAssigned(UWorkerData* Worker, FGuid TaskID)
+{
+	if (!ensure(CachedPlayerController)) { return; }
+
+	CachedPlayerController->Server_RequestAssignWorker(Worker, TaskID);
+	CachedManagementHUD->HideWorkerPane();
 }
 
 void UEngineeringScreenWidget::OnUnassignClicked(FGuid TaskID)

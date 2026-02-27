@@ -9,12 +9,12 @@ Track your story point velocity over time to improve sprint planning accuracy.
 ### Sprint 2 — Worker Assignment & Identity (March 2–6, 2026)
 - **Goal:** Give players meaningful worker assignment choices and national identity before campaign start
 - **Planned:** 8 SP
-- **Status:** In Planning
+- **Status:** In Progress
 
 | Issue # | Task | Story Points | Notes |
 |---------|------|--------------|-------|
-| #15 | Worker Pane — Manual Assignment | 5 | Architecture discussion required before coding |
-| #16 | Nation Selection Screen | 3 | |
+| #15 | Worker Pane — Manual Assignment | 5 | C++ complete. Blueprint + PIE test remaining |
+| #16 | Nation Selection Screen | 3 | Not started |
 | **TOTAL** | | **8** | |
 
 ---

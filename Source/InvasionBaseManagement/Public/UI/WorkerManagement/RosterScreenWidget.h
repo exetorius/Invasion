@@ -20,11 +20,7 @@ public:
 	void RefreshWorkerList();
 
 protected:
-	virtual void OnScreenDataReady() override;	
-	
-	// Class to spawn for each worker tile
-	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = "Roster")
-	TSubclassOf<class URosterWorkerTileWidget> WorkerTileClass;
+	virtual void OnScreenDataReady() override;		
 
 private:
 	void InitialiseRosterScreen();
@@ -33,6 +29,10 @@ private:
 	
 	void OnWorkerRosterUpdated();
 	void OnWorkerFired(class UWorkerData* Worker);
+	
+	// Class to spawn for each worker tile
+	UPROPERTY(EditAnywhere, Category = "Roster")
+	TSubclassOf<class URosterWorkerTileWidget> WorkerTileClass;
 	
 	// ScrollBox to hold worker tile widgets
 	UPROPERTY(meta = (BindWidget))

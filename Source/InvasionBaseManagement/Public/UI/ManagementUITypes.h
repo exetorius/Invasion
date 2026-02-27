@@ -1,6 +1,11 @@
 ﻿#pragma once
 
+#include "CoreMinimal.h"
 #include "ManagementUITypes.generated.h"
+
+class UWorkerData;
+
+DECLARE_DELEGATE_TwoParams(FOnAssignClicked, UWorkerData*, FGuid)
 
 UENUM(BlueprintType)
 enum class EManagementView : uint8
