@@ -14,6 +14,8 @@ void UWorkerPaneWidget::ShowWorkerList(ABaseManagerState* BaseManagerState, EWor
 	CachedBaseManagerState = BaseManagerState;
 	CachedRoleFilter = WorkerType;
 	CachedTaskID = InTaskID;
+	
+	CachedBaseManagerState->OnWorkerRosterChanged.AddUObject(this, &UWorkerPaneWidget::InitialiseWorkerPane);
 
 	InitialiseWorkerPane();
 }
@@ -22,6 +24,10 @@ void UWorkerPaneWidget::HideWorkerList()
 {
 	if (!ensure(WorkerList)) { return; }
 	WorkerList->ClearChildren();
+	if (CachedBaseManagerState)
+	{
+		CachedBaseManagerState->OnWorkerRosterChanged.RemoveAll(this);
+	}
 }
 
 void UWorkerPaneWidget::InitialiseWorkerPane()

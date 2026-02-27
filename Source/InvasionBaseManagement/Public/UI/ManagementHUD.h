@@ -20,8 +20,8 @@ public:
 	void HideWorkerPane();
 
 protected:
-	void BindNavigationDelegates();
 	virtual void NativeConstruct() override;
+	void BindNavigationDelegates();	
 
 	UPROPERTY(meta=(BindWidget))
 	TObjectPtr<class UWidgetSwitcher> WidgetSwitcher;
