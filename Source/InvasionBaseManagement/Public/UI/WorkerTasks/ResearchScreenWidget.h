@@ -31,4 +31,5 @@ private:
 	
 	void OnAssignClicked(FGuid TaskID);
 	void OnUnassignClicked(FGuid TaskID);
+	void OnWorkerAssigned(UWorkerData* Worker, FGuid TaskID);
 };

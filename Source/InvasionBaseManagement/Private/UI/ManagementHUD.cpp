@@ -10,7 +10,7 @@
 #include "UI/ManagementNavigationWidget.h"
 
 #include "Components/WidgetSwitcher.h"
-
+#include "UI/WorkerManagement/WorkerPaneWidget.h"
 
 
 void UManagementHUD::NativeConstruct()
@@ -72,4 +72,21 @@ void UManagementHUD::SwitchToView(EManagementView NewView)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("No widget found for view %d"), static_cast<int32>(NewView));
 	}
+}
+
+void UManagementHUD::ShowWorkerPane(ABaseManagerState* BaseManagerState, EWorkerRole WorkerRole, FGuid TaskID, FOnAssignClicked Callback)
+{
+	if (!ensure(WBP_WorkerPaneWidget)) { return; }
+
+	WBP_WorkerPaneWidget->OnAssignClicked = Callback;
+	WBP_WorkerPaneWidget->ShowWorkerList(BaseManagerState, WorkerRole, TaskID);
+	WBP_WorkerPaneWidget->SetVisibility(ESlateVisibility::Visible);
+}
+
+void UManagementHUD::HideWorkerPane()
+{
+	if (!ensure(WBP_WorkerPaneWidget)) { return; }
+	
+	WBP_WorkerPaneWidget->HideWorkerList();
+	WBP_WorkerPaneWidget->SetVisibility(ESlateVisibility::Collapsed);
 }

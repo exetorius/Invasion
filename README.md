@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 1 complete, Sprint 2 planning |
+| **Status** | Early development — Sprint 2 complete, Sprint 3 planning |
 
 ---
 
@@ -76,6 +76,17 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 
 ---
 
+## Sprint 2 — Worker Assignment & Identity ✅ | March 2–6, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #15 | Worker Pane — Manual Assignment | 5 | ✅ Done |
+| #16 | Nation Selection Screen | 3 | ✅ Done |
+
+**Planned:** 8 SP | **Completed:** 8 SP ✅
+
+---
+
 ## Sprint 1 — Base Activity ✅ | Feb 19–25, 2026
 
 | # | Task | Points | Status |
@@ -129,7 +140,7 @@ Notable decisions logged so far:
 - [x] Task data layer + Research screen (assign/unassign workers, 1s progress timer, multiplayer tested)
 - [x] Engineering screen (mirrors research, Engineer role filter)
 - [x] Base overview dashboard (worker counts, task progress, resources)
-- [ ] Nation selection screen
+- [x] Nation selection screen (grey-box — data layer complete, permanent home TBD)
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
 - [ ] Tactical combat (long term)

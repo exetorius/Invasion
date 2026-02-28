@@ -8,7 +8,7 @@
 #include "Core/BaseManagerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Systems/RegionalWorkerPool.h"
-#include "UI/WorkerManagement/HiringWorkerTileWidget.h"
+#include "UI/Tiles/HiringWorkerTileWidget.h"
 
 void UHiringScreenWidget::OnScreenDataReady()
 {
@@ -69,7 +69,8 @@ void UHiringScreenWidget::PopulateHiringWorkerList()
 				if (UHiringWorkerTileWidget* Tile = CreateWidget<UHiringWorkerTileWidget>(this, WorkerTileWidget))
 				{
 					Tile->SetWorkerData(Worker);					
-					Tile->OnHireClicked.BindUObject(this, &UHiringScreenWidget::OnWorkerHired);
+					Tile->SetActionLabel(FText::FromString("Hire"));
+					Tile->OnActionClicked.BindUObject(this, &UHiringScreenWidget::OnWorkerHired);
 					WorkerListScrollBox->AddChild(Tile);
 				}
 			}

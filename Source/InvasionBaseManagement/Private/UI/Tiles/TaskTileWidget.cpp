@@ -1,7 +1,7 @@
 ﻿// CopyrightNotice
 
 
-#include "UI/WorkerTasks/TaskTileWidget.h"
+#include "UI/Tiles/TaskTileWidget.h"
 
 void UTaskTileWidget::OnAssignButtonClicked()
 {

@@ -10,7 +10,7 @@ public class InvasionBaseManagement : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core"  });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "UMG" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "UMG", "SlateCore" });
 
 	}
 }

@@ -4,9 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "Data/CampaignTypes.h"	
 #include "ManagementPlayerController.generated.h"
-
-class ABaseManagerState;
 
 /**
  * PlayerController for base management
@@ -19,6 +18,9 @@ class INVASIONBASEMANAGEMENT_API AManagementPlayerController : public APlayerCon
 
 public:
 	AManagementPlayerController();
+	
+	UFUNCTION(Server, Reliable, Category = "UI")
+	void Server_RequestSetNation(ENation NewNation);
 	
 	UFUNCTION(Server, Reliable, Category = "UI")
 	void Server_RequestHireWorker(class UWorkerData* Worker, class ARegionalWorkerPool* Pool);
@@ -48,11 +50,14 @@ private:
 
 	// Cached reference to this player's BaseManagerState
 	UPROPERTY()
-	mutable TObjectPtr<ABaseManagerState> CachedBaseManagerState;
+	mutable TObjectPtr<class ABaseManagerState> CachedBaseManagerState;
 	
 // Getters & Setters
 public:
 	// Get this player's BaseManagerState
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")	
 	ABaseManagerState* GetBaseManagerState() const;
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "UI")
+	UManagementHUD* GetManagementHUD() const { return HUD; }
 };

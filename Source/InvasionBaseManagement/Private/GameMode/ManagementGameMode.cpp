@@ -18,8 +18,9 @@ AManagementGameMode::AManagementGameMode()
 
 	// Default regions
 	RegionNames.Add(FName("Europe"));
-	RegionNames.Add(FName("US"));
+	RegionNames.Add(FName("North America"));
 	RegionNames.Add(FName("Asia"));
+	RegionNames.Add(FName("Oceania"));
 
 	DefaultPlayerRegion = FName("Europe");
 }
