@@ -74,8 +74,19 @@ void ABaseManagerState::OnProgressUpdate()
 		
 		// Copy - modify -- assign
 		FBaseTask ModifiedTask = Task;		
-		ModifiedTask.Progress += 1.f * Task.AssignedWorkerIDs.Num();
-		bAnyTaskProgressed = true;
+		
+		// TODO: Upgrade to a smarter formula once WorkerData contains some statistics for actual workers
+		float TotalEfficiency = 0.f;
+		for (const FGuid& WorkerID : Task.AssignedWorkerIDs)
+		{
+			if (UWorkerData* Worker = FindWorkerByGUID(WorkerID))
+			{
+				TotalEfficiency += Worker->GetWorkEfficiency() / 100.f;
+			}
+		}
+		
+		ModifiedTask.Progress += TotalEfficiency;
+		bAnyTaskProgressed = true; // TODO: Should only progress if actual progression is made
 		UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Task %s progress updated to %f"), *Task.TaskID.ToString(), ModifiedTask.Progress);
 		if (ModifiedTask.Progress >= ModifiedTask.BaseDuration)
 		{
