@@ -6,6 +6,7 @@
 #include "Core/BaseManagerState.h"
 #include "Systems/RegionalWorkerPool.h"
 #include "GameFramework/PlayerState.h"
+#include "Data/CampaignTypes.h"
 
 AManagementGameMode::AManagementGameMode()
 {
@@ -15,14 +16,6 @@ AManagementGameMode::AManagementGameMode()
 	// Set default classes
 	BaseManagerStateClass = ABaseManagerState::StaticClass();
 	RegionalWorkerPoolClass = ARegionalWorkerPool::StaticClass();
-
-	// Default regions
-	RegionNames.Add(FName("Europe"));
-	RegionNames.Add(FName("North America"));
-	RegionNames.Add(FName("Asia"));
-	RegionNames.Add(FName("Oceania"));
-
-	DefaultPlayerRegion = FName("Europe");
 }
 
 void AManagementGameMode::BeginPlay()
@@ -75,12 +68,13 @@ void AManagementGameMode::CreateBaseManagerStateForPlayer(APlayerController* New
 	if (NewBaseState)
 	{
 		NewBaseState->SetOwningPlayerState(NewPlayer->PlayerState);
-		NewBaseState->SetBaseRegion(DefaultPlayerRegion); // Assign default region
+		const TArray<FName>& Regions = GetAllUniqueRegions(); // TODO: Assign once player has picked starting region #24 issue
+		NewBaseState->SetBaseRegion(Regions[0]); 
 		PlayerBaseStates.Add(NewPlayer->PlayerState, NewBaseState);
 
 		UE_LOG(LogTemp, Log, TEXT("ManagementGameMode: Created BaseManagerState for player %s in region %s"),
 			*NewPlayer->PlayerState->GetPlayerName(),
-			*DefaultPlayerRegion.ToString());
+			*Regions[0].ToString());
 	}
 	else
 	{
@@ -101,7 +95,7 @@ void AManagementGameMode::SpawnRegionalWorkerPools()
 	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
 
 	// Spawn a pool for each region
-	for (const FName& RegionName : RegionNames)
+	for (const FName& RegionName : GetAllUniqueRegions())
 	{
 		ARegionalWorkerPool* Pool = GetWorld()->SpawnActor<ARegionalWorkerPool>(
 			RegionalWorkerPoolClass,

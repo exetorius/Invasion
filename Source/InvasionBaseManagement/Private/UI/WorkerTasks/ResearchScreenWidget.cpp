@@ -26,11 +26,7 @@ void UResearchScreenWidget::InitialiseResearchScreen()
 
 void UResearchScreenWidget::PopulateTaskList()
 {
-	if (!TaskListScrollBox)
-	{
-		UE_LOG(LogTemp, Error, TEXT("ResearchScreenWidget: TaskListScrollBox is null - ensure it's bound in Blueprint"));
-		return;
-	}
+	if (!ensure(TaskListScrollBox)) { return; }
 	
 	UE_LOG(LogTemp, Log, TEXT("ResearchScreenWidget: Populating task list"));
 	

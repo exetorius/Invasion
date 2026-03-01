@@ -15,3 +15,7 @@ enum class ENation : uint8
 	
 	EN_MAX			UMETA(Hidden)
 };
+
+// Helper function
+INVASIONBASEMANAGEMENT_API FName GetRegionNameFromNation(ENation Nation);
+INVASIONBASEMANAGEMENT_API TArray<FName> GetAllUniqueRegions();

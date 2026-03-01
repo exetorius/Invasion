@@ -6,6 +6,7 @@
 #include "Engine/NetDriver.h"
 #include "GameFramework/PlayerState.h"
 #include "UObject/UObjectGlobals.h"
+#include "Data/CampaignTypes.h"
 
 ABaseManagerState::ABaseManagerState()
 {
@@ -59,25 +60,14 @@ void ABaseManagerState::SetPlayerNation(ENation NewNation)
 {
 	if (PlayerNation != ENation::EN_None) { return; }
 	PlayerNation = NewNation;
-	BaseRegion = DeriveRegionFromNation(NewNation);
-}
-
-FName ABaseManagerState::DeriveRegionFromNation(ENation Nation) const
-{
-	switch (Nation)
-	{
-		case ENation::EN_UK:	return  FName("Europe");
-		case ENation::EN_FRA:	return FName("Europe");
-		case ENation::EN_US:	return FName("NorthAmerica");
-		case ENation::EN_AUS:	return FName("Australia");
-		case ENation::EN_CHN:	return FName("Asia");
-		default:				return FName("None");
-	}
+	BaseRegion = GetRegionNameFromNation(NewNation);
 }
 
 void ABaseManagerState::OnProgressUpdate()
 {
 	if (!HasAuthority()) { return; }
+	
+	bool bAnyTaskProgressed = false;	
 	for (FBaseTask& Task : ActiveTasks)
 	{
 		if (Task.AssignedWorkerIDs.Num() == 0) { continue; }
@@ -85,6 +75,7 @@ void ABaseManagerState::OnProgressUpdate()
 		// Copy - modify -- assign
 		FBaseTask ModifiedTask = Task;		
 		ModifiedTask.Progress += 1.f * Task.AssignedWorkerIDs.Num();
+		bAnyTaskProgressed = true;
 		UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Task %s progress updated to %f"), *Task.TaskID.ToString(), ModifiedTask.Progress);
 		if (ModifiedTask.Progress >= ModifiedTask.BaseDuration)
 		{
@@ -93,7 +84,7 @@ void ABaseManagerState::OnProgressUpdate()
 		}
 		Task = ModifiedTask;		
 	}	
-	OnTasksChanged.Broadcast();	
+	if (bAnyTaskProgressed) { OnTasksChanged.Broadcast(); }
 }
 
 void ABaseManagerState::BeginPlay()
@@ -157,6 +148,8 @@ void ABaseManagerState::InitializeBase()
 	EmpGrenade.MaxWorkers = 2;
 	EmpGrenade.BaseDuration = 45;	
 	ActiveTasks.Add(EmpGrenade);
+	
+	OnTasksChanged.Broadcast();
 }
 
 void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
@@ -168,21 +161,8 @@ void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
 		return;
 	}
 
-	// Server-side execution
-	if (NewWorker)
-	{
-		WorkerRoster.Add(NewWorker);
-
-		// CRITICAL: Register as a replicated subobject to replicate to clients
-		AddReplicatedSubObject(NewWorker);
-
-		UE_LOG(LogTemp, Log, TEXT("Added worker: %s to base owned by %s"),
-			*NewWorker->GetWorkerName(),
-			OwningPlayerState ? *OwningPlayerState->GetPlayerName() : TEXT("Unknown"));
-
-		// Broadcast to UI that the roster changed
-		OnWorkerRosterChanged.Broadcast();
-	}
+	// Server can run this on itself
+	Server_AddWorker_Implementation(NewWorker);
 }
 
 void ABaseManagerState::Server_AddWorker_Implementation(UWorkerData* NewWorker)
@@ -218,16 +198,7 @@ void ABaseManagerState::RemoveWorker(UWorkerData* OldWorker)
 	}
 
 	// Server-side execution
-	WorkerRoster.Remove(OldWorker);
-
-	// CRITICAL: Remove as a replicated subobject to reduce overheads
-	RemoveReplicatedSubObject(OldWorker);
-
-	UE_LOG(LogTemp, Log, TEXT("Removed worker: %s back to pool"),
-		*OldWorker->GetWorkerName());
-
-	// Broadcast to UI that the roster changed
-	OnWorkerRosterChanged.Broadcast();
+	Server_RemoveWorker_Implementation(OldWorker);
 }
 
 void ABaseManagerState::Server_RemoveWorker_Implementation(UWorkerData* OldWorker)

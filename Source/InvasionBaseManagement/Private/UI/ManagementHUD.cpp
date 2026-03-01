@@ -57,11 +57,7 @@ void UManagementHUD::BindNavigationDelegates()
 
 void UManagementHUD::SwitchToView(EManagementView NewView)
 {
-	if (!WidgetSwitcher)
-	{
-		UE_LOG(LogTemp, Error, TEXT("OverlaySwitcher is NULL"));
-		return;
-	}
+	if (!ensure(WidgetSwitcher)) { return; }
 
 	// Search the TMap for the desired widget to display and if valid, display it
 	if (UUserWidget** FoundWidget = ViewMap.Find(NewView))

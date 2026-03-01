@@ -33,11 +33,7 @@ void URosterScreenWidget::InitialiseRosterScreen()
 void URosterScreenWidget::PopulateWorkerList()
 {
 	// TODO: Display workers in a list by Role - Soldiers, Scientists, Engineers, Medics etc
-	if (!WorkerListScrollBox)
-	{
-		UE_LOG(LogTemp, Error, TEXT("RosterScreenWidget: WorkerListScrollBox is null - ensure it's bound in Blueprint"));
-		return;
-	}
+	if (!ensure(WorkerListScrollBox))	{ return; }
 
 	// Clear existing tiles
 	WorkerListScrollBox->ClearChildren();

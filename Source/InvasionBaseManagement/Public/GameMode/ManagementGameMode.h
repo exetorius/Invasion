@@ -41,14 +41,6 @@ protected:
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "Regional Pools")
 	TSubclassOf<ARegionalWorkerPool> RegionalWorkerPoolClass;
 
-	// Regions to create on game start
-	UPROPERTY(EditDefaultsOnly, Category = "Regional Pools")
-	TArray<FName> RegionNames;
-
-	// Default region for new players
-	UPROPERTY(EditDefaultsOnly, Category = "Base Manager")
-	FName DefaultPlayerRegion;
-
 private:
 	// Map of PlayerState to their BaseManagerState
 	UPROPERTY()

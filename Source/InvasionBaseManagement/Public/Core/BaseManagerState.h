@@ -88,9 +88,7 @@ private:
 	
 	// Task timer handling
 	FTimerHandle TaskTimerHandle;
-	void OnProgressUpdate();
-	
-	FName DeriveRegionFromNation(ENation Nation) const;
+	void OnProgressUpdate();	
 	
 	// Client side functionality
 	UFUNCTION()
@@ -102,7 +100,7 @@ private:
 public:	
 	APlayerState* GetOwningPlayerState() const { return OwningPlayerState; }
 	void SetOwningPlayerState(APlayerState* NewPlayerState) { OwningPlayerState = NewPlayerState; }
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")
+	UFUNCTION(BlueprintPure, Category = "Base Manager")
 	ENation GetPlayerNation() const { return PlayerNation; }
 	void SetPlayerNation(ENation NewNation);
 	FName GetBaseRegion() const { return BaseRegion; }
@@ -115,6 +113,5 @@ public:
 	void RemoveSupplies(int32 SuppliesToRemove) { Supplies = FMath::Max(Supplies - SuppliesToRemove, 0); }
 	const TArray<FBaseTask>& GetActiveTasks() const { return ActiveTasks; }
 	
-	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")
-	const TArray<UWorkerData*>& GetAllWorkers() const { return WorkerRoster; }
+	const TArray<TObjectPtr<UWorkerData>>& GetAllWorkers() const { return WorkerRoster; }
 };

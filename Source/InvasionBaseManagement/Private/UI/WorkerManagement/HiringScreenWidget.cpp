@@ -46,11 +46,7 @@ void UHiringScreenWidget::InitialiseRegionalPool()
 
 void UHiringScreenWidget::PopulateHiringWorkerList()
 {
-	if (!WorkerListScrollBox)
-	{
-		UE_LOG(LogTemp, Error, TEXT("HiringScreenWidget: WorkerListScrollBox is null - ensure it's bound in Blueprint"));
-		return;
-	}
+	if (!ensure(WorkerListScrollBox))	{ return; }
 	
 	UE_LOG(LogTemp, Log, TEXT("HiringScreenWidget: Populating worker list"));
 	
