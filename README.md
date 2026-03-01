@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 2 complete, Sprint 3 planning |
+| **Status** | Early development — Sprint 3 complete, Sprint 4 planning |
 
 ---
 
@@ -73,6 +73,21 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
 - Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
+
+---
+
+## Sprint 3 — Tech Debt & Stability ✅ | March 9–13, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #17 | BindWidget ensure audit + GetOwningPlayer cast + stale TODO | 2 | ✅ Done |
+| #18 | Deduplicate region definition in CampaignTypes.h | 2 | ✅ Done |
+| #19 | Fix unconditional OnTasksChanged broadcast | 1 | ✅ Done |
+| #20 | Wire WorkEfficiency into task progress formula | 2 | ✅ Done |
+| #22 | AddWorker delegates to _Implementation | 1 | ✅ Done |
+| #23 | GetAllWorkers() return type alignment | 1 | ✅ Done |
+
+**Planned:** 9 SP | **Completed:** 9 SP ✅
 
 ---
 
