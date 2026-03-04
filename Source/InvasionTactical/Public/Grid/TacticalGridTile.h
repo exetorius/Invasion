@@ -7,6 +7,8 @@
 #include "GameFramework/Actor.h"
 #include "TacticalGridTile.generated.h"
 
+class ABaseUnit;
+
 UCLASS()
 class INVASIONTACTICAL_API ATacticalGridTile : public AActor
 {
@@ -27,7 +29,8 @@ private:
 	bool bIsWalkable = true; // Set once at BeginPlay via overlap. TODO: expose setter if dynamic blocking gets introduced (e.g Debris)
 	UPROPERTY(EditAnywhere)
 	FCoverData CoverData;
-	//ABaseUnit* OccupyingUnit; // TODO: Create this class first before uncommenting!
+	UPROPERTY()
+	ABaseUnit* OccupyingUnit;
 	
 // Getters & Setters
 public:
@@ -38,10 +41,10 @@ public:
 	bool IsWalkable() const { return bIsWalkable; }
 	UFUNCTION(BlueprintPure)
 	FCoverData GetCoverData() const { return CoverData; }
-	//UFUNCTION(BlueprintPure)
-	//bool IsOccupied() const { return OccupyingUnit != nullptr; }
-	//UFUNCTION(BlueprintPure)
-	//ABaseUnit* GetOccupyingUnit();
-	//void SetOccupyingUnit(ABaseUnit* NewUnit);
+	UFUNCTION(BlueprintPure)
+	bool IsOccupied() const { return OccupyingUnit != nullptr; }
+	UFUNCTION(BlueprintPure)
+	ABaseUnit* GetOccupyingUnit() const { return OccupyingUnit; };
+	void SetOccupyingUnit(ABaseUnit* NewUnit) { OccupyingUnit = NewUnit; };
 };
 

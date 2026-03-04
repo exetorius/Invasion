@@ -41,6 +41,7 @@ struct FCoverData
 UENUM(BlueprintType)
 enum class EFaction : uint8 
 {
+	None,
 	Player,
 	Enemy,
 	CivilianFriendly,

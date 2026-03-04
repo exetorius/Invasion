@@ -17,7 +17,15 @@ class INVASIONTACTICAL_API ABaseUnit : public AActor
 
 public:
 	ABaseUnit();
-
+	
+	void SetCurrentTile(ATacticalGridTile* NewTile);		
+	void Kill();	
+	
+	void AddHealth(float HealthToAdd);
+	void RemoveHealth(float HealthToRemove);
+	
+	virtual void OnTurnStart();	
+	
 protected:
 	virtual void BeginPlay() override;
 
@@ -34,7 +42,7 @@ private:
 	int32 MaxMovementPoints = 10;
 	
 	UPROPERTY(EditDefaultsOnly)
-	EFaction Faction;
+	EFaction Faction = EFaction::None;
 	
 	UPROPERTY(VisibleInstanceOnly)
 	ECombatState CombatState = ECombatState::Healthy;
@@ -42,8 +50,27 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	ATacticalGridTile* CurrentTile;
 	
-	UPROPERTY()
+	// Not UPROPERTY - UWorkerData lives in InvasionBaseManagement which is not yet a dependency.
+	// Safe for POC as this is always nullptr. Restore UPROPERTY when modules are wired in Phase 3.
 	UWorkerData* WorkerData = nullptr; // TODO - pass this in dynamically after POC
 	
-	
+// Getters & setters
+public:
+	UFUNCTION(BlueprintPure)
+	bool IsAlive() const { return CombatState != ECombatState::Dead; }
+	UFUNCTION(BlueprintPure)
+	float GetHealth() const { return Health; }
+	UFUNCTION(BlueprintPure)
+	float GetMaxHealth() const { return MaxHealth; }
+	UFUNCTION(BlueprintPure)
+	int32 GetMovementPointsRemaining() const { return MovementPointsRemaining; }
+	UFUNCTION(BlueprintPure)
+	int32 GetMaxMovementPoints() const { return MaxMovementPoints;}
+	UFUNCTION(BlueprintPure)
+	EFaction GetFaction() const { return Faction; }
+	void SetFaction(const EFaction NewFaction);
+	UFUNCTION(BlueprintPure)
+	ECombatState GetCombatState() const { return CombatState; }
+	UFUNCTION(BlueprintPure)
+	ATacticalGridTile* GetCurrentTile() const { return CurrentTile; }	
 };
