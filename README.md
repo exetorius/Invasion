@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 3 complete, Sprint 4 planning |
+| **Status** | Early development — Sprint 4 complete, Sprint 5 planning |
 
 ---
 
@@ -40,7 +40,7 @@ Source/
 ├── InvasionGameSettings/       # Graphics, audio, keybindings (stub)
 ├── InvasionSaveSystem/         # Save/load, slot management (stub)
 ├── InvasionProgression/        # Unlocks, achievements, stats (stub)
-└── InvasionTactical/           # Tactical battle module (stub)
+└── InvasionTactical/           # Tactical battle module (grid, tiles, unit hierarchy complete)
 ```
 
 ### Key Patterns
@@ -73,6 +73,19 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
 - Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
+
+---
+
+## Sprint 4 — Tactical Combat POC ✅ | March 2–4, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #25 | TacticalTypes.h — shared enums and structs | 1 | ✅ Done |
+| #26 | ATacticalGridTile — grid coordinate, walkability, cover, occupancy | 3 | ✅ Done |
+| #27 | ATacticalGrid — generation, query API, coordinate helpers | 3 | ✅ Done |
+| #28 | ABaseUnit / APlayerUnit / AEnemyUnit — unit hierarchy, stats, turn integration | 3 | ✅ Done |
+
+**Planned:** 10 SP | **Completed:** 10 SP ✅
 
 ---
 
@@ -156,6 +169,7 @@ Notable decisions logged so far:
 - [x] Engineering screen (mirrors research, Engineer role filter)
 - [x] Base overview dashboard (worker counts, task progress, resources)
 - [x] Nation selection screen (grey-box — data layer complete, permanent home TBD)
+- [x] Tactical combat foundation — ATacticalGridTile, ATacticalGrid, unit hierarchy (SP-first POC, Sprint 4)
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
 - [ ] Tactical combat (long term)
