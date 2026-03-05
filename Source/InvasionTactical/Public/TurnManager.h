@@ -21,7 +21,7 @@ public:
 	ATurnManager();
 	
 	void RegisterUnit(ABaseUnit* Unit);
-	void StartCombat();
+	void StartCombat();	
 	void RequestEndTurn();	
 	
 protected:
@@ -43,4 +43,10 @@ private:
 	UPROPERTY(VisibleInstanceOnly)
 	TArray<ABaseUnit*> EnemyUnits;	
 	
+	bool ShouldStartNextPhase();
+	bool HasCombatEnded() const;
+	void AdvanceToNextLiveUnit();
+	
+	const TArray<ABaseUnit*>& GetCurrentTeam() const;
+	const TArray<ABaseUnit*>& GetOtherTeam() const;
 };

@@ -45,72 +45,84 @@ void ATurnManager::StartCombat()
 	switch (FMath::RandRange(0, 1))
 	{
 	case 0:
-		TurnPhase = ETacticalPhase::Player;
-		StartingPhase = TurnPhase;
-		PlayerUnits[CurrentUnitIndex]->OnTurnStart();		
-		return;
+		TurnPhase = ETacticalPhase::Player;			
+		break;
 	case 1:
 		TurnPhase = ETacticalPhase::Enemy;
-		StartingPhase = TurnPhase;
-		EnemyUnits[CurrentUnitIndex]->OnTurnStart();
-		return;
+		break;
 	default:
 		UE_LOG(LogTemp, Warning, TEXT("ATurnManager::StartCombat - Invalid starting team"));
+		return;
 	}
+	StartingPhase = TurnPhase;
+	GetCurrentTeam()[CurrentUnitIndex]->OnTurnStart();	
+}
+
+bool ATurnManager::ShouldStartNextPhase()
+{
+	const TArray<ABaseUnit*>& CurrentTeam = GetCurrentTeam();
+	const TArray<ABaseUnit*>& OtherTeam = GetOtherTeam();
+	if (CurrentUnitIndex >= CurrentTeam.Num())
+	{
+		TurnPhase = TurnPhase == ETacticalPhase::Player ? ETacticalPhase::Enemy : ETacticalPhase::Player; 
+		if (TurnPhase == StartingPhase) { CurrentRound++; }
+		CurrentUnitIndex = 0;
+		OtherTeam[CurrentUnitIndex]->OnTurnStart();
+		return true;
+	}
+	return false;
+}
+
+bool ATurnManager::HasCombatEnded() const
+{
+	int32 DeadUnits = 0;
+	const TArray<ABaseUnit*>& OtherTeam = GetOtherTeam();
+	for (ABaseUnit* Unit : OtherTeam)
+	{
+		if (!Unit->IsAlive()) { DeadUnits++; }
+	}
+	if (DeadUnits >= OtherTeam.Num())
+	{
+		OnCombatEnded.Broadcast(TurnPhase == ETacticalPhase::Player); // bPlayerWon
+		return true;
+	}	
+	return false;
+}
+
+void ATurnManager::AdvanceToNextLiveUnit()
+{
+	const TArray<ABaseUnit*>& CurrentTeam = GetCurrentTeam();
+	CurrentUnitIndex++;	
+	while (CurrentUnitIndex < CurrentTeam.Num() && !CurrentTeam[CurrentUnitIndex]->IsAlive()) { CurrentUnitIndex++; }
 }
 
 void ATurnManager::RequestEndTurn()
-{		
-	int32 DeadUnits = 0;
-	switch (TurnPhase)
+{			
+	if (TurnPhase == ETacticalPhase::None)
 	{
-	case ETacticalPhase::Player:
-		// Check if all enemies are dead		
-		for (ABaseUnit* Unit : EnemyUnits)
-		{
-			if (!Unit->IsAlive()) { DeadUnits++; }
-		}
-		if (DeadUnits >= EnemyUnits.Num())
-		{
-			OnCombatEnded.Broadcast(true); // bPlayerWon
-			return;
-		}	
-		CurrentUnitIndex++;	
-		while (CurrentUnitIndex < PlayerUnits.Num() && !PlayerUnits[CurrentUnitIndex]->IsAlive()) { CurrentUnitIndex++; }
-		if (CurrentUnitIndex >= PlayerUnits.Num())
-		{
-			TurnPhase = ETacticalPhase::Enemy; 
-			if (TurnPhase == StartingPhase) { CurrentRound++; }
-			CurrentUnitIndex = 0;
-			EnemyUnits[CurrentUnitIndex]->OnTurnStart();
-			return;
-		}
-		PlayerUnits[CurrentUnitIndex]->OnTurnStart();
+		UE_LOG(LogTemp, Warning, TEXT("ATurnManager::RequestEndTurn - Cannot end turn when no combat is active"));
 		return;
-	case ETacticalPhase::Enemy:
-		// Check if all players are dead		
-		for (ABaseUnit* Unit : PlayerUnits)
-		{
-			if (!Unit->IsAlive()) { DeadUnits++; }
-		}
-		if (DeadUnits >= PlayerUnits.Num())
-		{
-			OnCombatEnded.Broadcast(false); // bPlayerWon
-			return;
-		}	
-		CurrentUnitIndex++;	
-		while (CurrentUnitIndex < EnemyUnits.Num() && !EnemyUnits[CurrentUnitIndex]->IsAlive()) { CurrentUnitIndex++; }
-		if (CurrentUnitIndex >= EnemyUnits.Num())
-		{
-			TurnPhase = ETacticalPhase::Player; 
-			if (TurnPhase == StartingPhase) { CurrentRound++; }
-			CurrentUnitIndex = 0;
-			PlayerUnits[CurrentUnitIndex]->OnTurnStart();
-			return;
-		}
-		EnemyUnits[CurrentUnitIndex]->OnTurnStart();
-		return;
-	case ETacticalPhase::None:
-		UE_LOG(LogTemp, Warning, TEXT("ATurnManager::RequestEndTurn - Invalid turn phase"));
 	}
+
+	// Check if all enemies are dead		
+	if (HasCombatEnded()) { return; }
+	
+	// Skip over dead units
+	AdvanceToNextLiveUnit();
+	
+	// If no remaining units, switch teams
+	if (ShouldStartNextPhase()) { return; }
+	
+	// Tell next unit to start its turn
+	GetCurrentTeam()[CurrentUnitIndex]->OnTurnStart();
+}
+
+const TArray<ABaseUnit*>& ATurnManager::GetCurrentTeam() const
+{
+	return TurnPhase == ETacticalPhase::Player ? PlayerUnits : EnemyUnits;
+}
+
+const TArray<ABaseUnit*>& ATurnManager::GetOtherTeam() const
+{
+	return TurnPhase == ETacticalPhase::Player ? EnemyUnits : PlayerUnits;
 }
