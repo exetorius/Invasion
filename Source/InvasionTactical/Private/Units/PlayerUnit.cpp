@@ -11,4 +11,9 @@ APlayerUnit::APlayerUnit()
 	SetFaction(EFaction::Player);
 }
 
+void APlayerUnit::OnTurnStart()
+{
+	Super::OnTurnStart();
+}
+
 

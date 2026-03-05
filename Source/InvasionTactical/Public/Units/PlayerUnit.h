@@ -13,6 +13,6 @@ class INVASIONTACTICAL_API APlayerUnit : public ABaseUnit
 
 public:
 	APlayerUnit();
-
+	virtual void OnTurnStart() override;
 
 };

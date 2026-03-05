@@ -11,4 +11,9 @@ AEnemyUnit::AEnemyUnit()
 	SetFaction(EFaction::Enemy);
 }
 
+void AEnemyUnit::OnTurnStart()
+{
+	Super::OnTurnStart();
+}
+
 

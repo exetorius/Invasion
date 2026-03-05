@@ -60,6 +60,7 @@ enum class ECombatState : uint8
 UENUM(BlueprintType)
 enum class ETacticalPhase : uint8
 {
+	None,
 	Player,
 	Enemy
 };

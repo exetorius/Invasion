@@ -13,6 +13,6 @@ class INVASIONTACTICAL_API AEnemyUnit : public ABaseUnit
 
 public:
 	AEnemyUnit();
-
+	virtual void OnTurnStart() override;
 
 };
