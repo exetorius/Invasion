@@ -3,6 +3,7 @@
 
 #include "Grid/TacticalGrid.h"
 
+#include "Pathfinder.h"
 #include "Grid/TacticalGridTile.h"
 
 
@@ -29,6 +30,9 @@ void ATacticalGrid::BeginPlay()
 			}			
 		}
 	}
+	
+	Pathfinder = NewObject<UPathfinder>(this);
+	Pathfinder->InitialiseGrid(this);
 }
 
 int32 ATacticalGrid::CoordinateToIndex(FIntPoint Coordinates) const

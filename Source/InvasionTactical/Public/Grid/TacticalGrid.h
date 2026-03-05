@@ -35,8 +35,8 @@ private:
 	
 	int32 CoordinateToIndex(FIntPoint Coordinates) const;
 	
-	//UPROPERTY()
-	//TObjectPtr<UPathfinder> Pathfinder;
+	UPROPERTY()
+	TObjectPtr<UPathfinder> Pathfinder;
 	
 // Getters & setters
 public:
@@ -48,5 +48,5 @@ public:
 	TArray<ATacticalGridTile*> GetTilesInRange(FIntPoint Origin, int32 Range) const;
 	FIntPoint GetGridLocationFromWorld(FVector WorldLocation) const;
 	FVector GetWorldLocationFromGrid(FIntPoint Coordinates) const;
-	//UPathfinder* GetPathfinder() const { return Pathfinder; } //TODO: Create the class then uncomment
+	UPathfinder* GetPathfinder() const { return Pathfinder; }
 };
