@@ -21,12 +21,16 @@ protected:
 	virtual void BeginPlay() override;
 
 private:
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere)
 	int32 GridWidth = 10;
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(EditAnywhere)
 	int32 GridHeight = 10;
 	UPROPERTY(EditDefaultsOnly)
 	float TileSize = 100.f;
+	
+	// Set before play starts
+	UPROPERTY(EditAnywhere)
+	bool bDebugDraw = false;
 	
 	UPROPERTY(EditDefaultsOnly)
 	TSubclassOf<ATacticalGridTile> TileClass;

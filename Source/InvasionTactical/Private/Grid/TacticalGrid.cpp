@@ -22,11 +22,19 @@ void ATacticalGrid::BeginPlay()
 	{
 		for (int32 X = 0; X < GridWidth; X++)
 		{
-			if (ATacticalGridTile* Tile = GetWorld()->SpawnActor<ATacticalGridTile>(TileClass))
+			FTransform Transform;
+			Transform.SetLocation(GetActorLocation() + FVector(X * TileSize, Y * TileSize, 0.f));			
+			
+			if (ATacticalGridTile* Tile = GetWorld()->SpawnActor<ATacticalGridTile>(TileClass, Transform))
 			{
-				Tile->SetActorLocation(GetActorLocation() + FVector(X * TileSize, Y * TileSize, 0.f));
 				Tile->SetGridCoordinates(FIntPoint(X, Y));
-				Tiles.Add(Tile);
+				Tiles.Add(Tile);				
+				
+				if (bDebugDraw)
+				{
+					FColor DebugColor = Tile->IsWalkable() ? FColor::Green : FColor::Red;
+					DrawDebugBox(GetWorld(), Tile->GetActorLocation(), FVector(TileSize/2, TileSize/2, 0.f), DebugColor, true, 0,0, 10);
+				}
 			}			
 		}
 	}

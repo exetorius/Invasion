@@ -15,13 +15,14 @@ void ATacticalGridTile::BeginPlay()
 	
 	if (const UWorld* World = GetWorld())
 	{
-		bIsWalkable = !World->OverlapAnyTestByChannel(
-			GetActorLocation(), 
-			FQuat::Identity, 
-			ECC_GameTraceChannel1, 
+		const bool bBlocked = World->OverlapAnyTestByChannel(
+			GetActorLocation(),
+			FQuat::Identity,
+			ECC_GameTraceChannel1,
 			FCollisionShape::MakeBox(FVector(BoxHalfExtents)),
-			FCollisionQueryParams::DefaultQueryParam				
+			FCollisionQueryParams::DefaultQueryParam
 			);
+		bIsWalkable = !bBlocked;
 	}
 }
 

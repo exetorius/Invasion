@@ -32,7 +32,7 @@ class INVASIONTACTICAL_API UPathfinder : public UObject
 	GENERATED_BODY()
 	
 public:
-	TArray<ATacticalGridTile*> FindPath(ATacticalGridTile* StartTile, ATacticalGridTile* EndTile);
+	TArray<ATacticalGridTile*> FindPath(ATacticalGridTile* StartTile, const ATacticalGridTile* EndTile) const;
 	
 	void InitialiseGrid(ATacticalGrid* Grid) { TacticalGrid = Grid;};
 	
