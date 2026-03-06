@@ -3,6 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
+#include "TacticalTypes.h"
 #include "GameFramework/Actor.h"
 #include "TacticalGrid.generated.h"
 
@@ -16,15 +17,18 @@ class INVASIONTACTICAL_API ATacticalGrid : public AActor
 
 public:
 	ATacticalGrid();
+	
+	UFUNCTION(BlueprintPure)
+	ECoverType GetCover(FIntPoint DefenderCoords, FIntPoint AttackerCoords);
 
 protected:
 	virtual void BeginPlay() override;
 
 private:
 	UPROPERTY(EditAnywhere)
-	int32 GridWidth = 10;
+	int32 GridLength = 10;
 	UPROPERTY(EditAnywhere)
-	int32 GridHeight = 10;
+	int32 GridWidth = 10;
 	UPROPERTY(EditDefaultsOnly)
 	float TileSize = 100.f;
 	
@@ -41,6 +45,7 @@ private:
 	
 	UPROPERTY()
 	TObjectPtr<UPathfinder> Pathfinder;
+		
 	
 // Getters & setters
 public:

@@ -36,5 +36,9 @@ void APathfinderTest::BeginPlay()
 			UE_LOG(LogTemp, Warning, TEXT("Tile: %s"), *Tile->GetGridCoordinates().ToString());
 		}
 	}
+	ECoverType Cover = TacticalGrid->GetCover(DefenderCoords, AttackerCoords);
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow,
+		FString::Printf(TEXT("Cover: %d"), (uint8)Cover));
+	
 }
 

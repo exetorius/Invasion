@@ -18,9 +18,9 @@ void ATacticalGrid::BeginPlay()
 	
 	if (!ensure(TileClass)) { return; }
 	
-	for (int32 Y = 0; Y < GridHeight; Y++)
+	for (int32 Y = 0; Y < GridWidth; Y++) // East / West
 	{
-		for (int32 X = 0; X < GridWidth; X++)
+		for (int32 X = 0; X < GridLength; X++) // North / South
 		{
 			FTransform Transform;
 			Transform.SetLocation(GetActorLocation() + FVector(X * TileSize, Y * TileSize, 0.f));			
@@ -30,7 +30,7 @@ void ATacticalGrid::BeginPlay()
 				Tile->SetGridCoordinates(FIntPoint(X, Y));
 				Tiles.Add(Tile);				
 				
-				if (bDebugDraw)
+				if (bDebugDraw) // TODO: Make debug tool better
 				{
 					FColor DebugColor = Tile->IsWalkable() ? FColor::Green : FColor::Red;
 					DrawDebugBox(GetWorld(), Tile->GetActorLocation(), FVector(TileSize/2, TileSize/2, 0.f), DebugColor, true, 0,0, 10);
@@ -45,11 +45,40 @@ void ATacticalGrid::BeginPlay()
 
 int32 ATacticalGrid::CoordinateToIndex(FIntPoint Coordinates) const
 {
-	if (Coordinates.X < 0 || Coordinates.Y < 0 || Coordinates.X >= GridWidth || Coordinates.Y >= GridHeight)
+	if (Coordinates.X < 0 || Coordinates.Y < 0 || Coordinates.X >= GridLength || Coordinates.Y >= GridWidth)
 	{
 		return INDEX_NONE;
 	}
 	return Coordinates.X + Coordinates.Y * GridWidth;
+}
+
+ECoverType ATacticalGrid::GetCover(FIntPoint DefenderCoords, FIntPoint AttackerCoords)
+{
+	if (ATacticalGridTile* DefenderTile = GetTile(DefenderCoords))
+	{
+		FIntPoint Direction = DefenderCoords - AttackerCoords;
+
+		if (Direction.X != 0 && Direction.Y == 0)
+		{
+			// Attacker is North or South
+			if (Direction.X > 0) { return DefenderTile->GetCoverData().GetCover(ECardinalDirection::South); }
+			if (Direction.X < 0) { return DefenderTile->GetCoverData().GetCover(ECardinalDirection::North); }
+		}
+		else if (Direction.X == 0 && Direction.Y != 0)
+		{
+			// Attacker is East or West
+			if (Direction.Y > 0) { return DefenderTile->GetCoverData().GetCover(ECardinalDirection::West); }
+			if (Direction.Y < 0) { return DefenderTile->GetCoverData().GetCover(ECardinalDirection::East); }
+		}
+		else
+		{
+			// Diagonal case (lowest cover wins)
+			ECoverType NorthCover = Direction.X > 0 ? DefenderTile->GetCoverData().GetCover(ECardinalDirection::South) : DefenderTile->GetCoverData().GetCover(ECardinalDirection::North);
+			ECoverType EastCover = Direction.Y > 0 ? DefenderTile->GetCoverData().GetCover(ECardinalDirection::West) : DefenderTile->GetCoverData().GetCover(ECardinalDirection::East);
+			return FMath::Min(NorthCover, EastCover);
+		}		
+	}
+	return ECoverType::None;
 }
 
 ATacticalGridTile* ATacticalGrid::GetTile(FIntPoint Coordinates) const

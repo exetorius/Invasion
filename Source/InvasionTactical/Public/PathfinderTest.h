@@ -14,6 +14,10 @@ class INVASIONTACTICAL_API APathfinderTest : public AActor
 public:
 	APathfinderTest();
 
+	UPROPERTY(EditAnywhere)
+	FIntPoint DefenderCoords;
+	UPROPERTY(EditAnywhere)
+	FIntPoint AttackerCoords;
 protected:
 	virtual void BeginPlay() override;
 

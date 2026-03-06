@@ -36,6 +36,18 @@ struct FCoverData
 	
 	UPROPERTY(EditAnywhere, BlueprintReadOnly)
 	ECoverType West = ECoverType::None;
+	
+	ECoverType GetCover(const ECardinalDirection Direction) const
+	{
+		switch (Direction)
+		{
+			case ECardinalDirection::North: return North;
+			case ECardinalDirection::East: return East;
+			case ECardinalDirection::South: return South;
+			case ECardinalDirection::West: return West;
+			default: return ECoverType::None;
+		}
+	}
 };
 
 UENUM(BlueprintType)
