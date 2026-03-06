@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 4 complete, Sprint 5 planning |
+| **Status** | Early development — Sprint 5 complete, Sprint 6 planning |
 
 ---
 
@@ -73,6 +73,17 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
 - Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
+
+---
+
+## Sprint 5 — Combat Logic ✅ | March 4–6, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #29 | ATurnManager — phase management, unit ordering, win condition | 3 | ✅ Done |
+| #30 | UPathfinder — A* pathfinding over ATacticalGrid | 5 | ✅ Done |
+
+**Planned:** 8 SP | **Completed:** 8 SP ✅
 
 ---
 
@@ -170,6 +181,7 @@ Notable decisions logged so far:
 - [x] Base overview dashboard (worker counts, task progress, resources)
 - [x] Nation selection screen (grey-box — data layer complete, permanent home TBD)
 - [x] Tactical combat foundation — ATacticalGridTile, ATacticalGrid, unit hierarchy (SP-first POC, Sprint 4)
+- [x] Turn management + A* pathfinding (SP-first POC, Sprint 5)
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
 - [ ] Tactical combat (long term)
