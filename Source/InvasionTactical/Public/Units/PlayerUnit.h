@@ -15,4 +15,7 @@ public:
 	APlayerUnit();
 	virtual void OnTurnStart() override;
 
+protected:
+	virtual void BeginPlay() override;
+
 };

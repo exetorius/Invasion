@@ -69,6 +69,8 @@ public:
 	int32 GetMovementPointsRemaining() const { return MovementPointsRemaining; }
 	UFUNCTION(BlueprintPure)
 	int32 GetMaxMovementPoints() const { return MaxMovementPoints;}
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void ConsumeMovementPoints(int32 Points);
 	UFUNCTION(BlueprintPure)
 	int32 GetCombatSkill() const { return CombatSkill; }
 	UFUNCTION(BlueprintPure)

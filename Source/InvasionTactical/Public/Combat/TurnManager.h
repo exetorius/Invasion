@@ -49,4 +49,8 @@ private:
 	
 	const TArray<ABaseUnit*>& GetCurrentTeam() const;
 	const TArray<ABaseUnit*>& GetOtherTeam() const;
+	
+	// Getters & Setters
+public:
+	const TArray<ABaseUnit*>& GetPlayerUnits() const { return PlayerUnits; }
 };

@@ -17,6 +17,11 @@ void ABaseUnit::BeginPlay()
 	
 }
 
+void ABaseUnit::ConsumeMovementPoints(int32 Points)
+{
+	MovementPointsRemaining = FMath::Clamp(MovementPointsRemaining - Points, 0, MovementPointsRemaining);
+}
+
 void ABaseUnit::SetFaction(const EFaction NewFaction)
 {
 	if (Faction == EFaction::None)

@@ -4,6 +4,7 @@
 #include "Combat/TurnManager.h"
 
 #include "Units/BaseUnit.h"
+#include "Kismet/GameplayStatics.h"
 
 
 ATurnManager::ATurnManager()
@@ -14,7 +15,19 @@ ATurnManager::ATurnManager()
 void ATurnManager::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	// TODO: Replace with ATacticalGameMode — RegisterUnit should be called explicitly per unit, not auto-discovered.
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseUnit::StaticClass(), FoundActors);
+	for (AActor* Actor : FoundActors)
+	{
+		if (ABaseUnit* Unit = Cast<ABaseUnit>(Actor))
+		{
+			RegisterUnit(Unit);
+		}
+	}
+
+	StartCombat();
 }
 
 void ATurnManager::RegisterUnit(ABaseUnit* Unit)
@@ -42,10 +55,13 @@ void ATurnManager::StartCombat()
 {
 	if (!ensure(PlayerUnits.Num() > 0) || !ensure(EnemyUnits.Num() > 0)) { return; }
 	CurrentRound = 1;
+	// TODO: Restore coin flip — hardcoded to Enemy for PIE validation of #33
+	TurnPhase = ETacticalPhase::Enemy;
+	/*
 	switch (FMath::RandRange(0, 1))
 	{
 	case 0:
-		TurnPhase = ETacticalPhase::Player;			
+		TurnPhase = ETacticalPhase::Player;
 		break;
 	case 1:
 		TurnPhase = ETacticalPhase::Enemy;
@@ -54,6 +70,7 @@ void ATurnManager::StartCombat()
 		UE_LOG(LogTemp, Warning, TEXT("ATurnManager::StartCombat - Invalid starting team"));
 		return;
 	}
+	*/
 	StartingPhase = TurnPhase;
 	GetCurrentTeam()[CurrentUnitIndex]->OnTurnStart();	
 }
