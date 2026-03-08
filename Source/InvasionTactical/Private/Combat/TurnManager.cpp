@@ -1,7 +1,7 @@
 ﻿// CopyrightNotice
 
 
-#include "TurnManager.h"
+#include "Combat/TurnManager.h"
 
 #include "Units/BaseUnit.h"
 
@@ -67,6 +67,7 @@ bool ATurnManager::ShouldStartNextPhase()
 		TurnPhase = TurnPhase == ETacticalPhase::Player ? ETacticalPhase::Enemy : ETacticalPhase::Player; 
 		if (TurnPhase == StartingPhase) { CurrentRound++; }
 		CurrentUnitIndex = 0;
+		// TODO: Add bounds check on OtherTeam before calling OnTurnStart — crash if other team array is somehow empty
 		OtherTeam[CurrentUnitIndex]->OnTurnStart();
 		return true;
 	}

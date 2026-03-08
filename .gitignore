@@ -72,7 +72,6 @@ Plugins/*/Intermediate/*
 
 # Cache files for the editor to use
 DerivedDataCache/*
-=======
 Binaries
 DerivedDataCache
 Intermediate
@@ -105,3 +104,6 @@ CLAUDE.md
 
 # Docs and design — tracked in private Invasion_Docs repo
 Docs/
+
+# VibeUE
+/Plugins/VibeUE

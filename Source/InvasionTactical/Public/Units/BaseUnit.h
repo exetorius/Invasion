@@ -41,6 +41,9 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	int32 MaxMovementPoints = 10;
 	
+	UPROPERTY(EditAnywhere) // TODO: EditAnywhere fine for POC, defaults only later to lock it down
+	int32 CombatSkill = 50;
+	
 	UPROPERTY(EditDefaultsOnly)
 	EFaction Faction = EFaction::None;
 	
@@ -66,6 +69,8 @@ public:
 	int32 GetMovementPointsRemaining() const { return MovementPointsRemaining; }
 	UFUNCTION(BlueprintPure)
 	int32 GetMaxMovementPoints() const { return MaxMovementPoints;}
+	UFUNCTION(BlueprintPure)
+	int32 GetCombatSkill() const { return CombatSkill; }
 	UFUNCTION(BlueprintPure)
 	EFaction GetFaction() const { return Faction; }
 	void SetFaction(const EFaction NewFaction);

@@ -56,10 +56,6 @@
 		{
 			"Name": "SteamSockets",
 			"Enabled": true
-		},
-		{
-			"Name": "VibeUE",
-			"Enabled": true
 		}
 	]
 }

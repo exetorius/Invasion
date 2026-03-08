@@ -3,6 +3,8 @@
 #include "CoreMinimal.h"
 #include "TacticalTypes.generated.h"
 
+class ABaseUnit;
+
 UENUM(BlueprintType)
 enum class ECardinalDirection : uint8
 {
@@ -75,4 +77,15 @@ enum class ETacticalPhase : uint8
 	None,
 	Player,
 	Enemy
+};
+
+USTRUCT(BlueprintType)
+struct  FCombatHitResult
+{
+	GENERATED_BODY()
+	
+	bool bHit = false;
+	bool bCrit = false;
+	float DamageDealt = 0.f;
+	bool bFlanking = false;
 };
