@@ -3,10 +3,9 @@
 
 #include "PathfinderTest.h"
 
-#include "Pathfinder.h"
-#include "Grid/TacticalGrid.h"
-#include "Grid/TacticalGridTile.h"
+#include "Combat/CombatManager.h"
 #include "Kismet/GameplayStatics.h"
+#include "Units/BaseUnit.h"
 
 
 APathfinderTest::APathfinderTest()
@@ -18,27 +17,49 @@ void APathfinderTest::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	ATacticalGrid* TacticalGrid = Cast<ATacticalGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ATacticalGrid::StaticClass()));
-	
-	if (!ensure(TacticalGrid)) { return; }
-	
-	ATacticalGridTile* StartTile = TacticalGrid->GetTile(FIntPoint(0,0));
-	ATacticalGridTile* EndTile = TacticalGrid->GetTile(FIntPoint(4,4));
-	
-	if (!ensure(StartTile) || !ensure(EndTile)) { return; }
-	
-	TArray<ATacticalGridTile*> Path = TacticalGrid->GetPathfinder()->FindPath(StartTile, EndTile);
+	CombatManager = Cast<ACombatManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ACombatManager::StaticClass()));
 
-	if (Path.Num() > 0)
-	{
-		for (ATacticalGridTile* Tile : Path)
-		{
-			UE_LOG(LogTemp, Warning, TEXT("Tile: %s"), *Tile->GetGridCoordinates().ToString());
-		}
-	}
-	ECoverType Cover = TacticalGrid->GetCover(DefenderCoords, AttackerCoords);
-	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::Yellow,
-		FString::Printf(TEXT("Cover: %d"), (uint8)Cover));
+	if (!ensure(CombatManager)) { return; }
 	
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseUnit::StaticClass(), FoundActors);
+	
+	if (!ensure(FoundActors.Num() >= 2)) { return; }
+	
+	Attacker = Cast<ABaseUnit>(FoundActors[0]);
+	Defender = Cast<ABaseUnit>(FoundActors[1]);
+	
+	ShotCount = 0;
+	GetWorldTimerManager().SetTimer(ShotTimerHandle, this, &APathfinderTest::FireTestShot, .5f, true);	
+}
+
+void APathfinderTest::FireTestShot()
+{	
+	if (!ensure(CombatManager) || !ensure(Attacker) || !ensure(Defender))
+	{
+		 GetWorldTimerManager().ClearTimer(ShotTimerHandle);
+		 return;
+	}
+	
+	ShotCount++;
+	FCombatHitResult Result = CombatManager->ResolveHit(Attacker, Defender, CoverType, bIsFlanking);
+	
+	FString ResultText;
+	if (Result.bCrit)
+	{
+		ResultText = FString::Printf(TEXT("Shot %d: CRIT — Damage: %.1f"), ShotCount, Result.DamageDealt);
+	}
+	else if (Result.bHit)
+	{
+		ResultText = FString::Printf(TEXT("Shot %d: HIT — Damage: %.1f"), ShotCount, Result.DamageDealt);
+	}
+	else
+	{
+		ResultText = FString::Printf(TEXT("Shot %d: MISS"), ShotCount);
+	}
+
+	GEngine->AddOnScreenDebugMessage(-1, 10.f, FColor::White, ResultText);
+	
+	if (ShotCount >= 10) { GetWorldTimerManager().ClearTimer(ShotTimerHandle); return;}
 }
 

@@ -48,19 +48,8 @@ FCombatHitResult ACombatManager::ResolveHit(ABaseUnit* Attacker, ABaseUnit* Defe
 		}
 		constexpr int32 BaseDamage = 20;
 		CombatResult.DamageDealt = BaseDamage * DamageModifier;
-		CombatResult.bHit = true;		
-		
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Red,
-	  FString::Printf(TEXT("Hit: %s | Crit: %s | Damage: %.1f"),
-		  CombatResult.bHit ? TEXT("Yes") : TEXT("No"),
-		  CombatResult.bCrit ? TEXT("Yes") : TEXT("No"),
-		  CombatResult.DamageDealt));
-		
+		CombatResult.bHit = true;
 		Defender->RemoveHealth(CombatResult.DamageDealt);
-	}
-	else
-	{
-		GEngine->AddOnScreenDebugMessage(-1, 5.f, FColor::Yellow, TEXT("Miss!"));
 	}
 
 	return CombatResult;
