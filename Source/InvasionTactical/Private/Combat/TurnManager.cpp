@@ -69,6 +69,7 @@ void ATurnManager::StartCombat()
 	}
 	StartingPhase = TurnPhase;
 	GetCurrentTeam()[CurrentUnitIndex]->OnTurnStart();
+	OnActiveUnitChanged.Broadcast(GetCurrentTeam()[CurrentUnitIndex]);
 }
 
 bool ATurnManager::ShouldStartNextPhase()
@@ -80,7 +81,8 @@ bool ATurnManager::ShouldStartNextPhase()
 		TurnPhase = TurnPhase == ETacticalPhase::Player ? ETacticalPhase::Enemy : ETacticalPhase::Player; 
 		if (TurnPhase == StartingPhase) { CurrentRound++; }
 		CurrentUnitIndex = 0;
-		// TODO: Add bounds check on OtherTeam before calling OnTurnStart — crash if other team array is somehow empty
+		if (!ensure(OtherTeam.Num() > 0)) { return true; }		
+		OnActiveUnitChanged.Broadcast(OtherTeam[CurrentUnitIndex]);
 		OtherTeam[CurrentUnitIndex]->OnTurnStart();
 		return true;
 	}
@@ -97,7 +99,7 @@ bool ATurnManager::HasCombatEnded() const
 	}
 	if (DeadUnits >= OtherTeam.Num())
 	{
-		OnCombatEnded.Broadcast(TurnPhase == ETacticalPhase::Player); // bPlayerWon
+		OnCombatEnded.Broadcast(TurnPhase == ETacticalPhase::Player); // If player, we won, if enemy, we lost
 		return true;
 	}	
 	return false;
@@ -127,8 +129,9 @@ void ATurnManager::RequestEndTurn()
 	// If no remaining units, switch teams
 	if (ShouldStartNextPhase()) { return; }
 	
-	// Tell next unit to start its turn
+	// Tell the next unit to start its turn
 	GetCurrentTeam()[CurrentUnitIndex]->OnTurnStart();
+	OnActiveUnitChanged.Broadcast(GetCurrentTeam()[CurrentUnitIndex]);
 }
 
 const TArray<ABaseUnit*>& ATurnManager::GetCurrentTeam() const
@@ -139,4 +142,14 @@ const TArray<ABaseUnit*>& ATurnManager::GetCurrentTeam() const
 const TArray<ABaseUnit*>& ATurnManager::GetOtherTeam() const
 {
 	return TurnPhase == ETacticalPhase::Player ? EnemyUnits : PlayerUnits;
+}
+
+ABaseUnit* ATurnManager::GetActiveUnit() const
+{
+	const TArray<ABaseUnit*>& CurrentTeam = GetCurrentTeam();
+	if (!ensure(CurrentTeam.Num() > 0) || !ensure(CurrentUnitIndex < CurrentTeam.Num()))
+	{
+		return nullptr;
+	} 
+	return CurrentTeam[CurrentUnitIndex]; 
 }

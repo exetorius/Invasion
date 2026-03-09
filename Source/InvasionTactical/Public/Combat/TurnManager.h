@@ -9,14 +9,19 @@
 
 class ABaseUnit;
 
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnCombatEnded, bool, bPlayerWon);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnActiveUnitChanged, ABaseUnit*, NewActiveUnit);
+
 UCLASS()
 class INVASIONTACTICAL_API ATurnManager : public AActor
 {
 	GENERATED_BODY()
 		
-public:		
-	DECLARE_MULTICAST_DELEGATE_OneParam(FOnCombatEnded, bool); // bPlayerWon
-	FOnCombatEnded OnCombatEnded;
+public:			
+	UPROPERTY(BlueprintAssignable)
+	FOnCombatEnded OnCombatEnded;	
+	UPROPERTY(BlueprintAssignable)
+	FOnActiveUnitChanged OnActiveUnitChanged;
 	
 	ATurnManager();
 	
@@ -53,4 +58,5 @@ private:
 	// Getters & Setters
 public:
 	const TArray<ABaseUnit*>& GetPlayerUnits() const { return PlayerUnits; }
+	ABaseUnit* GetActiveUnit() const;
 };
