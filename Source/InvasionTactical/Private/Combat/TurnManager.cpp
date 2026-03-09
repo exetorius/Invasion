@@ -55,9 +55,6 @@ void ATurnManager::StartCombat()
 {
 	if (!ensure(PlayerUnits.Num() > 0) || !ensure(EnemyUnits.Num() > 0)) { return; }
 	CurrentRound = 1;
-	// TODO: Restore coin flip — hardcoded to Enemy for PIE validation of #33
-	TurnPhase = ETacticalPhase::Enemy;
-	/*
 	switch (FMath::RandRange(0, 1))
 	{
 	case 0:
@@ -70,9 +67,8 @@ void ATurnManager::StartCombat()
 		UE_LOG(LogTemp, Warning, TEXT("ATurnManager::StartCombat - Invalid starting team"));
 		return;
 	}
-	*/
 	StartingPhase = TurnPhase;
-	GetCurrentTeam()[CurrentUnitIndex]->OnTurnStart();	
+	GetCurrentTeam()[CurrentUnitIndex]->OnTurnStart();
 }
 
 bool ATurnManager::ShouldStartNextPhase()

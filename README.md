@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 5 complete, Sprint 6 planning |
+| **Status** | Early development — Sprint 6 complete |
 
 ---
 
@@ -73,6 +73,18 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
 - Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
+
+---
+
+## Sprint 6 — Resolution & AI ✅ | March 7–9, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #31 | Cover calculation — directional cover query from tile coordinates | 2 | ✅ Done |
+| #32 | Hit resolution — RNG roll, cover modifiers, damage output | 2 | ✅ Done |
+| #33 | Basic enemy AI decision loop — advance, seek cover, shoot | 3 | ✅ Done |
+
+**Planned:** 7 SP | **Completed:** 7 SP ✅
 
 ---
 
@@ -182,6 +194,7 @@ Notable decisions logged so far:
 - [x] Nation selection screen (grey-box — data layer complete, permanent home TBD)
 - [x] Tactical combat foundation — ATacticalGridTile, ATacticalGrid, unit hierarchy (SP-first POC, Sprint 4)
 - [x] Turn management + A* pathfinding (SP-first POC, Sprint 5)
+- [x] Cover calculation, hit resolution + basic enemy AI (SP-first POC, Sprint 6)
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
 - [ ] Tactical combat (long term)

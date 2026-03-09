@@ -36,12 +36,13 @@ void AEnemyUnit::BeginPlay()
 			SetCurrentTile(StartTile);
 		}
 	}
+
 }
 
 void AEnemyUnit::OnTurnStart()
 {
 	Super::OnTurnStart();
-	
+
 	// Guard — ensure refs valid, CurrentTile valid
 	if (!ensure(TurnManager) || !ensure(CombatManager) || !ensure(TacticalGrid)) { return; }
 
@@ -122,6 +123,7 @@ void AEnemyUnit::OnTurnStart()
 				for (ATacticalGridTile* PathTile : Path)
 				{
 					if (StepsTaken >= GetMovementPointsRemaining()) { break; }
+					if (PathTile == GetCurrentTile()) { continue; }
 					if (PathTile->IsOccupied()) { break; }
 
 					DestTile = PathTile;
@@ -179,6 +181,7 @@ void AEnemyUnit::OnTurnStart()
 			for (ATacticalGridTile* PathTile : ShortestPath)
 			{
 				if (StepsTaken >= GetMovementPointsRemaining()) { break; }
+				if (PathTile == GetCurrentTile()) { continue; }
 				if (PathTile->IsOccupied()) { break; }
 
 				DestTile = PathTile;

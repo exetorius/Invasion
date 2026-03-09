@@ -29,6 +29,7 @@ void APlayerUnit::BeginPlay()
 			SetCurrentTile(StartTile);
 		}
 	}
+
 }
 
 void APlayerUnit::OnTurnStart()
