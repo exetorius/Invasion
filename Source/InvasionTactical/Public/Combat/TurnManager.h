@@ -58,5 +58,6 @@ private:
 	// Getters & Setters
 public:
 	const TArray<ABaseUnit*>& GetPlayerUnits() const { return PlayerUnits; }
+	UFUNCTION(BlueprintPure)
 	ABaseUnit* GetActiveUnit() const;
 };
