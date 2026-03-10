@@ -113,7 +113,10 @@ void ATurnManager::AdvanceToNextLiveUnit()
 }
 
 void ATurnManager::RequestEndTurn()
-{			
+{
+	// TODO: Gate on caller identity — only the active unit (or PlayerController for player phase) should
+	// be able to call RequestEndTurn. Enemy phase calls from player input (e.g. End Turn button) must be
+	// rejected here once the persistent HUD replaces the throwaway widget.
 	if (TurnPhase == ETacticalPhase::None)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("ATurnManager::RequestEndTurn - Cannot end turn when no combat is active"));

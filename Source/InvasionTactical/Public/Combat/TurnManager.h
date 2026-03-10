@@ -27,6 +27,7 @@ public:
 	
 	void RegisterUnit(ABaseUnit* Unit);
 	void StartCombat();	
+	UFUNCTION(BlueprintCallable)
 	void RequestEndTurn();	
 	
 protected:
