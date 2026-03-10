@@ -3,14 +3,16 @@
 
 #include "Units/PlayerUnit.h"
 
+#include "Combat/TurnManager.h"
 #include "Grid/TacticalGrid.h"
 #include "Grid/TacticalGridTile.h"
 #include "Kismet/GameplayStatics.h"
 
 
+
 APlayerUnit::APlayerUnit()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	PrimaryActorTick.bCanEverTick = true;
 	
 	SetFaction(EFaction::Player);
 }
@@ -30,11 +32,25 @@ void APlayerUnit::BeginPlay()
 		}
 	}
 
+	TurnManager = Cast<ATurnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ATurnManager::StaticClass()));
+}
+
+void APlayerUnit::Tick(float DeltaSeconds)
+{
+	Super::Tick(DeltaSeconds);
+	if (!ensure(TurnManager)) { return; }
+	const bool bIsDown = GetWorld()->GetFirstPlayerController()->IsInputKeyDown(EKeys::E);
+	if (bIsDown && !bEndTurnKeyWasDown && TurnManager->GetActiveUnit() == this)
+	{
+		TurnManager->RequestEndTurn();
+	}
+	bEndTurnKeyWasDown = bIsDown;	
 }
 
 void APlayerUnit::OnTurnStart()
 {
 	Super::OnTurnStart();
+	bEndTurnKeyWasDown = true;
 }
 
 

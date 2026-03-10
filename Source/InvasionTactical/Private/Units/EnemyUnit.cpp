@@ -39,13 +39,25 @@ void AEnemyUnit::BeginPlay()
 
 }
 
+void AEnemyUnit::DebugEndTurn()
+{
+	if (ensure(TurnManager))
+	{
+		TurnManager->RequestEndTurn();
+	}
+}
+
 void AEnemyUnit::OnTurnStart()
 {
 	Super::OnTurnStart();
 
 	// Guard — ensure refs valid, CurrentTile valid
-	if (!ensure(TurnManager) || !ensure(CombatManager) || !ensure(TacticalGrid)) { return; }
+	if (!ensure(TurnManager) || !ensure(CombatManager) || !ensure(TacticalGrid)) { return; }	
+	
+	GetWorldTimerManager().SetTimer(DebugEndTurnHandle, this, &AEnemyUnit::DebugEndTurn, 2.0f, false);
+	return; // TODO: Temp debug — remove this return when restoring AI logic for #33 re-validation
 
+	/*
 	// Find all living player units
 	const TArray<ABaseUnit*> LivingPlayers = TurnManager->GetPlayerUnits().FilterByPredicate([](const ABaseUnit* Unit) { return Unit && Unit->IsAlive(); });
 
@@ -201,4 +213,5 @@ void AEnemyUnit::OnTurnStart()
 	}
 
 	TurnManager->RequestEndTurn();
+	*/
 }

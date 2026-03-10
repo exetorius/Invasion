@@ -32,5 +32,9 @@ private:
 	TObjectPtr<ACombatManager> CombatManager;
 	UPROPERTY()
 	TObjectPtr<ATacticalGrid> TacticalGrid;
+	
+	// TODO: Temp debug — remove DebugEndTurn, DebugEndTurnHandle, and restore AI logic for #33 PIE	re-validation
+	FTimerHandle DebugEndTurnHandle;
+	void DebugEndTurn();
 
 };
