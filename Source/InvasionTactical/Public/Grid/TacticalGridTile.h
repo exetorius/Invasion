@@ -32,6 +32,12 @@ private:
 	UPROPERTY()
 	ABaseUnit* OccupyingUnit;
 	
+	// TODO: Change to decal alter, POC for now
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UStaticMeshComponent> HighlightMesh;
+	UPROPERTY()
+	TObjectPtr<UMaterialInstanceDynamic> HighlightMaterial;
+	
 // Getters & Setters
 public:
 	UFUNCTION(BlueprintPure)
@@ -46,5 +52,8 @@ public:
 	UFUNCTION(BlueprintPure)
 	ABaseUnit* GetOccupyingUnit() const { return OccupyingUnit; };
 	void SetOccupyingUnit(ABaseUnit* NewUnit) { OccupyingUnit = NewUnit; };
+	
+	// POC - Mesh
+	void SetHighlighted(bool bHighlighted);
 };
 

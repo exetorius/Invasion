@@ -10,12 +10,18 @@
 ATacticalGridTile::ATacticalGridTile()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	
+	HighlightMesh = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("HighlightMesh"));
+	HighlightMesh->SetupAttachment(RootComponent);
+	HighlightMesh->SetCollisionEnabled(ECollisionEnabled::NoCollision);
+	HighlightMesh->SetVisibility(false);
 }
 
 void ATacticalGridTile::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	// TODO: Move to helper function to unbloat BeginPlay
 	if (const UWorld* World = GetWorld())
 	{
 		const bool bBlocked = World->OverlapAnyTestByChannel(
@@ -108,5 +114,17 @@ void ATacticalGridTile::BeginPlay()
 			}
 		}
 	}
+		
+	HighlightMaterial = UMaterialInstanceDynamic::Create(HighlightMesh->GetMaterial(0), this);
+	if (!ensure(HighlightMaterial)) { return; }
+	HighlightMesh->SetMaterial(0, HighlightMaterial);
+}
+
+void ATacticalGridTile::SetHighlighted(bool bHighlighted)
+{
+	if (!ensure(HighlightMaterial)) { return; }
+	
+	HighlightMaterial->SetScalarParameterValue("Highlighted", bHighlighted ? 1.f : 0.f);
+	HighlightMesh->SetVisibility(bHighlighted);	
 }
 

@@ -7,8 +7,10 @@
 #include "GameFramework/Actor.h"
 #include "TacticalGrid.generated.h"
 
+class ATurnManager;
 class ATacticalGridTile;
 class UPathfinder;
+class ABaseUnit;
 
 UCLASS()
 class INVASIONTACTICAL_API ATacticalGrid : public AActor
@@ -20,6 +22,9 @@ public:
 	
 	UFUNCTION(BlueprintPure)
 	ECoverType GetCover(FIntPoint DefenderCoords, FIntPoint AttackerCoords);
+	
+	void HighlightTilesInRange(ABaseUnit* Unit);
+	void ClearHighlights();
 
 protected:
 	virtual void BeginPlay() override;
@@ -43,8 +48,14 @@ private:
 	
 	int32 CoordinateToIndex(FIntPoint Coordinates) const;
 	
+	UFUNCTION()
+	void OnActiveUnitChanged(ABaseUnit* NewActiveUnit);
+	
 	UPROPERTY()
 	TObjectPtr<UPathfinder> Pathfinder;
+	
+	UPROPERTY()
+	TObjectPtr<ATurnManager> TurnManager;
 		
 	
 // Getters & setters

@@ -4,7 +4,10 @@
 #include "Grid/TacticalGrid.h"
 
 #include "Pathfinder.h"
+#include "Combat/TurnManager.h"
 #include "Grid/TacticalGridTile.h"
+#include "Kismet/GameplayStatics.h"
+#include "Units/BaseUnit.h"
 
 
 ATacticalGrid::ATacticalGrid()
@@ -18,6 +21,7 @@ void ATacticalGrid::BeginPlay()
 	
 	if (!ensure(TileClass)) { return; }
 	
+	// TODO: Named function for readability?
 	for (int32 Y = 0; Y < GridWidth; Y++) // East / West
 	{
 		for (int32 X = 0; X < GridLength; X++) // North / South
@@ -41,6 +45,11 @@ void ATacticalGrid::BeginPlay()
 	
 	Pathfinder = NewObject<UPathfinder>(this);
 	Pathfinder->InitialiseGrid(this);
+	
+	TurnManager = Cast<ATurnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ATurnManager::StaticClass()));
+	if (!ensure(TurnManager)) { return; }
+	// TODO: BeginPlay order not guaranteed — if ATurnManager runs first, the initial OnActiveUnitChanged broadcast fires before this binding exists and the first highlight is missed. Fix when ATacticalGameMode manages startup order.
+	TurnManager->OnActiveUnitChanged.AddDynamic(this, &ATacticalGrid::OnActiveUnitChanged);
 }
 
 int32 ATacticalGrid::CoordinateToIndex(FIntPoint Coordinates) const
@@ -50,6 +59,12 @@ int32 ATacticalGrid::CoordinateToIndex(FIntPoint Coordinates) const
 		return INDEX_NONE;
 	}
 	return Coordinates.X + Coordinates.Y * GridWidth;
+}
+
+void ATacticalGrid::OnActiveUnitChanged(ABaseUnit* NewActiveUnit)
+{
+	ClearHighlights();
+	HighlightTilesInRange(NewActiveUnit);
 }
 
 ECoverType ATacticalGrid::GetCover(FIntPoint DefenderCoords, FIntPoint AttackerCoords)
@@ -79,6 +94,30 @@ ECoverType ATacticalGrid::GetCover(FIntPoint DefenderCoords, FIntPoint AttackerC
 		}		
 	}
 	return ECoverType::None;
+}
+
+void ATacticalGrid::HighlightTilesInRange(ABaseUnit* Unit)
+{
+	if (!Unit || Unit->GetFaction() != EFaction::Player) { return; }
+	ATacticalGridTile* CurrentTile = Unit->GetCurrentTile();
+	if (!ensure(CurrentTile)) { return; }
+	TArray<ATacticalGridTile*> TilesInRange = GetTilesInRange(CurrentTile->GetGridCoordinates(), Unit->GetMovementPointsRemaining());
+	
+	for (ATacticalGridTile* Tile : TilesInRange)
+	{
+		// Skip over blocked or occupied tiles
+		if (!Tile->IsWalkable() || Tile->IsOccupied()) { continue; }
+		Tile->SetHighlighted(true);
+	}
+}
+
+void ATacticalGrid::ClearHighlights()
+{
+	// TODO: Make more efficient, currently called on every tile regardless if its highlighted or not, could pass in the highlighted tiles
+	for (ATacticalGridTile* Tile : Tiles)
+	{
+		Tile->SetHighlighted(false);
+	}
 }
 
 ATacticalGridTile* ATacticalGrid::GetTile(FIntPoint Coordinates) const
