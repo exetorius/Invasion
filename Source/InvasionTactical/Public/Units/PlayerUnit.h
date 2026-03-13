@@ -6,6 +6,7 @@
 #include "BaseUnit.h"
 #include "PlayerUnit.generated.h"
 
+
 UCLASS()
 class INVASIONTACTICAL_API APlayerUnit : public ABaseUnit
 {
@@ -14,6 +15,8 @@ class INVASIONTACTICAL_API APlayerUnit : public ABaseUnit
 public:
 	APlayerUnit();
 	virtual void OnTurnStart() override;
+	
+	void MoveToTile(ATacticalGridTile* MoveTile);
 
 protected:
 	virtual void BeginPlay() override;

@@ -87,7 +87,7 @@ ECoverType ATacticalGrid::GetCover(FIntPoint DefenderCoords, FIntPoint AttackerC
 		}
 		else
 		{
-			// Diagonal case (lowest cover wins)
+			// Diagonal case (the weakest cover wins)
 			ECoverType NorthCover = Direction.X > 0 ? DefenderTile->GetCoverData().GetCover(ECardinalDirection::South) : DefenderTile->GetCoverData().GetCover(ECardinalDirection::North);
 			ECoverType EastCover = Direction.Y > 0 ? DefenderTile->GetCoverData().GetCover(ECardinalDirection::West) : DefenderTile->GetCoverData().GetCover(ECardinalDirection::East);
 			return FMath::Min(NorthCover, EastCover);

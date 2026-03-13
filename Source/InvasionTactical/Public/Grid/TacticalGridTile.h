@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "TacticalGridTile.generated.h"
 
+class UBoxComponent;
 class ABaseUnit;
 
 UCLASS()
@@ -32,11 +33,16 @@ private:
 	UPROPERTY()
 	ABaseUnit* OccupyingUnit;
 	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UBoxComponent> ClickCollision;
+	
 	// TODO: Change to decal alter, POC for now
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UStaticMeshComponent> HighlightMesh;
 	UPROPERTY()
 	TObjectPtr<UMaterialInstanceDynamic> HighlightMaterial;
+	
+	bool bIsHighlighted = false;
 	
 // Getters & Setters
 public:
@@ -55,5 +61,6 @@ public:
 	
 	// POC - Mesh
 	void SetHighlighted(bool bHighlighted);
+	bool IsHighlighted() const { return bIsHighlighted; };
 };
 

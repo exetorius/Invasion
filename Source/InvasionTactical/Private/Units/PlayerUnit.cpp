@@ -35,3 +35,12 @@ void APlayerUnit::OnTurnStart()
 {
 	Super::OnTurnStart();
 }
+
+void APlayerUnit::MoveToTile(ATacticalGridTile* MoveTile)
+{
+	// TODO: Stepwise movement post-POC, teleport for now
+	if (!MoveTile) { return; }
+	ConsumeMovementPoints(GetMovementPointsRemaining()); // Consume all movement points for POC
+	SetCurrentTile(MoveTile);
+	SetActorLocation(MoveTile->GetActorLocation());
+}
