@@ -126,6 +126,18 @@ void ATacticalPlayerController::RequestAttackUnit(ABaseUnit* TargetUnit)
 		if (Cover && Cover->GetCoverType() == ECoverType::Full) { return; }
 	}
 
-	CombatManager->ResolveHit(ActiveUnit, TargetUnit, TacticalGrid->GetCover(DefenderCoordinates, AttackerCoordinates), false);
+	// TODO: Replace GEngine messages with world-space floating text popup above target unit (#40)
+	const FCombatHitResult HitResult = CombatManager->ResolveHit(ActiveUnit, TargetUnit, TacticalGrid->GetCover(DefenderCoordinates, AttackerCoordinates), false);
+	if (HitResult.bHit)
+	{
+		const FString Message = HitResult.bCrit
+			? FString::Printf(TEXT("CRIT! -%.0f"), HitResult.DamageDealt)
+			: FString::Printf(TEXT("HIT -%.0f"), HitResult.DamageDealt);
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::Red, Message);
+	}
+	else
+	{
+		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, TEXT("MISS"));
+	}
 	ActiveUnit->ConsumeMovementPoints(ActiveUnit->GetMovementPointsRemaining() / 2);
 }

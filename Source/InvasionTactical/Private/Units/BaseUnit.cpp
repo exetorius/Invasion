@@ -4,27 +4,60 @@
 #include "Units/BaseUnit.h"
 
 #include "Components/CapsuleComponent.h"
+#include "Components/WidgetComponent.h"
 #include "Grid/TacticalGridTile.h"
+#include "Kismet/GameplayStatics.h"
+#include "UI/HealthBarWidget.h"
 
 
 ABaseUnit::ABaseUnit()
 {
-	PrimaryActorTick.bCanEverTick = false;
+	// TODO: Disable again once billboard of health bar is implemented correctly
+	PrimaryActorTick.bCanEverTick = true;
 	
 	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleCollider"));
 	SetRootComponent(CapsuleCollider);
 	CapsuleCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CapsuleCollider->SetCollisionResponseToAllChannels(ECR_Ignore);
 	CapsuleCollider->SetCollisionResponseToChannel(ECC_GameTraceChannel4, ECR_Block);
+	
+	HealthBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarWidget"));
+	HealthBarWidgetComponent->SetupAttachment(CapsuleCollider);	
+}
+
+void ABaseUnit::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+	
+
+	// TODO: Move into a UBillboardWidgetComponent subclass so ABaseUnit::Tick can be disabled
+	if (HealthBarWidgetComponent)
+	{
+		if (const APlayerCameraManager* CameraManager = UGameplayStatics::GetPlayerCameraManager(GetWorld(), 0))
+		{
+			const FRotator CameraRot = CameraManager->GetCameraRotation();
+			HealthBarWidgetComponent->SetWorldRotation(FRotator(0.f, CameraRot.Yaw + 180.f, 0.f));
+		}
+	}
 }
 
 void ABaseUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	
+	if (!ensure(HealthBarWidgetComponent)) { return; }
+	if (UHealthBarWidget* HealthBarWidget = Cast<UHealthBarWidget>(HealthBarWidgetComponent->GetWidget()))
+	{
+		HealthBarWidget->Initialise(this);
+	}
 }
 
-void ABaseUnit::ConsumeMovementPoints(int32 Points)
+void ABaseUnit::BroadcastOnHealthChanged(const int32 NewHealth)
+{
+	OnHealthChanged.Broadcast(NewHealth);
+}
+
+void ABaseUnit::ConsumeMovementPoints(const int32 Points)
 {
 	MovementPointsRemaining = FMath::Clamp(MovementPointsRemaining - Points, 0, MovementPointsRemaining);
 }
@@ -62,6 +95,7 @@ void ABaseUnit::Kill()
 		Health = 0;
 		MovementPointsRemaining = 0;
 		CombatState = ECombatState::Dead;
+		BroadcastOnHealthChanged(Health);
 	}
 }
 
@@ -70,6 +104,7 @@ void ABaseUnit::AddHealth(float HealthToAdd)
 	if (IsAlive())
 	{
 		Health = FMath::Clamp(Health + HealthToAdd, 0.f, MaxHealth);
+		BroadcastOnHealthChanged(Health);
 	}
 }
 
@@ -82,6 +117,7 @@ void ABaseUnit::RemoveHealth(float HealthToRemove)
 		{
 			Kill();
 		}
+		BroadcastOnHealthChanged(Health);
 	}
 }
 

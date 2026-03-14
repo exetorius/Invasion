@@ -10,8 +10,6 @@
 
 APlayerUnit::APlayerUnit()
 {
-	PrimaryActorTick.bCanEverTick = false;
-
 	SetFaction(EFaction::Player);
 }
 

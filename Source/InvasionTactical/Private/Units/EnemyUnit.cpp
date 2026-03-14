@@ -14,8 +14,6 @@
 
 AEnemyUnit::AEnemyUnit()
 {
-	PrimaryActorTick.bCanEverTick = false;
-	
 	SetFaction(EFaction::Enemy);
 }
 
@@ -55,9 +53,7 @@ void AEnemyUnit::OnTurnStart()
 	if (!ensure(TurnManager) || !ensure(CombatManager) || !ensure(TacticalGrid)) { return; }	
 	
 	GetWorldTimerManager().SetTimer(DebugEndTurnHandle, this, &AEnemyUnit::DebugEndTurn, 2.0f, false);
-	return; // TODO: Temp debug — remove this return when restoring AI logic for #33 re-validation
 
-	/*
 	// Find all living player units
 	const TArray<ABaseUnit*> LivingPlayers = TurnManager->GetPlayerUnits().FilterByPredicate([](const ABaseUnit* Unit) { return Unit && Unit->IsAlive(); });
 
@@ -213,5 +209,4 @@ void AEnemyUnit::OnTurnStart()
 	}
 
 	TurnManager->RequestEndTurn();
-	*/
 }
