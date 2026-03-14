@@ -7,6 +7,7 @@
 #include "GameFramework/Actor.h"
 #include "BaseUnit.generated.h"
 
+class UCapsuleComponent;
 class UWorkerData;
 class ATacticalGridTile;
 
@@ -56,6 +57,9 @@ private:
 	// Not UPROPERTY - UWorkerData lives in InvasionBaseManagement which is not yet a dependency.
 	// Safe for POC as this is always nullptr. Restore UPROPERTY when modules are wired in Phase 3.
 	UWorkerData* WorkerData = nullptr; // TODO - pass this in dynamically after POC
+	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<UCapsuleComponent> CapsuleCollider;
 	
 // Getters & setters
 public:

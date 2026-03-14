@@ -6,6 +6,7 @@
 #include "GameFramework/PlayerController.h"
 #include "TacticalPlayerController.generated.h"
 
+class ACombatManager;
 class ATacticalGridTile;
 class UInputAction;
 class UInputMappingContext;
@@ -31,16 +32,23 @@ private:
 	TObjectPtr<ATurnManager> TurnManager;
 	UPROPERTY()
 	TObjectPtr<ABaseUnit> ActiveUnit;
+	UPROPERTY()
+	TObjectPtr<ACombatManager> CombatManager;
 	
 	// ENHANCED INPUT
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputMappingContext> IMC_Tactical;
 	UPROPERTY(EditDefaultsOnly, Category = "Input")
 	TObjectPtr<UInputAction> IA_Select;
+	UPROPERTY(EditDefaultsOnly, Category = "Input")
+	TObjectPtr<UInputAction> IA_Attack;
 	
 	UFUNCTION()
 	void OnActiveUnitChanged(ABaseUnit* NewActiveUnit);
 	
 	void OnSelectClicked();
 	void RequestMoveToTile(ATacticalGridTile* MoveTile);
+	
+	void OnAttackClicked();
+	void RequestAttackUnit(ABaseUnit* TargetUnit);
 };

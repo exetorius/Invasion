@@ -3,12 +3,19 @@
 
 #include "Units/BaseUnit.h"
 
+#include "Components/CapsuleComponent.h"
 #include "Grid/TacticalGridTile.h"
 
 
 ABaseUnit::ABaseUnit()
 {
 	PrimaryActorTick.bCanEverTick = false;
+	
+	CapsuleCollider = CreateDefaultSubobject<UCapsuleComponent>(TEXT("CapsuleCollider"));
+	SetRootComponent(CapsuleCollider);
+	CapsuleCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
+	CapsuleCollider->SetCollisionResponseToAllChannels(ECR_Ignore);
+	CapsuleCollider->SetCollisionResponseToChannel(ECC_GameTraceChannel4, ECR_Block);
 }
 
 void ABaseUnit::BeginPlay()

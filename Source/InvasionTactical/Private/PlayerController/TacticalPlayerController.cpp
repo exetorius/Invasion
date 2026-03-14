@@ -5,7 +5,9 @@
 
 #include "EnhancedInputComponent.h"
 #include "EnhancedInputSubsystems.h"
+#include "Combat/CombatManager.h"
 #include "Combat/TurnManager.h"
+#include "Grid/CoverActor.h"
 #include "Grid/TacticalGrid.h"
 #include "Grid/TacticalGridTile.h"
 #include "Kismet/GameplayStatics.h"
@@ -26,8 +28,9 @@ void ATacticalPlayerController::BeginPlay()
 	
 	TacticalGrid = Cast<ATacticalGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ATacticalGrid::StaticClass()));
 	TurnManager = Cast<ATurnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ATurnManager::StaticClass()));
+	CombatManager = Cast<ACombatManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ACombatManager::StaticClass()));
 	
-	if (!ensure(TacticalGrid) || !ensure(TurnManager)) { return; }
+	if (!ensure(TacticalGrid) || !ensure(TurnManager) || !ensure(CombatManager)) { return; }
 	
 	TurnManager->OnActiveUnitChanged.AddDynamic(this, &ATacticalPlayerController::OnActiveUnitChanged);
 	ABaseUnit* CurrentUnit = TurnManager->GetActiveUnit();
@@ -45,7 +48,7 @@ void ATacticalPlayerController::SetupInputComponent()
 	UEnhancedInputComponent* EIC = CastChecked<UEnhancedInputComponent>(InputComponent);
 
 	EIC->BindAction(IA_Select, ETriggerEvent::Started, this, &ATacticalPlayerController::OnSelectClicked);
-
+	EIC->BindAction(IA_Attack, ETriggerEvent::Started, this, &ATacticalPlayerController::OnAttackClicked);
 }
 
 void ATacticalPlayerController::OnActiveUnitChanged(ABaseUnit* NewActiveUnit)
@@ -84,4 +87,45 @@ void ATacticalPlayerController::RequestMoveToTile(ATacticalGridTile* MoveTile)
 	if (!ensure(PlayerUnit)) { return; }
 	PlayerUnit->MoveToTile(MoveTile);
 	TacticalGrid->ClearHighlights();
+}
+
+void ATacticalPlayerController::OnAttackClicked()
+{
+	if (!ActiveUnit) { return; }
+
+	// Line trace to find the hit unit
+	FHitResult Hit;
+	GetHitResultUnderCursor(ECC_GameTraceChannel4, false, Hit);
+	if (ABaseUnit* HitUnit = Cast<ABaseUnit>(Hit.GetActor()))
+	{
+		if (HitUnit->IsAlive() && HitUnit->GetFaction() != EFaction::Player)
+		{
+			RequestAttackUnit(HitUnit);
+		}
+	}
+}
+
+void ATacticalPlayerController::RequestAttackUnit(ABaseUnit* TargetUnit)
+{
+	// TODO: Server RPC boundary — becomes Server RPC when networking lands
+	if (!TargetUnit || !ActiveUnit || !CombatManager || !TacticalGrid) { return; }
+	FIntPoint AttackerCoordinates = ActiveUnit->GetCurrentTile()->GetGridCoordinates();
+	FIntPoint DefenderCoordinates = TargetUnit->GetCurrentTile()->GetGridCoordinates();
+
+	// TODO: MaxShootRange will be moving from Enemy to Base and added here for range check #42 QoL Pass
+
+	// Skip if obstructed by a wall
+	FHitResult WallHit;
+	if (GetWorld()->LineTraceSingleByChannel(WallHit, ActiveUnit->GetActorLocation(), TargetUnit->GetActorLocation(), ECC_GameTraceChannel1)) { return; }
+
+	// Skip if behind full cover
+	FHitResult CoverHit;
+	if (GetWorld()->LineTraceSingleByChannel(CoverHit, ActiveUnit->GetActorLocation(), TargetUnit->GetActorLocation(), ECC_GameTraceChannel2))
+	{
+		const ACoverActor* Cover = Cast<ACoverActor>(CoverHit.GetActor());
+		if (Cover && Cover->GetCoverType() == ECoverType::Full) { return; }
+	}
+
+	CombatManager->ResolveHit(ActiveUnit, TargetUnit, TacticalGrid->GetCover(DefenderCoordinates, AttackerCoordinates), false);
+	ActiveUnit->ConsumeMovementPoints(ActiveUnit->GetMovementPointsRemaining() / 2);
 }
