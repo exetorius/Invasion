@@ -35,6 +35,10 @@ private:
 	
 	// TODO: Temp debug — remove DebugEndTurn, DebugEndTurnHandle, and restore AI logic for #33 PIE	re-validation
 	FTimerHandle DebugEndTurnHandle;
-	void DebugEndTurn();
+	void DebugEndTurn() const;
 
+	TArray<ABaseUnit*> FindVisiblePlayers(const TArray<ABaseUnit*>& LivingPlayers, const FIntPoint MyCoords) const;
+	ABaseUnit* FindNearestPlayer(const FIntPoint MyCoords, const TArray<ABaseUnit*>& VisiblePlayers) const;
+	void MoveAlongPath(const TArray<ATacticalGridTile*>& Path, const FIntPoint& ReferenceCoords);
+	void AdvanceToward(const TArray<ABaseUnit*>& LivingPlayers);
 };
