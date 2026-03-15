@@ -54,10 +54,3 @@ FCombatHitResult ACombatManager::ResolveHit(ABaseUnit* Attacker, ABaseUnit* Defe
 
 	return CombatResult;
 }
-
-void ACombatManager::BeginPlay()
-{
-	Super::BeginPlay();
-	
-}
-

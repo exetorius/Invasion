@@ -17,6 +17,7 @@ class INVASIONTACTICAL_API ATacticalGridTile : public AActor
 
 public:
 	ATacticalGridTile();
+	
 
 protected:
 	virtual void BeginPlay() override;		
@@ -28,7 +29,7 @@ private:
 	FIntPoint TileCoordinates;
 	UPROPERTY(VisibleInstanceOnly)
 	bool bIsWalkable = true; // Set once at BeginPlay via overlap. TODO: expose setter if dynamic blocking gets introduced (e.g Debris)
-	UPROPERTY(EditAnywhere)
+	UPROPERTY(EditDefaultsOnly)
 	FCoverData CoverData;
 	UPROPERTY()
 	ABaseUnit* OccupyingUnit;
@@ -43,6 +44,7 @@ private:
 	TObjectPtr<UMaterialInstanceDynamic> HighlightMaterial;
 	
 	bool bIsHighlighted = false;
+	void DetectCoverEdges(const UWorld* World);
 	
 // Getters & Setters
 public:

@@ -20,7 +20,4 @@ public:
 	UFUNCTION(BlueprintCallable)
 	FCombatHitResult ResolveHit (ABaseUnit* Attacker, ABaseUnit* Defender, ECoverType Cover, bool bFlanking);
 
-protected:
-	virtual void BeginPlay() override;
-
 };

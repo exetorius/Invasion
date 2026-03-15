@@ -54,7 +54,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	int32 MaxMovementPoints = 10;
 	
-	UPROPERTY(EditAnywhere) // TODO: EditAnywhere fine for POC, defaults only later to lock it down
+	UPROPERTY(EditDefaultsOnly)
 	int32 CombatSkill = 50;
 	
 	UPROPERTY(EditDefaultsOnly)

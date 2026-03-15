@@ -55,18 +55,7 @@ void ATurnManager::StartCombat()
 {
 	if (!ensure(PlayerUnits.Num() > 0) || !ensure(EnemyUnits.Num() > 0)) { return; }
 	CurrentRound = 1;
-	switch (FMath::RandRange(0, 1))
-	{
-	case 0:
-		TurnPhase = ETacticalPhase::Player;
-		break;
-	case 1:
-		TurnPhase = ETacticalPhase::Enemy;
-		break;
-	default:
-		UE_LOG(LogTemp, Warning, TEXT("ATurnManager::StartCombat - Invalid starting team"));
-		return;
-	}
+	TurnPhase = FMath::RandBool() ? ETacticalPhase::Player : ETacticalPhase::Enemy;
 	StartingPhase = TurnPhase;
 	GetCurrentTeam()[CurrentUnitIndex]->OnTurnStart();
 	OnActiveUnitChanged.Broadcast(GetCurrentTeam()[CurrentUnitIndex]);

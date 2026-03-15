@@ -112,7 +112,7 @@ void ATacticalPlayerController::RequestAttackUnit(ABaseUnit* TargetUnit)
 	FIntPoint AttackerCoordinates = ActiveUnit->GetCurrentTile()->GetGridCoordinates();
 	FIntPoint DefenderCoordinates = TargetUnit->GetCurrentTile()->GetGridCoordinates();
 
-	// TODO: MaxShootRange will be moving from Enemy to Base and added here for range check #42 QoL Pass
+	// TODO: MaxShootRange will be moving from Enemy to Base and added here for range check #45 
 
 	// Skip if obstructed by a wall
 	FHitResult WallHit;
@@ -126,7 +126,7 @@ void ATacticalPlayerController::RequestAttackUnit(ABaseUnit* TargetUnit)
 		if (Cover && Cover->GetCoverType() == ECoverType::Full) { return; }
 	}
 
-	// TODO: Replace GEngine messages with world-space floating text popup above target unit (#40)
+	// TODO: Replace GEngine messages with world-space floating text popup above target unit (#46)
 	const FCombatHitResult HitResult = CombatManager->ResolveHit(ActiveUnit, TargetUnit, TacticalGrid->GetCover(DefenderCoordinates, AttackerCoordinates), false);
 	if (HitResult.bHit)
 	{
