@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 6 complete |
+| **Status** | Early development — Sprint 7 complete |
 
 ---
 
@@ -73,6 +73,24 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
 - Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
+
+---
+
+## Sprint 7 — Playable Tactical Loop ✅ | March 10–16, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #34 | Player input — select active unit + indicator | 2 | ✅ Done |
+| #35 | Player input — valid move range highlight | 3 | ✅ Done |
+| #36 | Player input — click tile to move | 3 | ✅ Done |
+| #37 | Player input — click enemy to shoot | 3 | ✅ Done |
+| #38 | Player input — End Turn button | 1 | ✅ Done |
+| #39 | HP display on units | 2 | ✅ Done |
+| #40 | Hit/miss feedback | 2 | ✅ Done |
+| #42 | AEnemyUnit::OnTurnStart refactor | 2 | ✅ Done |
+| #43 | Sprint 7 QoL pass | 2 | ✅ Done |
+
+**Planned:** 20 SP | **Completed:** 20 SP ✅
 
 ---
 
@@ -195,6 +213,7 @@ Notable decisions logged so far:
 - [x] Tactical combat foundation — ATacticalGridTile, ATacticalGrid, unit hierarchy (SP-first POC, Sprint 4)
 - [x] Turn management + A* pathfinding (SP-first POC, Sprint 5)
 - [x] Cover calculation, hit resolution + basic enemy AI (SP-first POC, Sprint 6)
+- [x] Playable tactical loop — player input, move/shoot, turn cycling, HP display, hit/miss feedback (SP-first POC, Sprint 7)
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
 - [ ] Tactical combat (long term)
