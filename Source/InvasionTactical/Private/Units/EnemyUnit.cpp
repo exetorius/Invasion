@@ -9,7 +9,6 @@
 #include "Grid/TacticalGrid.h"
 #include "Grid/TacticalGridTile.h"
 #include "Pathfinder.h"
-#include "Kismet/GameplayStatics.h"
 
 
 AEnemyUnit::AEnemyUnit()
@@ -21,19 +20,6 @@ void AEnemyUnit::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// TODO: Refactor — replace GetAllActorsOfClass caching with injection via ATacticalGameMode. BeginPlay caching is a POC shortcut.
-	TurnManager = Cast<ATurnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ATurnManager::StaticClass()));
-	CombatManager = Cast<ACombatManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ACombatManager::StaticClass()));
-	TacticalGrid = Cast<ATacticalGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ATacticalGrid::StaticClass()));
-
-	if (TacticalGrid)
-	{
-		FIntPoint StartCoords = TacticalGrid->GetGridLocationFromWorld(GetActorLocation());
-		if (ATacticalGridTile* StartTile = TacticalGrid->GetTile(StartCoords))
-		{
-			SetCurrentTile(StartTile);
-		}
-	}
 }
 
 void AEnemyUnit::DebugEndTurn() const
@@ -206,5 +192,22 @@ void AEnemyUnit::AdvanceToward(const TArray<ABaseUnit*>& LivingPlayers)
 		// TODO: Cover preference per subclass — hardcoded to first non-None tile for POC
 		const FIntPoint NearestPlayerCoords = TacticalGrid->GetGridLocationFromWorld(NearestPlayer->GetActorLocation());			
 		MoveAlongPath(ShortestPath, NearestPlayerCoords);
+	}
+}
+
+void AEnemyUnit::Initialise(ATurnManager* NewTurnManager, ACombatManager* NewCombatManager,
+	ATacticalGrid* NewTacticalGrid)
+{
+	TurnManager = NewTurnManager;
+	CombatManager = NewCombatManager;
+	TacticalGrid = NewTacticalGrid;
+	
+	if (TacticalGrid)
+	{
+		FIntPoint StartCoords = TacticalGrid->GetGridLocationFromWorld(GetActorLocation());
+		if (ATacticalGridTile* StartTile = TacticalGrid->GetTile(StartCoords))
+		{
+			SetCurrentTile(StartTile);
+		}
 	}
 }

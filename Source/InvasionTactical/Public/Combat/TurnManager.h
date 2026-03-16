@@ -26,13 +26,10 @@ public:
 	ATurnManager();
 	
 	void RegisterUnit(ABaseUnit* Unit);
-	void StartCombat();	
+	void StartCombat(const TArray<ABaseUnit*>& CombatUnits);	
 	UFUNCTION(BlueprintCallable)
 	void RequestEndTurn();	
-	
-protected:
-	virtual void BeginPlay() override;
-	
+
 private:
 	UPROPERTY(VisibleInstanceOnly)
 	int32 CurrentUnitIndex = 0;

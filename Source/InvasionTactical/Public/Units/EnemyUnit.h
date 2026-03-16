@@ -41,4 +41,8 @@ private:
 	ABaseUnit* FindNearestPlayer(const FIntPoint MyCoords, const TArray<ABaseUnit*>& VisiblePlayers) const;
 	void MoveAlongPath(const TArray<ATacticalGridTile*>& Path, const FIntPoint& ReferenceCoords);
 	void AdvanceToward(const TArray<ABaseUnit*>& LivingPlayers);
+	
+	// Getters & Setters
+public:
+	void Initialise(ATurnManager* NewTurnManager, ACombatManager* NewCombatManager, ATacticalGrid* NewTacticalGrid);
 };

@@ -5,7 +5,6 @@
 
 #include "Grid/TacticalGrid.h"
 #include "Grid/TacticalGridTile.h"
-#include "Kismet/GameplayStatics.h"
 
 
 APlayerUnit::APlayerUnit()
@@ -17,16 +16,6 @@ void APlayerUnit::BeginPlay()
 {
 	Super::BeginPlay();
 
-	// TODO: Refactor — replace with injection via ATacticalGameMode. BeginPlay caching is a POC shortcut.
-	ATacticalGrid* Grid = Cast<ATacticalGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ATacticalGrid::StaticClass()));
-	if (Grid)
-	{
-		FIntPoint StartCoords = Grid->GetGridLocationFromWorld(GetActorLocation());
-		if (ATacticalGridTile* StartTile = Grid->GetTile(StartCoords))
-		{
-			SetCurrentTile(StartTile);
-		}
-	}
 }
 
 void APlayerUnit::OnTurnStart()
@@ -41,4 +30,16 @@ void APlayerUnit::MoveToTile(ATacticalGridTile* MoveTile)
 	ConsumeMovementPoints(GetMovementPointsRemaining()); // Consume all movement points for POC
 	SetCurrentTile(MoveTile);
 	SetActorLocation(MoveTile->GetActorLocation());
+}
+
+void APlayerUnit::Initialise(ATacticalGrid* TacticalGrid)
+{
+	if (TacticalGrid)
+	{
+		FIntPoint StartCoords = TacticalGrid->GetGridLocationFromWorld(GetActorLocation());
+		if (ATacticalGridTile* StartTile = TacticalGrid->GetTile(StartCoords))
+		{
+			SetCurrentTile(StartTile);
+		}
+	}
 }

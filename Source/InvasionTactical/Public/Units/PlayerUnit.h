@@ -7,6 +7,8 @@
 #include "PlayerUnit.generated.h"
 
 
+class ATacticalGrid;
+
 UCLASS()
 class INVASIONTACTICAL_API APlayerUnit : public ABaseUnit
 {
@@ -17,6 +19,7 @@ public:
 	virtual void OnTurnStart() override;
 	
 	void MoveToTile(ATacticalGridTile* MoveTile);
+	void Initialise(ATacticalGrid* TacticalGrid);
 
 protected:
 	virtual void BeginPlay() override;

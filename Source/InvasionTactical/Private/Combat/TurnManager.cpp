@@ -4,7 +4,6 @@
 #include "Combat/TurnManager.h"
 
 #include "Units/BaseUnit.h"
-#include "Kismet/GameplayStatics.h"
 
 
 ATurnManager::ATurnManager()
@@ -12,27 +11,9 @@ ATurnManager::ATurnManager()
 	PrimaryActorTick.bCanEverTick = false;
 }
 
-void ATurnManager::BeginPlay()
-{
-	Super::BeginPlay();
-
-	// TODO: Replace with ATacticalGameMode — RegisterUnit should be called explicitly per unit, not auto-discovered.
-	TArray<AActor*> FoundActors;
-	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ABaseUnit::StaticClass(), FoundActors);
-	for (AActor* Actor : FoundActors)
-	{
-		if (ABaseUnit* Unit = Cast<ABaseUnit>(Actor))
-		{
-			RegisterUnit(Unit);
-		}
-	}
-
-	StartCombat();
-}
-
 void ATurnManager::RegisterUnit(ABaseUnit* Unit)
 {
-	if (!ensure(Unit)) { return; }
+	if (!Unit) { return; }
 
 	switch (Unit->GetFaction())
 	{
@@ -51,8 +32,13 @@ void ATurnManager::RegisterUnit(ABaseUnit* Unit)
 	}
 }
 
-void ATurnManager::StartCombat()
+void ATurnManager::StartCombat(const TArray<ABaseUnit*>& CombatUnits)
 {
+	for (ABaseUnit* Unit : CombatUnits)
+	{
+		RegisterUnit(Unit);
+	}
+	
 	if (!ensure(PlayerUnits.Num() > 0) || !ensure(EnemyUnits.Num() > 0)) { return; }
 	CurrentRound = 1;
 	TurnPhase = FMath::RandBool() ? ETacticalPhase::Player : ETacticalPhase::Enemy;

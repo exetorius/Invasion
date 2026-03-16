@@ -5,6 +5,7 @@
 
 #include "Components/CapsuleComponent.h"
 #include "Components/WidgetComponent.h"
+#include "GameMode/TacticalGameMode.h"
 #include "Grid/TacticalGridTile.h"
 #include "Kismet/GameplayStatics.h"
 #include "UI/HealthBarWidget.h"
@@ -43,13 +44,24 @@ void ABaseUnit::Tick(float DeltaTime)
 
 void ABaseUnit::BeginPlay()
 {
-	Super::BeginPlay();
+	Super::BeginPlay();	
+	
+	if (ATacticalGameMode* TacticalGameMode = Cast<ATacticalGameMode>(UGameplayStatics::GetGameMode(this)))
+	{
+		UE_LOG(LogTemp, Warning, TEXT("ABaseUnit::BeginPlay — %s calling RegisterUnit"), *GetName());
+		TacticalGameMode->RegisterUnit(this);
+	}
+	else
+	{
+		UE_LOG(LogTemp, Error, TEXT("ABaseUnit::BeginPlay — %s failed to get ATacticalGameMode"), *GetName());
+	}
 	
 	if (!ensure(HealthBarWidgetComponent)) { return; }
+	
 	if (UHealthBarWidget* HealthBarWidget = Cast<UHealthBarWidget>(HealthBarWidgetComponent->GetWidget()))
 	{
 		HealthBarWidget->Initialise(this);
-	}
+	}	
 }
 
 void ABaseUnit::BroadcastOnHealthChanged(const int32 NewHealth)
