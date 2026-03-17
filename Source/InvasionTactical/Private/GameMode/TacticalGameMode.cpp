@@ -10,6 +10,7 @@
 #include "Units/BaseUnit.h"
 #include "Units/EnemyUnit.h"
 #include "Units/PlayerUnit.h"
+#include "Data/MissionSoldier.h"
 
 
 void ATacticalGameMode::BeginPlay()
@@ -27,7 +28,7 @@ void ATacticalGameMode::BeginPlay()
 		for (ABaseUnit* Unit : Units)
 		{
 			if (AEnemyUnit* Enemy = Cast<AEnemyUnit>(Unit)) { Enemy->Initialise(TurnManager, CombatManager, TacticalGrid); }
-			if (APlayerUnit* Player = Cast<APlayerUnit>(Unit)) { Player->Initialise(TacticalGrid); }
+			if (APlayerUnit* Player = Cast<APlayerUnit>(Unit)) { Player->Initialise(TacticalGrid, FMissionSoldier()); } // TODO: Pass in actual FMissionSoldier data (#52)
 		}
 		TryStartCombat();
 	}
@@ -52,7 +53,8 @@ void ATacticalGameMode::RegisterUnit(ABaseUnit* Unit)
 
 	if (APlayerUnit* PlayerUnit = Cast<APlayerUnit>(Unit))
 	{
-		PlayerUnit->Initialise(TacticalGrid);
+		// TODO: Pass in actual FMissionSoldier data (#52)
+		PlayerUnit->Initialise(TacticalGrid, FMissionSoldier());
 	}
 
 	TryStartCombat();

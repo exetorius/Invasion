@@ -8,7 +8,7 @@ public class InvasionTactical : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 
-		PublicDependencyModuleNames.AddRange(new string[] { "Core" });
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "InvasionCore" });
 
 		PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "InputCore", "EnhancedInput", "UMG" });
 

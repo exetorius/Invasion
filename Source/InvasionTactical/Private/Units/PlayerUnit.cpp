@@ -32,7 +32,7 @@ void APlayerUnit::MoveToTile(ATacticalGridTile* MoveTile)
 	SetActorLocation(MoveTile->GetActorLocation());
 }
 
-void APlayerUnit::Initialise(ATacticalGrid* TacticalGrid)
+void APlayerUnit::Initialise(ATacticalGrid* TacticalGrid, const FMissionSoldier& NewSoldierData)
 {
 	if (TacticalGrid)
 	{
@@ -42,4 +42,6 @@ void APlayerUnit::Initialise(ATacticalGrid* TacticalGrid)
 			SetCurrentTile(StartTile);
 		}
 	}
+
+	SoldierData = NewSoldierData;
 }

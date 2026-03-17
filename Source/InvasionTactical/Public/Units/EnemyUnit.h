@@ -6,7 +6,6 @@
 #include "BaseUnit.h"
 #include "EnemyUnit.generated.h"
 
-class ATacticalGrid;
 class ACombatManager;
 class ATurnManager;
 

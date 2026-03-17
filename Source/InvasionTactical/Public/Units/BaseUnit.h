@@ -11,6 +11,7 @@ class UWidgetComponent;
 class UCapsuleComponent;
 class UWorkerData;
 class ATacticalGridTile;
+class ATacticalGrid;
 
 DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnHealthChanged, int32, NewHealth);
 
