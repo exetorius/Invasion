@@ -35,4 +35,6 @@ private:
 	TArray<TObjectPtr<ABaseUnit>> Units;
 	
 	int32 ExpectedUnitCount = 0;
+	
+	void TryStartCombat();
 };

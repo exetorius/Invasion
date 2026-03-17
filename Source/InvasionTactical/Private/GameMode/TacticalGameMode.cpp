@@ -24,8 +24,20 @@ void ATacticalGameMode::BeginPlay()
 		TArray<AActor*> DiscoveredUnits;
 		UGameplayStatics::GetAllActorsOfClass(World, ABaseUnit::StaticClass(), DiscoveredUnits);
 		ExpectedUnitCount = DiscoveredUnits.Num();
-		UE_LOG(LogTemp, Warning, TEXT("TacticalGameMode::BeginPlay — ExpectedUnitCount = %d"), ExpectedUnitCount);
+		for (ABaseUnit* Unit : Units)
+		{
+			if (AEnemyUnit* Enemy = Cast<AEnemyUnit>(Unit)) { Enemy->Initialise(TurnManager, CombatManager, TacticalGrid); }
+			if (APlayerUnit* Player = Cast<APlayerUnit>(Unit)) { Player->Initialise(TacticalGrid); }
+		}
+		TryStartCombat();
 	}
+}
+
+void ATacticalGameMode::TryStartCombat()
+{
+	if (ExpectedUnitCount <= 0 || Units.Num() != ExpectedUnitCount) { return; }
+	if (!ensure(TurnManager)) { return; }
+	TurnManager->StartCombat(Units);
 }
 
 void ATacticalGameMode::RegisterUnit(ABaseUnit* Unit)
@@ -33,8 +45,6 @@ void ATacticalGameMode::RegisterUnit(ABaseUnit* Unit)
 	if (!Unit) { return; }
 
 	Units.Add(Unit);
-	UE_LOG(LogTemp, Warning, TEXT("TacticalGameMode::RegisterUnit — %s registered (%d / %d)"), *Unit->GetName(), Units.Num(), ExpectedUnitCount);
-
 	if (AEnemyUnit* EnemyUnit = Cast<AEnemyUnit>(Unit))
 	{
 		EnemyUnit->Initialise(TurnManager, CombatManager, TacticalGrid);
@@ -45,9 +55,5 @@ void ATacticalGameMode::RegisterUnit(ABaseUnit* Unit)
 		PlayerUnit->Initialise(TacticalGrid);
 	}
 
-	if (Units.Num() == ExpectedUnitCount)
-	{
-		UE_LOG(LogTemp, Warning, TEXT("TacticalGameMode::RegisterUnit — all units registered, calling StartCombat"));
-		TurnManager->StartCombat(Units);
-	}
+	TryStartCombat();
 }
