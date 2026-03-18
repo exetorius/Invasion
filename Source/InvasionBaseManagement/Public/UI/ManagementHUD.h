@@ -55,6 +55,9 @@ protected:
 	
 	UPROPERTY(meta = (BindWidget))
 	TObjectPtr<class UWorkerPaneWidget> WBP_WorkerPaneWidget;
+	
+	UPROPERTY(meta = (BindWidget))
+	TObjectPtr<class UMissionSelectScreenWidget> WBP_MissionSelectScreen;
 
 private:
 	void SetupViewMap();

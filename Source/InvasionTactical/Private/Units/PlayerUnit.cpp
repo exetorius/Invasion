@@ -44,4 +44,5 @@ void APlayerUnit::Initialise(ATacticalGrid* TacticalGrid, const FMissionSoldier&
 	}
 
 	SoldierData = NewSoldierData;
+	UE_LOG(LogTemp, Log, TEXT("APlayerUnit::Initialise — soldier: %s"), *SoldierData.DisplayName.ToString());
 }

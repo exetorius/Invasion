@@ -18,6 +18,7 @@ enum class EManagementView : uint8
 	EMV_Warehouse		UMETA(DisplayName = "Warehouse"),
 	EMV_Research		UMETA(DisplayName = "Research"),
 	EMV_Engineering		UMETA(DisplayName = "Engineering"),
+	EMV_MissionSelect	UMETA(DisplayName = "Mission Select"),
 	
 	EMV_MAX				UMETA(DisplayName = "MAX")
 };

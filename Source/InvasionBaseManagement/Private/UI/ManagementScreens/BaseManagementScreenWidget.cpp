@@ -6,6 +6,7 @@ void UBaseManagementScreenWidget::NativeConstruct()
 {
 	Super::NativeConstruct();
 
+	UE_LOG(LogTemp, Warning, TEXT("BaseManagementScreenWidget: Constructed"));
 	InitialiseScreenData();
 }
 

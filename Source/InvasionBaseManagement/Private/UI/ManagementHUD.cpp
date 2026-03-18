@@ -8,6 +8,7 @@
 #include "UI/ManagementScreens/WarehouseScreenWidget.h"
 #include "UI/WorkerTasks/ResearchScreenWidget.h"
 #include "UI/ManagementNavigationWidget.h"
+#include "UI/MissionSelect/MissionSelectScreenWidget.h"
 
 #include "Components/WidgetSwitcher.h"
 #include "UI/WorkerManagement/WorkerPaneWidget.h"
@@ -35,6 +36,7 @@ void UManagementHUD::SetupViewMap()
 	ViewMap.Add(EManagementView::EMV_Warehouse, WBP_WarehouseScreen);
 	ViewMap.Add(EManagementView::EMV_Research, WBP_ResearchScreen);
 	ViewMap.Add(EManagementView::EMV_Engineering, WBP_EngineeringScreen);
+	ViewMap.Add(EManagementView::EMV_MissionSelect, WBP_MissionSelectScreen);
 }
 
 // TODO: Implement navigation button binding for each screen when implementing subscreen navigation
