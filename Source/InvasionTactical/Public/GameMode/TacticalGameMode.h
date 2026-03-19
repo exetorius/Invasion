@@ -6,6 +6,7 @@
 #include "GameFramework/GameMode.h"
 #include "TacticalGameMode.generated.h"
 
+struct FMissionSoldier;
 class ATacticalGrid;
 class ATurnManager;
 class ACombatManager;
@@ -33,8 +34,11 @@ private:
 	TObjectPtr<ACombatManager> CombatManager;
 	UPROPERTY()
 	TArray<TObjectPtr<ABaseUnit>> Units;
+	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
+	TSubclassOf<ABaseUnit> PlayerUnitClass;
 	
 	int32 ExpectedUnitCount = 0;
 	
 	void TryStartCombat();
+	void SpawnUnits(UWorld* World, TArray<FMissionSoldier> Squad);
 };

@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 7 complete |
+| **Status** | Early development — Sprint 8 complete |
 
 ---
 
@@ -73,6 +73,21 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
 - Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
+
+---
+
+## Sprint 8 — Soldiers Bridge ✅ | March 16–22, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #47 | ClickCollision extent — driven from BoxHalfExtents | 1 | ✅ Done |
+| #48 | ATacticalGameMode — startup sequencing | 3 | ✅ Done |
+| #49 | FMissionSoldier + UMissionBridgeSubsystem | 3 | ✅ Done |
+| #50 | APlayerUnit soldier identity (WorkerID + DisplayName) | 1 | ✅ Done |
+| #51 | Mission selection screen — soldier picker + launch | 5 | ✅ Done |
+| #52 | Launch → tactical handoff — spawn named units | 5 | ✅ Done |
+
+**Planned:** 18 SP | **Completed:** 18 SP ✅
 
 ---
 
@@ -214,6 +229,7 @@ Notable decisions logged so far:
 - [x] Turn management + A* pathfinding (SP-first POC, Sprint 5)
 - [x] Cover calculation, hit resolution + basic enemy AI (SP-first POC, Sprint 6)
 - [x] Playable tactical loop — player input, move/shoot, turn cycling, HP display, hit/miss feedback (SP-first POC, Sprint 7)
+- [x] Soldiers bridge — named soldiers from base management spawn as units on the tactical map (Sprint 8)
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
 - [ ] Tactical combat (long term)

@@ -11,24 +11,37 @@
 #include "Units/EnemyUnit.h"
 #include "Units/PlayerUnit.h"
 #include "Data/MissionSoldier.h"
+#include "GameFramework/PlayerStart.h"
+#include "Subsystems/MissionBridgeSubsystem.h"
 
 
 void ATacticalGameMode::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	if (const UWorld* World = GetWorld())
+	if (UWorld* World = GetWorld())
 	{
 		TacticalGrid = Cast<ATacticalGrid>(UGameplayStatics::GetActorOfClass(World, ATacticalGrid::StaticClass()));
 		TurnManager = Cast<ATurnManager>(UGameplayStatics::GetActorOfClass(World, ATurnManager::StaticClass()));
 		CombatManager = Cast<ACombatManager>(UGameplayStatics::GetActorOfClass(World, ACombatManager::StaticClass()));
+		UMissionBridgeSubsystem* MissionBridgeSubsystem = GetGameInstance()->GetSubsystem<UMissionBridgeSubsystem>();
+		
+		TArray<FMissionSoldier> Squad = MissionBridgeSubsystem->GetPendingSquad();
+		
+		if (Squad.IsEmpty())
+		{
+			for (int32 i = 0; i < 5; i++) { Squad.Add(FMissionSoldier()); }
+		}
+		SpawnUnits(World, Squad);
+				
+		MissionBridgeSubsystem->ClearPendingSquad();
+		
 		TArray<AActor*> DiscoveredUnits;
 		UGameplayStatics::GetAllActorsOfClass(World, ABaseUnit::StaticClass(), DiscoveredUnits);
 		ExpectedUnitCount = DiscoveredUnits.Num();
 		for (ABaseUnit* Unit : Units)
 		{
 			if (AEnemyUnit* Enemy = Cast<AEnemyUnit>(Unit)) { Enemy->Initialise(TurnManager, CombatManager, TacticalGrid); }
-			if (APlayerUnit* Player = Cast<APlayerUnit>(Unit)) { Player->Initialise(TacticalGrid, FMissionSoldier()); } // TODO: Pass in actual FMissionSoldier data (#52)
 		}
 		TryStartCombat();
 	}
@@ -41,6 +54,30 @@ void ATacticalGameMode::TryStartCombat()
 	TurnManager->StartCombat(Units);
 }
 
+void ATacticalGameMode::SpawnUnits(UWorld* World, TArray<FMissionSoldier> Squad)
+{
+	if (!World || Squad.IsEmpty()) { return; }
+	
+	TArray<AActor*> PlayerStarts;
+	UGameplayStatics::GetAllActorsOfClass(World, APlayerStart::StaticClass(), PlayerStarts);
+	
+	if (Squad.Num() > PlayerStarts.Num())
+	{
+		UE_LOG(LogTemp, Warning, TEXT("Squad size (%d) is larger than number of player starts (%d)"), Squad.Num(), PlayerStarts.Num());
+	}
+	
+	for (int32 i = 0; i < Squad.Num(); i++)
+	{
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.Owner = World->GetFirstPlayerController();
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AdjustIfPossibleButDontSpawnIfColliding;		
+		if (APlayerUnit* PlayerUnit = World->SpawnActor<APlayerUnit>(PlayerUnitClass, PlayerStarts[i]->GetActorLocation(), PlayerStarts[i]->GetActorRotation(), SpawnParams))
+		{
+			PlayerUnit->Initialise(TacticalGrid, Squad[i]);
+		}		
+	}		
+}
+
 void ATacticalGameMode::RegisterUnit(ABaseUnit* Unit)
 {
 	if (!Unit) { return; }
@@ -49,12 +86,6 @@ void ATacticalGameMode::RegisterUnit(ABaseUnit* Unit)
 	if (AEnemyUnit* EnemyUnit = Cast<AEnemyUnit>(Unit))
 	{
 		EnemyUnit->Initialise(TurnManager, CombatManager, TacticalGrid);
-	}
-
-	if (APlayerUnit* PlayerUnit = Cast<APlayerUnit>(Unit))
-	{
-		// TODO: Pass in actual FMissionSoldier data (#52)
-		PlayerUnit->Initialise(TacticalGrid, FMissionSoldier());
 	}
 
 	TryStartCombat();
