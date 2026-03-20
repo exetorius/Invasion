@@ -4,7 +4,7 @@
 #include "UI/WorkerTasks/EngineeringScreenWidget.h"
 
 #include "Components/ScrollBox.h"
-#include "Controller/ManagementPlayerController.h"
+#include "PlayerController/ManagementPlayerController.h"
 #include "Core/BaseManagerState.h"
 #include "Data/TaskTypes.h"
 #include "Data/WorkerData.h"

@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "Data/MissionSoldier.h"
+#include "Data/MissionData.h"
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "MissionBridgeSubsystem.generated.h"
 
@@ -20,6 +20,11 @@ public:
 	const TArray<FMissionSoldier>& GetPendingSquad() const;
 	void ClearPendingSquad();
 	
+	void SetPendingMissionResult(const FMissionResult& Result);
+	const FMissionResult& GetPendingMissionResult() const;
+	void ClearPendingMissionResult();
+	
 private:
 	TArray<FMissionSoldier> PendingSquad;
+	FMissionResult PendingMissionResult;
 };

@@ -4,7 +4,7 @@
 #include "UI/WorkerManagement/RosterScreenWidget.h"
 #include "UI/Tiles/RosterWorkerTileWidget.h"
 #include "Core/BaseManagerState.h"
-#include "Controller/ManagementPlayerController.h"
+#include "PlayerController/ManagementPlayerController.h"
 #include "Components/ScrollBox.h"
 
 // Button functionality called from BP

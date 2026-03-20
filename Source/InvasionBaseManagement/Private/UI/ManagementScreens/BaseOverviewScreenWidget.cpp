@@ -6,7 +6,7 @@
 #include "Core/BaseManagerState.h"
 #include "Data/WorkerData.h"
 #include "Components/TextBlock.h"
-#include "Controller/ManagementPlayerController.h"
+#include "PlayerController/ManagementPlayerController.h"
 
 void UBaseOverviewScreenWidget::OnScreenDataReady()
 {

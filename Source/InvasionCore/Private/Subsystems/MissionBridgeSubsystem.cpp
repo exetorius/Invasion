@@ -17,3 +17,18 @@ void UMissionBridgeSubsystem::ClearPendingSquad()
 {
 	PendingSquad.Empty();
 }
+
+void UMissionBridgeSubsystem::SetPendingMissionResult(const FMissionResult& Result)
+{
+	PendingMissionResult = Result;
+}
+
+const FMissionResult& UMissionBridgeSubsystem::GetPendingMissionResult() const
+{
+	return PendingMissionResult;
+}
+
+void UMissionBridgeSubsystem::ClearPendingMissionResult()
+{
+	PendingMissionResult = FMissionResult();
+}

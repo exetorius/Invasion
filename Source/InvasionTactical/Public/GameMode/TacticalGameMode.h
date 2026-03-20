@@ -11,6 +11,7 @@ class ATacticalGrid;
 class ATurnManager;
 class ACombatManager;
 class ABaseUnit;
+class APlayerUnit;
 /**
  * 
  */
@@ -35,10 +36,15 @@ private:
 	UPROPERTY()
 	TArray<TObjectPtr<ABaseUnit>> Units;
 	UPROPERTY(EditDefaultsOnly, Category = "Spawning")
-	TSubclassOf<ABaseUnit> PlayerUnitClass;
+	TSubclassOf<APlayerUnit> PlayerUnitClass;
 	
 	int32 ExpectedUnitCount = 0;
 	
 	void TryStartCombat();
 	void SpawnUnits(UWorld* World, TArray<FMissionSoldier> Squad);
+	UFUNCTION()
+	void EndCombat(const bool bPlayerWon);
+	
+	UPROPERTY(EditDefaultsOnly)
+	TSoftObjectPtr<UWorld> BaseManagementLevel;
 };

@@ -1,7 +1,7 @@
 // CopyrightNotice
 
 
-#include "Controller/ManagementPlayerController.h"
+#include "PlayerController/ManagementPlayerController.h"
 
 #include "EngineUtils.h"
 #include "Blueprint/UserWidget.h"
@@ -11,6 +11,13 @@
 #include "GameMode/ManagementGameMode.h"
 #include "Kismet/GameplayStatics.h"
 #include "Systems/RegionalWorkerPool.h"
+
+void AManagementPlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	CheckPlayerReady();
+}
 
 AManagementPlayerController::AManagementPlayerController()
 {
@@ -83,13 +90,6 @@ void AManagementPlayerController::Server_RequestUnassignWorker_Implementation(UW
 	}
 }
 
-void AManagementPlayerController::BeginPlay()
-{
-	Super::BeginPlay();
-
-	CheckPlayerReady();
-}
-
 void AManagementPlayerController::CheckPlayerReady()
 {
 	if (GetBaseManagerState())
@@ -112,10 +112,6 @@ void AManagementPlayerController::CreateHUD()
 			if (HUD)
 			{
 				HUD->AddToViewport();
-
-				const FInputModeUIOnly InputMode;
-				SetInputMode(InputMode);
-				bShowMouseCursor = true;
 			}
 		}
 		else

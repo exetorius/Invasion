@@ -5,6 +5,7 @@
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
 #include "Data/CampaignTypes.h"	
+#include "PlayerController/InvasionPlayerController.h"
 #include "ManagementPlayerController.generated.h"
 
 /**
@@ -12,7 +13,7 @@
  * Creates HUD and provides access to the player's BaseManagerState
  */
 UCLASS()
-class INVASIONBASEMANAGEMENT_API AManagementPlayerController : public APlayerController
+class INVASIONBASEMANAGEMENT_API AManagementPlayerController : public AInvasionPlayerController
 {
 	GENERATED_BODY()
 

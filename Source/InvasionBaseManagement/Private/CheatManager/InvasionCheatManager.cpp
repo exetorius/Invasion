@@ -4,7 +4,7 @@
 #include "CheatManager/InvasionCheatManager.h"
 
 #include "EngineUtils.h"
-#include "Controller/ManagementPlayerController.h"
+#include "PlayerController/ManagementPlayerController.h"
 #include "Core/BaseManagerState.h"
 #include "Systems/RegionalWorkerPool.h"
 

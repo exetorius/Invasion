@@ -5,7 +5,7 @@
 
 #include "Components/ScrollBox.h"
 #include "Core/BaseManagerState.h"
-#include "Data/MissionSoldier.h"
+#include "Data/MissionData.h"
 #include "Data/WorkerData.h"
 #include "Kismet/GameplayStatics.h"
 #include "Subsystems/MissionBridgeSubsystem.h"

@@ -10,7 +10,7 @@
 #include "Units/BaseUnit.h"
 #include "Units/EnemyUnit.h"
 #include "Units/PlayerUnit.h"
-#include "Data/MissionSoldier.h"
+#include "Data/MissionData.h"
 #include "GameFramework/PlayerStart.h"
 #include "Subsystems/MissionBridgeSubsystem.h"
 
@@ -44,6 +44,7 @@ void ATacticalGameMode::BeginPlay()
 			if (AEnemyUnit* Enemy = Cast<AEnemyUnit>(Unit)) { Enemy->Initialise(TurnManager, CombatManager, TacticalGrid); }
 		}
 		TryStartCombat();
+		TurnManager->OnCombatEnded.AddDynamic(this, &ATacticalGameMode::EndCombat);
 	}
 }
 
@@ -76,6 +77,39 @@ void ATacticalGameMode::SpawnUnits(UWorld* World, TArray<FMissionSoldier> Squad)
 			PlayerUnit->Initialise(TacticalGrid, Squad[i]);
 		}		
 	}		
+}
+
+void ATacticalGameMode::EndCombat(const bool bPlayerWon)
+{
+	FMissionResult MissionResult;
+	MissionResult.bVictory = bPlayerWon;
+		
+	for (ABaseUnit* Unit : TurnManager->GetPlayerUnits())
+	{
+		APlayerUnit* PlayerUnit = Cast<APlayerUnit>(Unit);
+		if (PlayerUnit && !PlayerUnit->IsAlive())
+		{
+			MissionResult.CasualtyIDs.Add(PlayerUnit->GetSoldierID());
+		}
+	}
+	MissionResult.CreditsAwarded = bPlayerWon ? 100 : 0;
+
+	UE_LOG(LogTemp, Log, TEXT("ATacticalGameMode::EndCombat — Victory: %s | Casualties: %d | Credits: %d"),
+		bPlayerWon ? TEXT("true") : TEXT("false"),
+		MissionResult.CasualtyIDs.Num(),
+		MissionResult.CreditsAwarded);
+
+	for (const FGuid& ID : MissionResult.CasualtyIDs) 
+	{
+		UE_LOG(LogTemp, Log, TEXT("  Casualty: %s"), *ID.ToString());
+	}
+
+	if (UMissionBridgeSubsystem* MissionBridgeSubsystem = GetGameInstance()->GetSubsystem<UMissionBridgeSubsystem>())
+	{
+		MissionBridgeSubsystem->SetPendingMissionResult(MissionResult);
+	}
+	
+	UGameplayStatics::OpenLevel(GetWorld(), FName(BaseManagementLevel.GetAssetName()));
 }
 
 void ATacticalGameMode::RegisterUnit(ABaseUnit* Unit)

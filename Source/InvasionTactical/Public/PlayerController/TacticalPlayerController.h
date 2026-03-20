@@ -3,7 +3,7 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerController.h"
+#include "PlayerController/InvasionPlayerController.h"
 #include "TacticalPlayerController.generated.h"
 
 class ACombatManager;
@@ -17,12 +17,13 @@ class ATurnManager;
  * 
  */
 UCLASS()
-class INVASIONTACTICAL_API ATacticalPlayerController : public APlayerController
+class INVASIONTACTICAL_API ATacticalPlayerController : public AInvasionPlayerController
 {
 	GENERATED_BODY()
 	
 protected:
 	virtual void BeginPlay() override;
+	virtual void ReceivedPlayer() override;
 	virtual void SetupInputComponent() override;
 	
 private:

@@ -17,15 +17,7 @@
 void ATacticalPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
-	
-	// Otherwise we get no cursor on screen
-	bShowMouseCursor = true;
-	
-	if (UEnhancedInputLocalPlayerSubsystem* Subsystem =	ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
-	{
-		Subsystem->AddMappingContext(IMC_Tactical, 0);
-	}
-	
+
 	TacticalGrid = Cast<ATacticalGrid>(UGameplayStatics::GetActorOfClass(GetWorld(), ATacticalGrid::StaticClass()));
 	TurnManager = Cast<ATurnManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ATurnManager::StaticClass()));
 	CombatManager = Cast<ACombatManager>(UGameplayStatics::GetActorOfClass(GetWorld(), ACombatManager::StaticClass()));
@@ -38,7 +30,16 @@ void ATacticalPlayerController::BeginPlay()
 	{
 		ActiveUnit = CurrentUnit;
 	}
+}
 
+void ATacticalPlayerController::ReceivedPlayer()
+{
+	Super::ReceivedPlayer();
+
+	if (UEnhancedInputLocalPlayerSubsystem* Subsystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		Subsystem->AddMappingContext(IMC_Tactical, 0);
+	}
 }
 
 void ATacticalPlayerController::SetupInputComponent()
@@ -59,7 +60,7 @@ void ATacticalPlayerController::OnActiveUnitChanged(ABaseUnit* NewActiveUnit)
 		ActiveUnit = nullptr;
 		return;
 	}
-	
+
 	ActiveUnit = NewActiveUnit;
 }
 

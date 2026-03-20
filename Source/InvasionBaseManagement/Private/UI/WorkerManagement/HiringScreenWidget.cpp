@@ -4,7 +4,7 @@
 #include "UI/WorkerManagement/HiringScreenWidget.h"
 
 #include "Components/ScrollBox.h"
-#include "Controller/ManagementPlayerController.h"
+#include "PlayerController/ManagementPlayerController.h"
 #include "Core/BaseManagerState.h"
 #include "Kismet/GameplayStatics.h"
 #include "Systems/RegionalWorkerPool.h"

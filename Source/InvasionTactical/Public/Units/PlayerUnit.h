@@ -4,7 +4,7 @@
 
 #include "CoreMinimal.h"
 #include "BaseUnit.h"
-#include "Data/MissionSoldier.h"
+#include "Data/MissionData.h"
 #include "PlayerUnit.generated.h"
 
 

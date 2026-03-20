@@ -1,6 +1,6 @@
 ﻿#include "UI/ManagementScreens/BaseManagementScreenWidget.h"
 
-#include "Controller/ManagementPlayerController.h"
+#include "PlayerController/ManagementPlayerController.h"
 
 void UBaseManagementScreenWidget::NativeConstruct()
 {
