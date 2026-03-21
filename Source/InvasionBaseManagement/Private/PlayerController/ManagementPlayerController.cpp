@@ -4,19 +4,29 @@
 #include "PlayerController/ManagementPlayerController.h"
 
 #include "EngineUtils.h"
-#include "Blueprint/UserWidget.h"
 #include "CheatManager/InvasionCheatManager.h"
 #include "UI/ManagementHUD.h"
 #include "Core/BaseManagerState.h"
 #include "GameMode/ManagementGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "Subsystems/MissionBridgeSubsystem.h"
 #include "Systems/RegionalWorkerPool.h"
+#include "UI/MissionScreens/MissionResultScreenWidget.h"
 
 void AManagementPlayerController::BeginPlay()
 {
 	Super::BeginPlay();
 
 	CheckPlayerReady();
+	
+	if (const UMissionBridgeSubsystem* MissionBridgeSubsystem = GetGameInstance()->GetSubsystem<UMissionBridgeSubsystem>())
+	{
+		if (!MissionBridgeSubsystem->GetPendingMissionResult().bIsValid) { return; }
+		if (UMissionResultScreenWidget* MissionResultScreenWidget = CreateWidget<UMissionResultScreenWidget>(this, MissionResultScreenClass))
+		{
+			MissionResultScreenWidget->AddToViewport(1);
+		}		
+	}
 }
 
 AManagementPlayerController::AManagementPlayerController()

@@ -8,7 +8,7 @@
 #include "UI/ManagementScreens/WarehouseScreenWidget.h"
 #include "UI/WorkerTasks/ResearchScreenWidget.h"
 #include "UI/ManagementNavigationWidget.h"
-#include "UI/MissionSelect/MissionSelectScreenWidget.h"
+#include "UI/MissionScreens/MissionSelectScreenWidget.h"
 
 #include "Components/WidgetSwitcher.h"
 #include "UI/WorkerManagement/WorkerPaneWidget.h"

@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 8 complete |
+| **Status** | Early development — Sprint 9 complete |
 
 ---
 
@@ -73,6 +73,19 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
 - Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
+
+---
+
+## Sprint 9 — Close the Loop ✅ | March 20–27, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #53 | FMissionResult struct + UMissionBridgeSubsystem result handoff | 2 | ✅ Done |
+| #54 | Mission end detection + result write + level transition back to base | 3 | ✅ Done |
+| #55 | Apply mission consequences at base (casualties + credits) | 3 | ✅ Done |
+| #56 | Mission result screen (greybox) | 2 | ✅ Done |
+
+**Planned:** 10 SP | **Completed:** 10 SP ✅
 
 ---
 
@@ -230,6 +243,7 @@ Notable decisions logged so far:
 - [x] Cover calculation, hit resolution + basic enemy AI (SP-first POC, Sprint 6)
 - [x] Playable tactical loop — player input, move/shoot, turn cycling, HP display, hit/miss feedback (SP-first POC, Sprint 7)
 - [x] Soldiers bridge — named soldiers from base management spawn as units on the tactical map (Sprint 8)
+- [x] Mission return loop — result screen, consequences applied, full base↔tactical loop closed (Sprint 9)
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
 - [ ] Tactical combat (long term)

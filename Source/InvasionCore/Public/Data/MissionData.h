@@ -21,6 +21,9 @@ struct INVASIONCORE_API FMissionResult
 	GENERATED_BODY()
 	
 	UPROPERTY()
+	bool bIsValid = false;
+	
+	UPROPERTY()
 	bool bVictory = false;
 	
 	UPROPERTY()

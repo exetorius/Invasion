@@ -8,6 +8,7 @@
 
 class ARegionalWorkerPool;
 class ABaseManagerState;
+
 /**
  * GameMode for base management screen
  * Spawns a BaseManagerState for each player that joins

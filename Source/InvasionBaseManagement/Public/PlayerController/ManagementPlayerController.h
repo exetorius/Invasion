@@ -3,7 +3,6 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/PlayerController.h"
 #include "Data/CampaignTypes.h"	
 #include "PlayerController/InvasionPlayerController.h"
 #include "ManagementPlayerController.generated.h"
@@ -40,6 +39,9 @@ protected:
 	
 	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
 	TSubclassOf<class UManagementHUD> HUDClass;
+	
+	UPROPERTY(EditDefaultsOnly, BlueprintReadOnly, Category = "UI")
+	TSubclassOf<class UMissionResultScreenWidget> MissionResultScreenClass;
 
 private:
 	UPROPERTY()

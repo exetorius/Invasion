@@ -1,7 +1,7 @@
 ﻿// CopyrightNotice
 
 
-#include "UI/MissionSelect/MissionSelectScreenWidget.h"
+#include "UI/MissionScreens/MissionSelectScreenWidget.h"
 
 #include "Components/ScrollBox.h"
 #include "Core/BaseManagerState.h"

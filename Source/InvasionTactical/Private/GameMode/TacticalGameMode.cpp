@@ -82,6 +82,7 @@ void ATacticalGameMode::SpawnUnits(UWorld* World, TArray<FMissionSoldier> Squad)
 void ATacticalGameMode::EndCombat(const bool bPlayerWon)
 {
 	FMissionResult MissionResult;
+	MissionResult.bIsValid = true;
 	MissionResult.bVictory = bPlayerWon;
 		
 	for (ABaseUnit* Unit : TurnManager->GetPlayerUnits())

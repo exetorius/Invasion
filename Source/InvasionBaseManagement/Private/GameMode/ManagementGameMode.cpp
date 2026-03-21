@@ -28,10 +28,11 @@ void AManagementGameMode::BeginPlay()
 	if (HasAuthority())
 	{
 		SpawnRegionalWorkerPools();
+		
 		if (UMissionBridgeSubsystem* MissionBridgeSubsystem = GetGameInstance()->GetSubsystem<UMissionBridgeSubsystem>())
 		{
 			FMissionResult MissionResult = MissionBridgeSubsystem->GetPendingMissionResult();
-			if (MissionResult.CasualtyIDs.Num() == 0 && MissionResult.CreditsAwarded == 0)
+			if (MissionResult.bIsValid == false)
 			{
 				MissionBridgeSubsystem->ClearPendingMissionResult();
 				return;
@@ -43,19 +44,11 @@ void AManagementGameMode::BeginPlay()
 				{
 					if (UWorkerData* Soldier = BaseManagerState->FindWorkerByGUID(CasualtyID))
 					{
-						UE_LOG(LogTemp, Log, TEXT("ManagementGameMode: Removing casualty — %s"), *Soldier->GetWorkerName());
 						BaseManagerState->RemoveWorker(Soldier);
-					}
-					else
-					{
-						UE_LOG(LogTemp, Warning, TEXT("ManagementGameMode: Casualty GUID not found in roster — %s"), *CasualtyID.ToString());
 					}
 				}
 				BaseManagerState->AddCredits(MissionResult.CreditsAwarded);
-				UE_LOG(LogTemp, Log, TEXT("ManagementGameMode: Credits awarded — %d | Total credits — %d"),
-					MissionResult.CreditsAwarded, BaseManagerState->GetCredits());
 			}
-			MissionBridgeSubsystem->ClearPendingMissionResult();
 		}
 	}
 }
