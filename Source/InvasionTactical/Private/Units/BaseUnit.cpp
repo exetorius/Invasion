@@ -21,6 +21,12 @@ ABaseUnit::ABaseUnit()
 	CapsuleCollider->SetCollisionEnabled(ECollisionEnabled::QueryOnly);
 	CapsuleCollider->SetCollisionResponseToAllChannels(ECR_Ignore);
 	CapsuleCollider->SetCollisionResponseToChannel(ECC_GameTraceChannel4, ECR_Block);
+	CapsuleCollider->SetCapsuleHalfHeight(88.f);
+	CapsuleCollider->SetCapsuleRadius(34.f);
+	
+	MeshComponent = CreateDefaultSubobject<USkeletalMeshComponent>(TEXT("MeshComponent"));
+	MeshComponent->SetupAttachment(CapsuleCollider);
+	MeshComponent->SetRelativeLocation(FVector(0.f, 0.f, -88.f));
 	
 	HealthBarWidgetComponent = CreateDefaultSubobject<UWidgetComponent>(TEXT("HealthBarWidget"));
 	HealthBarWidgetComponent->SetupAttachment(CapsuleCollider);	

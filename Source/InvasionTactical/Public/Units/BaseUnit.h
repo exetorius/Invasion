@@ -47,7 +47,7 @@ private:
 	UPROPERTY(EditDefaultsOnly)
 	float MaxHealth = 100.f;
 	
-	UPROPERTY(EditDefaultsOnly)
+	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UWidgetComponent> HealthBarWidgetComponent;
 	
 	UPROPERTY(VisibleInstanceOnly)
@@ -74,6 +74,9 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<UCapsuleComponent> CapsuleCollider;
 	
+	UPROPERTY(VisibleAnywhere)
+	TObjectPtr<USkeletalMeshComponent> MeshComponent;
+	
 // Getters & setters
 public:
 	UFUNCTION(BlueprintPure)
@@ -97,4 +100,6 @@ public:
 	ECombatState GetCombatState() const { return CombatState; }
 	UFUNCTION(BlueprintPure)
 	ATacticalGridTile* GetCurrentTile() const { return CurrentTile; }	
+	UFUNCTION(BlueprintPure)
+	USkeletalMeshComponent* GetMesh() const { return MeshComponent; }
 };
