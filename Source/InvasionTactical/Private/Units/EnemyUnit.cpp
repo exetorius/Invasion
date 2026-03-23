@@ -163,7 +163,7 @@ void AEnemyUnit::MoveAlongPath(const TArray<ATacticalGridTile*>& Path, const FIn
 		// TODO: Stepwise movement with delay — teleport for POC, animation post-POC
 		ConsumeMovementPoints(StepsTaken);
 		SetCurrentTile(DestTile);
-		SetActorLocation(DestTile->GetActorLocation());
+		SetActorLocation(FVector(DestTile->GetActorLocation().X, DestTile->GetActorLocation().Y, GetActorLocation().Z));
 	}
 }
 

@@ -29,7 +29,7 @@ void APlayerUnit::MoveToTile(ATacticalGridTile* MoveTile)
 	if (!MoveTile) { return; }
 	ConsumeMovementPoints(GetMovementPointsRemaining()); // Consume all movement points for POC
 	SetCurrentTile(MoveTile);
-	SetActorLocation(MoveTile->GetActorLocation());
+	SetActorLocation(FVector(MoveTile->GetActorLocation().X, MoveTile->GetActorLocation().Y, GetActorLocation().Z));
 }
 
 void APlayerUnit::Initialise(ATacticalGrid* TacticalGrid, const FMissionSoldier& NewSoldierData)
