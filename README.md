@@ -14,7 +14,7 @@ You command a sovereign national base in a world under alien threat. Recruit and
 | **Language** | C++ (with Blueprint for UI) |
 | **Multiplayer** | Optional, session-based via Steam (AdvancedSteamSessions) |
 | **Solo** | First-class, complete experience |
-| **Status** | Early development — Sprint 9 complete |
+| **Status** | Early development — Sprint 10 complete |
 
 ---
 
@@ -73,6 +73,20 @@ Workers have health, morale, injury severity, and status. Stats use float ranges
 - Workers registered via `AddReplicatedSubObject()` in both the pool (while available) and the state (after hire)
 - Subobject registration transfers on hire and fire — deregistered from source, registered on destination
 - Server RPCs on pool actors must route through `AManagementPlayerController` — pool actors have no player owner connection
+
+---
+
+## Sprint 10 — Tactical Visual Pass ✅ | March 22–27, 2026
+
+| # | Task | Points | Status |
+|---|---|---|---|
+| #57 | Replace APlayerUnit capsule mesh with UE Mannequin | 2 | ✅ Done |
+| #58 | Replace AEnemyUnit capsule mesh with UE Mannequin | 2 | ✅ Done |
+| #59 | Validate gameplay systems after mannequin swap | 2 | ✅ Done |
+| #61 | Player attack limit — one attack per turn | 2 | ✅ Done |
+| #45 | Player shoot range check in RequestAttackUnit | 2 | ✅ Done |
+
+**Planned:** 10 SP | **Completed:** 10 SP ✅
 
 ---
 
@@ -244,6 +258,7 @@ Notable decisions logged so far:
 - [x] Playable tactical loop — player input, move/shoot, turn cycling, HP display, hit/miss feedback (SP-first POC, Sprint 7)
 - [x] Soldiers bridge — named soldiers from base management spawn as units on the tactical map (Sprint 8)
 - [x] Mission return loop — result screen, consequences applied, full base↔tactical loop closed (Sprint 9)
+- [x] Tactical visual pass — Mannequin meshes, attack limit, shoot range constraint (Sprint 10)
 - [ ] Save system
 - [ ] Full research tree (tech unlocks, outcomes)
 - [ ] Tactical combat (long term)
