@@ -27,7 +27,7 @@ void ATacticalGridTile::BeginPlay()
 {
 	Super::BeginPlay();
 	
-	// To catch any possible edited value in the editor. BP values are picked up AFTER construction so this needs to live here
+	// To catch any possible edited value in the editor. BP values are picked up AFTER construction, so this needs to live here
 	ClickCollision->SetBoxExtent(FVector(BoxHalfExtents)); 
 
 	if (const UWorld* World = GetWorld())

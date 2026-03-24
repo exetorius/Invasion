@@ -77,6 +77,11 @@ private:
 	UPROPERTY(VisibleAnywhere)
 	TObjectPtr<USkeletalMeshComponent> MeshComponent;
 	
+	UPROPERTY(EditDefaultsOnly)
+	int32 MaxShootRange = 8;
+	
+	bool bHasAttackedThisTurn = false;
+	
 // Getters & setters
 public:
 	UFUNCTION(BlueprintPure)
@@ -102,4 +107,10 @@ public:
 	ATacticalGridTile* GetCurrentTile() const { return CurrentTile; }	
 	UFUNCTION(BlueprintPure)
 	USkeletalMeshComponent* GetMesh() const { return MeshComponent; }
+	UFUNCTION(BlueprintPure)
+	bool HasAttackedThisTurn() const { return bHasAttackedThisTurn; }
+	UFUNCTION(BlueprintCallable, Category = "Combat")
+	void ConsumeAttack();
+	UFUNCTION(BlueprintPure)
+	int32 GetMaxShootRange() const { return MaxShootRange; }
 };

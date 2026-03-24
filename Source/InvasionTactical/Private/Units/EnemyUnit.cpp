@@ -102,7 +102,7 @@ TArray<ABaseUnit*> AEnemyUnit::FindVisiblePlayers(const TArray<ABaseUnit*>& Livi
 		const int32 ManhattanDist = FMath::Abs(MyCoords.X - PlayerCoords.X) + FMath::Abs(MyCoords.Y - PlayerCoords.Y);
 
 		// Skip if out of shooting range
-		if (ManhattanDist > MaxShootRange) { continue; }
+		if (ManhattanDist > GetMaxShootRange()) { continue; }
 
 		// Skip if obstructed by a wall
 		FHitResult WallHit;

@@ -89,6 +89,11 @@ void ABaseUnit::SetFaction(const EFaction NewFaction)
 	// TODO: Mind control / faction swap mechanic will need to override this blocker
 }
 
+void ABaseUnit::ConsumeAttack()
+{
+	bHasAttackedThisTurn = true;
+}
+
 void ABaseUnit::SetCurrentTile(ATacticalGridTile* NewTile)
 {
 	if (!ensure(NewTile)) { return; }
@@ -142,6 +147,7 @@ void ABaseUnit::RemoveHealth(float HealthToRemove)
 void ABaseUnit::OnTurnStart()
 {
 	MovementPointsRemaining = MaxMovementPoints;
+	bHasAttackedThisTurn = false;
 }
 
 

@@ -107,13 +107,18 @@ void ATacticalPlayerController::OnAttackClicked()
 }
 
 void ATacticalPlayerController::RequestAttackUnit(ABaseUnit* TargetUnit)
-{
+{	
 	// TODO: Server RPC boundary — becomes Server RPC when networking lands
 	if (!TargetUnit || !ActiveUnit || !CombatManager || !TacticalGrid) { return; }
-	FIntPoint AttackerCoordinates = ActiveUnit->GetCurrentTile()->GetGridCoordinates();
-	FIntPoint DefenderCoordinates = TargetUnit->GetCurrentTile()->GetGridCoordinates();
+	if (ActiveUnit->HasAttackedThisTurn()) { return; }
+	
+	const FIntPoint AttackerCoordinates = ActiveUnit->GetCurrentTile()->GetGridCoordinates();
+	const FIntPoint DefenderCoordinates = TargetUnit->GetCurrentTile()->GetGridCoordinates();
 
-	// TODO: MaxShootRange will be moving from Enemy to Base and added here for range check #45 
+	const int32 ManhattanDist = FMath::Abs(AttackerCoordinates.X - DefenderCoordinates.X) + FMath::Abs(AttackerCoordinates.Y - DefenderCoordinates.Y);
+
+	// Skip if out of shooting range
+	if (ManhattanDist > ActiveUnit->GetMaxShootRange()) { return; }
 
 	// Skip if obstructed by a wall
 	FHitResult WallHit;
@@ -141,4 +146,5 @@ void ATacticalPlayerController::RequestAttackUnit(ABaseUnit* TargetUnit)
 		GEngine->AddOnScreenDebugMessage(-1, 2.f, FColor::White, TEXT("MISS"));
 	}
 	ActiveUnit->ConsumeMovementPoints(ActiveUnit->GetMovementPointsRemaining() / 2);
+	ActiveUnit->ConsumeAttack();
 }

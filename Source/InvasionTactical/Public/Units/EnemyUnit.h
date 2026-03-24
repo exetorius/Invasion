@@ -21,10 +21,7 @@ public:
 protected:
 	virtual void BeginPlay() override;
 	
-private:
-	UPROPERTY(EditDefaultsOnly)
-	int32 MaxShootRange = 8;
-	
+private:	
 	UPROPERTY()
 	TObjectPtr<ATurnManager> TurnManager;
 	UPROPERTY()
