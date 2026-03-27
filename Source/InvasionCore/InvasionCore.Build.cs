@@ -10,6 +10,6 @@ public class InvasionCore : ModuleRules
 
 		PublicDependencyModuleNames.AddRange(new string[] { "Core" });
 
-		PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "AdvancedSessions" });
+		PrivateDependencyModuleNames.AddRange(new string[] { "CoreUObject", "Engine", "AdvancedSessions", "NetCore" });
 	}
 }

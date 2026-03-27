@@ -10,7 +10,7 @@
  */
 
 UCLASS(Blueprintable)
-class INVASIONBASEMANAGEMENT_API UWorkerData : public UObject
+class INVASIONCORE_API UWorkerData : public UObject
 {
 	GENERATED_BODY()
 
