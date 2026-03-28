@@ -47,7 +47,7 @@ void UWorkerPaneWidget::InitialiseWorkerPane()
 	{
 		if (!Worker) { continue; }
 		if (Worker->GetRole() != CachedRoleFilter) { continue; }
-		if (Worker->GetCurrentStatus() != EWorkerStatus::EWS_Idle) { continue; }
+		if (Worker->GetCurrentStatus() != EWorkerStatus::Idle) { continue; }
 
 		if (UWorkerTileBase* Tile = CreateWidget<UWorkerTileBase>(this, WorkerTileWidget))
 		{

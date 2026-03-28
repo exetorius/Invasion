@@ -97,10 +97,10 @@ void UBaseOverviewScreenWidget::PopulateOverviewScreen()
 		Total++;
 		switch (Worker->GetCurrentStatus())
 		{
-			case EWorkerStatus::EWS_Idle:      Idle++;      break;
-			case EWorkerStatus::EWS_Working:   Working++;   break;
-			case EWorkerStatus::EWS_OnMission: OnMission++; break;
-			case EWorkerStatus::EWS_Injured:   Injured++;   break;
+			case EWorkerStatus::Idle:      Idle++;      break;
+			case EWorkerStatus::Working:   Working++;   break;
+			case EWorkerStatus::OnMission: OnMission++; break;
+			case EWorkerStatus::Injured:   Injured++;   break;
 			default: break;
 		}
 	}

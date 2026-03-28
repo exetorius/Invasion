@@ -82,7 +82,7 @@ void UMissionSelectScreenWidget::PopulateWorkerList()
 	
 	for (UWorkerData* Worker : AllWorkers)
 	{
-		if (Worker->GetRole() == EWorkerRole::EWRO_Soldier && Worker->GetCurrentStatus() != EWorkerStatus::EWS_OnMission && !SelectedSoldiers.Contains(Worker))
+		if (Worker->GetRole() == EWorkerRole::Soldier && Worker->GetCurrentStatus() != EWorkerStatus::OnMission && !SelectedSoldiers.Contains(Worker))
 		{
 			AvailableSoldiers.Add(Worker);
 		}

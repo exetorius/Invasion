@@ -7,6 +7,7 @@
 #include "Data/WorkerTypes.h"
 #include "RegionalWorkerPool.generated.h"
 
+class USoldierData;
 class UWorkerData;
 
 /**
@@ -56,6 +57,8 @@ private:
 
 	// Generate a random worker of a specified role
 	TObjectPtr<UWorkerData> GenerateRandomWorker(EWorkerRole WorkerRole);
+	
+	TObjectPtr<USoldierData> GenerateRandomSoldier();
 
 	// Helper: Random name generation
 	FString GenerateRandomName();

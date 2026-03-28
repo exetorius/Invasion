@@ -3,6 +3,7 @@
 #include "Systems/RegionalWorkerPool.h"
 #include "Data/WorkerData.h"
 #include "Core/BaseManagerState.h"
+#include "Data/SoldierData.h"
 #include "Net/UnrealNetwork.h"
 
 ARegionalWorkerPool::ARegionalWorkerPool()
@@ -130,18 +131,16 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate soldiers
 	for (int32 i = 0; i < SoldiersCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Soldier);
-		if (Worker)
+		if (USoldierData* Soldier = GenerateRandomSoldier())
 		{
-			AddGeneratedWorker(Worker);
+			AddGeneratedWorker(Soldier);
 		}
 	}
 
 	// Generate scientists
 	for (int32 i = 0; i < ScientistsCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Scientist);
-		if (Worker)
+		if (UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::Scientist))
 		{
 			AddGeneratedWorker(Worker);
 		}
@@ -150,8 +149,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate engineers
 	for (int32 i = 0; i < EngineersCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Engineer);
-		if (Worker)
+		if (UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::Engineer))
 		{
 			AddGeneratedWorker(Worker);
 		}
@@ -160,8 +158,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate medics
 	for (int32 i = 0; i < MedicsCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Medic);
-		if (Worker)
+		if (UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::Medic))
 		{
 			AddGeneratedWorker(Worker);
 		}
@@ -170,8 +167,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 	// Generate pilots
 	for (int32 i = 0; i < PilotsCount; ++i)
 	{
-		UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::EWRO_Pilot);
-		if (Worker)
+		if (UWorkerData* Worker = GenerateRandomWorker(EWorkerRole::Pilot))
 		{
 			AddGeneratedWorker(Worker);
 		}
@@ -187,7 +183,7 @@ void ARegionalWorkerPool::GenerateInitialWorkerPool(int32 SoldiersCount, int32 S
 TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole WorkerRole)
 {
 	// TODO: Update method so race can be random instead of fixed Human
-	UWorkerData* NewWorker = UWorkerData::CreateWorker(this, WorkerRole, EWorkerRace::EWR_Human);
+	UWorkerData* NewWorker = UWorkerData::CreateWorker(this, WorkerRole, EWorkerRace::Human);
 	if (!NewWorker)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Failed to generate worker"));
@@ -197,50 +193,38 @@ TObjectPtr<UWorkerData> ARegionalWorkerPool::GenerateRandomWorker(EWorkerRole Wo
 	// --- IDENTITY ---
 	NewWorker->SetWorkerName(GenerateRandomName());
 	
-	// --- COMBAT STATS ---
+	// --- HEALTH STATS ---
 	NewWorker->SetMaxHealth(100.0f);
 	NewWorker->SetHealth(NewWorker->GetMaxHealth());
 	
-	// Role-based combat skill ranges
-	switch (WorkerRole)
-	{
-		case EWorkerRole::EWRO_Soldier:
-			NewWorker->SetCombatSkill(FMath::FRandRange(50.0f, 90.0f));
-			break;
-		case EWorkerRole::EWRO_Medic:
-			NewWorker->SetCombatSkill(FMath::FRandRange(30.0f, 60.0f));
-			break;
-		default: 
-			NewWorker->SetCombatSkill(FMath::FRandRange(10.0f, 50.0f)); 
-			break; // Scientists/Engineers
-	}
-	
-	// --- WORK STATS ---
-	// Role-based work efficiency
-	switch (WorkerRole)
-	{
-	case EWorkerRole::EWRO_Scientist:
-	case EWorkerRole::EWRO_Engineer:
-		NewWorker->SetWorkEfficiency(FMath::FRandRange(60.0f, 95.0f)); // Specialists: 60-95
-		break;
-	default:
-		NewWorker->SetWorkEfficiency(FMath::FRandRange(40.0f, 75.0f)); // Others: 40-75
-		break;
-	}
-	
 	// --- STATE ---
-	NewWorker->SetMorale(FMath::FRandRange(80.0f, 100.0f));
-	NewWorker->SetInjurySeverity(EWorkerInjurySeverity::EWIS_None);
-	NewWorker->SetCurrentStatus(EWorkerStatus::EWS_Idle);
+	NewWorker->SetCurrentStatus(EWorkerStatus::Idle);
 	
-	UE_LOG(LogTemp, Log, TEXT("Generated Worker: %s (%s) | Combat: %.1f | Work: %.1f | Morale: %.1f"),
+	UE_LOG(LogTemp, Log, TEXT("Generated Worker: %s (%s)"),
 		*NewWorker->GetWorkerName(),
-		*UEnum::GetValueAsString(NewWorker->GetRole()),
-		NewWorker->GetCombatSkill(),
-		NewWorker->GetWorkEfficiency(),
-		NewWorker->GetMorale());
+		*UEnum::GetValueAsString(NewWorker->GetRole())
+		);
 	
 	return NewWorker;
+}
+
+TObjectPtr<USoldierData> ARegionalWorkerPool::GenerateRandomSoldier()
+{
+	USoldierData* NewSoldier = USoldierData::CreateSoldier(this);
+	if (!NewSoldier)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Failed to generate soldier"));
+		return nullptr;
+	}
+	
+	NewSoldier->SetWorkerName(GenerateRandomName());
+	
+	NewSoldier->SetMaxHealth(100.0f);
+	NewSoldier->SetHealth(NewSoldier->GetMaxHealth());
+	
+	NewSoldier->SetCurrentStatus(EWorkerStatus::Idle);
+	
+	return NewSoldier;
 }
 
 // TODO: Come up with a better name generation system 

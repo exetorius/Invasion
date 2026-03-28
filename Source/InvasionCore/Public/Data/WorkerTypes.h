@@ -1,45 +1,55 @@
 ﻿#pragma once
 
-UENUM()
+UENUM(BlueprintType)
 enum class EWorkerRace : uint8
 {
-	EWR_Unknown,
-	EWR_Human,	
+	Unknown,
+	Human,	
 
-	EWR_MAX	
+	Max	
 };
 
-UENUM()
+UENUM(BlueprintType)
 enum class EWorkerRole : uint8
 {
-	EWRO_None,
-	EWRO_Soldier,
-	EWRO_Scientist,
-	EWRO_Engineer,
-	EWRO_Medic,
-	EWRO_Pilot,
+	None,
+	Soldier,
+	Scientist,
+	Engineer,
+	Medic,
+	Pilot,
 
-	EWRO_MAX
+	Max
 };
 
-UENUM()
+UENUM(BlueprintType)
 enum class EWorkerStatus: uint8
 {
-	EWS_Idle,
-	EWS_OnMission,
-	EWS_Working,
-	EWS_Injured,
+	Idle,
+	OnMission,
+	Working,
+	Injured,
 	
-	EWS_MAX
+	Max
 };
 
-UENUM()
-enum class EWorkerInjurySeverity : uint8
+UENUM(BlueprintType)
+enum class EInjurySeverity : uint8
 {
-	EWIS_None,
-	EWIS_Minor,
-	EWIS_Major,
-	EWIS_Critical,
+	None,
+	Minor,
+	Major,
+	Critical,
 	
-	EWIS_MAX
+	Max
+};
+
+UENUM(BlueprintType)
+enum class EUnitRank : uint8
+{
+	Rookie,
+	Veteran,
+	Elite,
+	
+	Max
 };

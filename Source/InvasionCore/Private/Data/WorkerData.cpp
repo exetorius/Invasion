@@ -19,14 +19,8 @@ void UWorkerData::GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifet
 	//Combat Stats
 	DOREPLIFETIME(UWorkerData, Health);
 	DOREPLIFETIME(UWorkerData, MaxHealth);
-	DOREPLIFETIME(UWorkerData, CombatSkill);
-	
-	// Work Stats
-	DOREPLIFETIME(UWorkerData, WorkEfficiency);
 	
 	// State
-	DOREPLIFETIME(UWorkerData, Morale);
-	DOREPLIFETIME(UWorkerData, InjurySeverity);
 	DOREPLIFETIME(UWorkerData, bIsDead);
 	DOREPLIFETIME(UWorkerData, CurrentStatus);
 }
@@ -40,13 +34,13 @@ TObjectPtr<UWorkerData> UWorkerData::CreateWorker(UObject* Outer, EWorkerRole In
 		return nullptr;
 	}
 	
-	Worker->Role = InRole;
-	Worker->Race = InRace;
+	Worker->SetRole(InRole);
+	Worker->SetRace(InRace);
+	
 	return Worker;
 }
 
 // --- HEALTH ---
-
 void UWorkerData::AddHealth(float HealthToAdd)
 {
 	Health = FMath::Min(Health + HealthToAdd, MaxHealth);
@@ -63,7 +57,6 @@ void UWorkerData::SetHealth(float NewHealth)
 }
 
 // --- MAX HEALTH ---
-
 void UWorkerData::AddMaxHealth(float MaxHealthToAdd)
 {
 	MaxHealth = FMath::Min(MaxHealth + MaxHealthToAdd, 100.f);
@@ -79,21 +72,4 @@ void UWorkerData::SetMaxHealth(float NewMaxHealth)
 {
 	const float Floor = MaxHealth / 2.f;
 	MaxHealth = FMath::Clamp(NewMaxHealth, Floor, 100.f);
-}
-
-// --- MORALE ---
-
-void UWorkerData::AddMorale(float MoraleToAdd)
-{
-	Morale = FMath::Clamp(Morale + MoraleToAdd, 0.f, 100.f);
-}
-
-void UWorkerData::RemoveMorale(float MoraleToRemove)
-{
-	Morale = FMath::Clamp(Morale - MoraleToRemove, 0.f, 100.f);
-}
-
-void UWorkerData::SetMorale(float NewMorale)
-{
-	Morale = FMath::Clamp(NewMorale, 0.f, 100.f);
 }

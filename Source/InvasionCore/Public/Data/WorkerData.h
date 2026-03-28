@@ -14,7 +14,7 @@ class INVASIONCORE_API UWorkerData : public UObject
 {
 	GENERATED_BODY()
 
-public:
+public:   
 	UWorkerData();
 	static TObjectPtr<UWorkerData> CreateWorker(UObject* Outer, EWorkerRole InRole, EWorkerRace InRace);
 
@@ -35,10 +35,12 @@ public:
 	// --- RACE ---
 	UFUNCTION(BlueprintPure, Category = "Worker")		
 	EWorkerRace GetRace() const { return Race; }
+	void SetRace(const EWorkerRace NewRace) { if (Race == EWorkerRace::Unknown) Race = NewRace; }
 	
 	// --- ROLE ---
 	UFUNCTION(BlueprintPure, Category = "Worker")
 	EWorkerRole GetRole() const { return Role; }
+	void SetRole(const EWorkerRole NewRole) { if (Role == EWorkerRole::None) Role = NewRole; }
 	
 	// --- HEALTH ---
 	UFUNCTION(BlueprintPure, Category = "Worker")
@@ -57,28 +59,6 @@ public:
 	void Kill() { bIsDead = true; }
 	UFUNCTION(BlueprintPure, Category = "Worker")
 	bool IsDead() const { return bIsDead; }
-	
-	// --- COMBAT SKILL ---
-	UFUNCTION(BlueprintPure, Category = "Worker")
-	float GetCombatSkill() const { return CombatSkill; }
-	void SetCombatSkill(float NewCombatSkill) { CombatSkill = FMath::Clamp(NewCombatSkill, 0.f, 100.f); }
-	
-	// --- WORK EFFICIENCY ---
-	UFUNCTION(BlueprintPure, Category = "Worker")
-	float GetWorkEfficiency() const { return WorkEfficiency; }
-	void SetWorkEfficiency(float NewWorkEfficiency) { WorkEfficiency = FMath::Clamp(NewWorkEfficiency, 0.f, 100.f); }
-	
-	// --- MORALE ---
-	UFUNCTION(BlueprintPure, Category = "Worker")
-	float GetMorale() const { return Morale; }
-	void AddMorale(float MoraleToAdd); // TODO: Increase max for inspired effect?
-	void RemoveMorale(float MoraleToRemove); // TODO: Lower than 0 for psychosis?
-	void SetMorale(float NewMorale);
-	
-	// --- INJURY SEVERITY ---
-	UFUNCTION(BlueprintPure, Category = "Worker")
-	EWorkerInjurySeverity GetInjurySeverity() const { return InjurySeverity; }
-	void SetInjurySeverity(EWorkerInjurySeverity NewInjurySeverity) { InjurySeverity = NewInjurySeverity; }
 	
 	// --- STATUS ---
 	UFUNCTION(BlueprintPure, Category = "Worker")
@@ -105,21 +85,7 @@ private:
 	float Health;
 	
 	UPROPERTY(Replicated)
-	float MaxHealth;
-	
-	UPROPERTY(Replicated)
-	float CombatSkill;
-	
-	// --- WORK STATS ---
-	UPROPERTY(Replicated)
-	float WorkEfficiency;
-	
-	// --- STATE ---
-	UPROPERTY(Replicated)
-	float Morale;
-	
-	UPROPERTY(Replicated)
-	EWorkerInjurySeverity InjurySeverity;
+	float MaxHealth;	
 	
 	UPROPERTY(Replicated)
 	bool bIsDead = false;

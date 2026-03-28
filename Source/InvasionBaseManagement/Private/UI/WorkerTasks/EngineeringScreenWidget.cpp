@@ -66,7 +66,7 @@ void UEngineeringScreenWidget::OnAssignClicked(FGuid TaskID)
 
 	CachedManagementHUD->ShowWorkerPane(
 		CachedBaseManagerState,
-		EWorkerRole::EWRO_Engineer,
+		EWorkerRole::Engineer,
 		TaskID,
 		FOnAssignClicked::CreateUObject(this, &UEngineeringScreenWidget::OnWorkerAssigned));
 }

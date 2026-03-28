@@ -81,7 +81,8 @@ void ABaseManagerState::OnProgressUpdate()
 		{
 			if (UWorkerData* Worker = FindWorkerByGUID(WorkerID))
 			{
-				TotalEfficiency += Worker->GetWorkEfficiency() / 100.f;
+				// TODO: Replace the hardcoded values with an actual formula based off worker stats (when we re-implement them)
+				TotalEfficiency += 50 / 100.f;
 			}
 		}
 		
@@ -265,7 +266,7 @@ void ABaseManagerState::AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID)
 			
 			// Assign worker status
 			// TODO: Add a field to worker to display what task they are doing
-			Worker->SetCurrentStatus(EWorkerStatus::EWS_Working);
+			Worker->SetCurrentStatus(EWorkerStatus::Working);
 			
 			UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Assigned worker %s to task %s"), *Worker->GetWorkerName(), *TaskID.ToString());
 			
@@ -291,7 +292,7 @@ void ABaseManagerState::UnassignWorkerFromTask(UWorkerData* Worker, FGuid TaskID
 				ModifiedTask.AssignedWorkerIDs.Remove(Worker->GetWorkerUniqueID());
 				Task = ModifiedTask;
 			
-				Worker->SetCurrentStatus(EWorkerStatus::EWS_Idle);
+				Worker->SetCurrentStatus(EWorkerStatus::Idle);
 				UE_LOG(LogTemp, Log, TEXT("BaseManagerState: Unassigned worker %s from task %s"), *Worker->GetWorkerName(), *TaskID.ToString());
 				OnTasksChanged.Broadcast();
 			

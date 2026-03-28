@@ -66,7 +66,7 @@ void UResearchScreenWidget::OnAssignClicked(FGuid TaskID)
 
 	CachedManagementHUD->ShowWorkerPane(
 		CachedBaseManagerState,
-		EWorkerRole::EWRO_Scientist,
+		EWorkerRole::Scientist,
 		TaskID,
 		FOnAssignClicked::CreateUObject(this, &UResearchScreenWidget::OnWorkerAssigned));
 }
