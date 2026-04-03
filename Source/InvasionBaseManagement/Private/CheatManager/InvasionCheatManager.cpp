@@ -49,7 +49,7 @@ void UInvasionCheatManager::HireWorkersFromPool(int32 Count)
 	{
 		UWorkerData* Worker = Pool->GetAvailableWorkers()[FMath::RandRange(0, Pool->GetAvailableWorkers().Num() - 1)];
 		
-		Pool->Server_HireWorker(Worker, BaseState);
+		Pool->Server_HireWorker(Worker);
 		HiredCount++;
 	}
 	

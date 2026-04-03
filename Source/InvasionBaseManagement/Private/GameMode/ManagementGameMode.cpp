@@ -8,6 +8,7 @@
 #include "GameFramework/PlayerState.h"
 #include "Data/CampaignTypes.h"
 #include "Data/MissionData.h"
+#include "Subsystems/InvasionCampaignSubsystem.h"
 #include "Subsystems/MissionBridgeSubsystem.h"
 
 AManagementGameMode::AManagementGameMode()
@@ -29,26 +30,35 @@ void AManagementGameMode::BeginPlay()
 	{
 		SpawnRegionalWorkerPools();
 		
-		if (UMissionBridgeSubsystem* MissionBridgeSubsystem = GetGameInstance()->GetSubsystem<UMissionBridgeSubsystem>())
+		UMissionBridgeSubsystem* MissionBridgeSubsystem = GetGameInstance()->GetSubsystem<UMissionBridgeSubsystem>();
+		UInvasionCampaignSubsystem* CampaignSubsystem = GetGameInstance()->GetSubsystem<UInvasionCampaignSubsystem>();
+		
+		if (!ensure(MissionBridgeSubsystem)) { return; }
+		if (!ensure(CampaignSubsystem)) { return; }
+
+		FMissionResult MissionResult = MissionBridgeSubsystem->GetPendingMissionResult();
+		if (MissionResult.bIsValid == false)
 		{
-			FMissionResult MissionResult = MissionBridgeSubsystem->GetPendingMissionResult();
-			if (MissionResult.bIsValid == false)
+			MissionBridgeSubsystem->ClearPendingMissionResult();
+			return;
+		}
+		if (PlayerBaseStates.Num() > 0)
+		{
+			ABaseManagerState* BaseManagerState = PlayerBaseStates.CreateIterator().Value();
+			TArray<UWorkerData*> WorkerRoster = CampaignSubsystem->GetRoster();
+			
+			for (FGuid Casualty : MissionResult.CasualtyIDs)
 			{
-				MissionBridgeSubsystem->ClearPendingMissionResult();
-				return;
-			}
-			if (PlayerBaseStates.Num() > 0)
-			{
-				ABaseManagerState* BaseManagerState = PlayerBaseStates.CreateIterator().Value();
-				for (FGuid CasualtyID : MissionResult.CasualtyIDs)
+				for (UWorkerData* Worker : WorkerRoster)
 				{
-					if (UWorkerData* Soldier = BaseManagerState->FindWorkerByGUID(CasualtyID))
+					if (Worker && Worker->GetWorkerUniqueID() == Casualty)
 					{
-						BaseManagerState->RemoveWorker(Soldier);
+						CampaignSubsystem->RemoveWorker(Worker);
+						break;
 					}
 				}
-				BaseManagerState->AddCredits(MissionResult.CreditsAwarded);
-			}
+			}			
+			BaseManagerState->AddCredits(MissionResult.CreditsAwarded);
 		}
 	}
 }

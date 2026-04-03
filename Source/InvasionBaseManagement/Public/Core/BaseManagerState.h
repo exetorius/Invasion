@@ -9,6 +9,9 @@
 #include "Data/WorkerData.h"
 #include "BaseManagerState.generated.h"
 
+DECLARE_MULTICAST_DELEGATE(FOnWorkerRosterChanged);
+DECLARE_MULTICAST_DELEGATE(FOnTasksChanged);
+
 /**
  * Replicated actor that holds per-player base management data
  * Each player has their own BaseManagerState instance
@@ -22,30 +25,15 @@ class INVASIONBASEMANAGEMENT_API ABaseManagerState : public AInfo
 	//TODO : BIG - Move task management into its own class / subclass? There is going to be a lot of logic perhaps 
 	
 public:
-	DECLARE_MULTICAST_DELEGATE(FOnWorkerRosterChanged);
-	FOnWorkerRosterChanged OnWorkerRosterChanged;
-	DECLARE_MULTICAST_DELEGATE(FOnTasksChanged);
+	
+	FOnWorkerRosterChanged OnWorkerRosterChanged;	
 	FOnTasksChanged OnTasksChanged;
 	
 	ABaseManagerState();
 
 	virtual void GetLifetimeReplicatedProps(TArray<FLifetimeProperty>& OutLifetimeProps) const override;		
 
-	// Worker management
-	UFUNCTION(BlueprintCallable, Category = "Base Manager")
-	void AddWorker(UWorkerData* NewWorker);
-	
-	// Server-only function to add a worker (with validation)
-	UFUNCTION(Server, Reliable, Category = "Base Manager")
-	void Server_AddWorker(UWorkerData* NewWorker);
-	
-	UFUNCTION(BlueprintCallable, Category = "Base Manager")
-	void RemoveWorker(UWorkerData* OldWorker);
-	
-	// Server-only function to remove a worker (with validation)
-	UFUNCTION(Server, Reliable, Category = "Base Manager")
-	void Server_RemoveWorker(UWorkerData* OldWorker);	
-	
+	// Worker management	
 	UFUNCTION(BlueprintCallable, Category = "Base Manager")
 	void AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID);
 	
@@ -85,6 +73,10 @@ private:
 	int32 Supplies;
 	
 	void InitializeBase();
+	UFUNCTION()
+	void OnWorkerAdded(UWorkerData* NewWorker);
+	UFUNCTION()
+	void OnWorkerRemoved(UWorkerData* OldWorker);
 	
 	// Task timer handling
 	FTimerHandle TaskTimerHandle;

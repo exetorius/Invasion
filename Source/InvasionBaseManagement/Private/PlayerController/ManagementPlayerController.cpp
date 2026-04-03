@@ -9,6 +9,7 @@
 #include "Core/BaseManagerState.h"
 #include "GameMode/ManagementGameMode.h"
 #include "Kismet/GameplayStatics.h"
+#include "Subsystems/InvasionCampaignSubsystem.h"
 #include "Subsystems/MissionBridgeSubsystem.h"
 #include "Systems/RegionalWorkerPool.h"
 #include "UI/MissionScreens/MissionResultScreenWidget.h"
@@ -48,36 +49,36 @@ void AManagementPlayerController::Server_RequestHireWorker_Implementation(UWorke
                                                                           ARegionalWorkerPool* Pool)
 {
 	if (!Worker || !Pool) { return;}
-	
-	if (ABaseManagerState* Base = GetBaseManagerState())
-	{
-		// Already server-authoritative, call implementation directly
-		Pool->Server_HireWorker_Implementation(Worker, Base);
-	}	
+
+	// Already server-authoritative, call implementation directly
+	Pool->Server_HireWorker_Implementation(Worker);
 }
 
 void AManagementPlayerController::Server_RequestFireWorker_Implementation(UWorkerData* Worker)
 {
 	if (!Worker) { return;}
 	
-	if (ABaseManagerState* Base = GetBaseManagerState())
+	UInvasionCampaignSubsystem* CampaignSubsystem = GetGameInstance()->GetSubsystem<UInvasionCampaignSubsystem>();
+	const ABaseManagerState* Base = GetBaseManagerState();
+	
+	if (!ensure(CampaignSubsystem)) { return; }
+	if (!ensure(Base)) { return; }
+
+	TArray<AActor*> FoundActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARegionalWorkerPool::StaticClass(), FoundActors);
+	for (AActor* Actor : FoundActors)
 	{
-		TArray<AActor*> FoundActors;
-		UGameplayStatics::GetAllActorsOfClass(GetWorld(), ARegionalWorkerPool::StaticClass(), FoundActors);
-		for (AActor* Actor : FoundActors)
+		if (ARegionalWorkerPool* Pool = Cast<ARegionalWorkerPool>(Actor))
 		{
-			if (ARegionalWorkerPool* Pool = Cast<ARegionalWorkerPool>(Actor))
+			if (Pool->GetRegionID() == Base->GetBaseRegion())
 			{
-				if (Pool->GetRegionID() == Base->GetBaseRegion())
-				{
-					// Already server-authoritative, call implementation directly
-					Pool->Server_ReturnWorker_Implementation(Worker);
-					Base->RemoveWorker(Worker);					
-					break;
-				}
+				// Already server-authoritative, call implementation directly
+				Pool->Server_ReturnWorker_Implementation(Worker);
+				CampaignSubsystem->RemoveWorker(Worker);					
+				break;
 			}
-		}		
-	}
+		}
+	}		
 }
 
 void AManagementPlayerController::Server_RequestAssignWorker_Implementation(UWorkerData* Worker, FGuid TaskID)

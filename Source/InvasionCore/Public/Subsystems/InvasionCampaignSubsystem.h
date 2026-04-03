@@ -6,7 +6,8 @@
 #include "Subsystems/GameInstanceSubsystem.h"
 #include "InvasionCampaignSubsystem.generated.h"
 
-DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnRosterChanged, FGuid, WorkerID);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWorkerAdded, UWorkerData*, Worker);
+DECLARE_DYNAMIC_MULTICAST_DELEGATE_OneParam(FOnWorkerRemoved, UWorkerData*, Worker);
 
 class UWorkerData;
 /**
@@ -19,7 +20,9 @@ class INVASIONCORE_API UInvasionCampaignSubsystem : public UGameInstanceSubsyste
 	
 public:
 	UPROPERTY(BlueprintAssignable)
-	FOnRosterChanged OnRosterChanged;
+	FOnWorkerAdded OnWorkerAdded;
+	UPROPERTY(BlueprintAssignable)
+	FOnWorkerRemoved OnWorkerRemoved;
 	
 protected:
 	virtual void Initialize(FSubsystemCollectionBase& Collection) override;

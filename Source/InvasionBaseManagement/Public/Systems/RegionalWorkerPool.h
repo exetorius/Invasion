@@ -34,7 +34,7 @@ public:
 	
 	// Server: Hire a worker from this pool (removes from pool)
 	UFUNCTION(Server, Reliable, Category = "Regional Pool")
-	void Server_HireWorker(UWorkerData* Worker, class ABaseManagerState* HiringBase);
+	void Server_HireWorker(UWorkerData* Worker);
 
 	// Server: Return a worker to the pool (fired/dismissed)
 	UFUNCTION(Server, Reliable, Category = "Regional Pool")

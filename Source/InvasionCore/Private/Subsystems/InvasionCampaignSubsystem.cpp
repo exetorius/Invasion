@@ -20,7 +20,7 @@ void UInvasionCampaignSubsystem::AddWorker(UWorkerData* NewWorker)
 	if (!NewWorker) { return; }
 	
 	Roster.Add(NewWorker);
-	OnRosterChanged.Broadcast(NewWorker->GetWorkerUniqueID());
+	OnWorkerAdded.Broadcast(NewWorker);
 }
 
 void UInvasionCampaignSubsystem::RemoveWorker(UWorkerData* WorkerToRemove)
@@ -28,5 +28,5 @@ void UInvasionCampaignSubsystem::RemoveWorker(UWorkerData* WorkerToRemove)
 	if (!WorkerToRemove) { return; }
 	
 	Roster.Remove(WorkerToRemove);
-	OnRosterChanged.Broadcast(WorkerToRemove->GetWorkerUniqueID());
+	OnWorkerRemoved.Broadcast(WorkerToRemove);
 }

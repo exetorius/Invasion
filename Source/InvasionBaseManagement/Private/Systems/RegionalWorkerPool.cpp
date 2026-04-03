@@ -2,9 +2,9 @@
 
 #include "Systems/RegionalWorkerPool.h"
 #include "Data/WorkerData.h"
-#include "Core/BaseManagerState.h"
 #include "Data/SoldierData.h"
 #include "Net/UnrealNetwork.h"
+#include "Subsystems/InvasionCampaignSubsystem.h"
 
 ARegionalWorkerPool::ARegionalWorkerPool()
 {
@@ -47,11 +47,11 @@ void ARegionalWorkerPool::OnRep_AvailableWorkers()
 	OnAvailableWorkersChanged.Broadcast();
 }
 
-void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker, ABaseManagerState* HiringBase)
+void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker)
 {
-	if (!Worker || !HiringBase)
+	if (!Worker)
 	{
-		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Hire failed - invalid worker or base"));
+		UE_LOG(LogTemp, Warning, TEXT("RegionalWorkerPool: Hire failed - invalid worker"));
 		return;
 	}
 
@@ -69,7 +69,10 @@ void ARegionalWorkerPool::Server_HireWorker_Implementation(UWorkerData* Worker, 
 	RemoveReplicatedSubObject(Worker);
 
 	// Add to hiring base
-	HiringBase->AddWorker(Worker);
+	if (UInvasionCampaignSubsystem* CampaignSubsystem = GetGameInstance()->GetSubsystem<UInvasionCampaignSubsystem>())
+	{
+		CampaignSubsystem->AddWorker(Worker);
+	}
 
 	UE_LOG(LogTemp, Log, TEXT("RegionalWorkerPool '%s': Hired '%s' (%s)"),
 		*RegionID.ToString(),

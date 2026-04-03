@@ -7,6 +7,7 @@
 #include "GameFramework/PlayerState.h"
 #include "UObject/UObjectGlobals.h"
 #include "Data/CampaignTypes.h"
+#include "Subsystems/InvasionCampaignSubsystem.h"
 
 ABaseManagerState::ABaseManagerState()
 {
@@ -108,7 +109,20 @@ void ABaseManagerState::BeginPlay()
 		InitializeBase();
 		// TODO: Per task timer functionality tweaks / polish
 		GetWorld()->GetTimerManager().SetTimer(TaskTimerHandle, this, &ABaseManagerState::OnProgressUpdate, 1.f, true);
-	}
+		
+		if (UInvasionCampaignSubsystem* InvasionCampaignSubsystem = GetGameInstance()->GetSubsystem<UInvasionCampaignSubsystem>())
+		{
+			InvasionCampaignSubsystem->OnWorkerAdded.AddDynamic(this, &ABaseManagerState::OnWorkerAdded);
+			InvasionCampaignSubsystem->OnWorkerRemoved.AddDynamic(this, &ABaseManagerState::OnWorkerRemoved);
+			
+			TArray<UWorkerData*> ServerRoster = InvasionCampaignSubsystem->GetRoster();
+			for (UWorkerData* Worker : ServerRoster)
+			{
+				WorkerRoster.Add(Worker);
+				AddReplicatedSubObject(Worker);
+			}
+		}
+	}	
 }
 
 void ABaseManagerState::InitializeBase()
@@ -164,73 +178,16 @@ void ABaseManagerState::InitializeBase()
 	OnTasksChanged.Broadcast();
 }
 
-void ABaseManagerState::AddWorker(UWorkerData* NewWorker)
+void ABaseManagerState::OnWorkerAdded(UWorkerData* NewWorker)
 {
-	// Client calls server version
-	if (!HasAuthority())
-	{
-		Server_AddWorker(NewWorker);
-		return;
-	}
-
-	// Server can run this on itself
-	Server_AddWorker_Implementation(NewWorker);
+	WorkerRoster.Add(NewWorker);
+	AddReplicatedSubObject(NewWorker);
 }
 
-void ABaseManagerState::Server_AddWorker_Implementation(UWorkerData* NewWorker)
+void ABaseManagerState::OnWorkerRemoved(UWorkerData* OldWorker)
 {
-	if (NewWorker)
-	{
-		WorkerRoster.Add(NewWorker);
-
-		// CRITICAL: Register as a replicated subobject to replicate to clients
-		AddReplicatedSubObject(NewWorker);
-
-		UE_LOG(LogTemp, Log, TEXT("Server: Added worker: %s"), *NewWorker->GetWorkerName());
-
-		// Broadcast to UI that the roster changed
-		OnWorkerRosterChanged.Broadcast();
-	}
-}
-
-void ABaseManagerState::RemoveWorker(UWorkerData* OldWorker)
-{	
-	// Client calls server version
-	if (!HasAuthority())
-	{
-		Server_RemoveWorker(OldWorker);
-		return;
-	}
-	
-	// Check if this worker exists in this pool
-	if (!OldWorker || !WorkerRoster.Contains(OldWorker))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: RemoveWorker called with invalid or unknown worker"));
-		return;
-	}
-
-	// Server-side execution
-	Server_RemoveWorker_Implementation(OldWorker);
-}
-
-void ABaseManagerState::Server_RemoveWorker_Implementation(UWorkerData* OldWorker)
-{
-	// Check if this worker exists in this pool
-	if (!OldWorker || !WorkerRoster.Contains(OldWorker))
-	{
-		UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: RemoveWorker called with invalid or unknown worker"));
-		return;
-	}
-
 	WorkerRoster.Remove(OldWorker);
-
-	// CRITICAL: Remove as a replicated subobject to reduce overheads
 	RemoveReplicatedSubObject(OldWorker);
-
-	UE_LOG(LogTemp, Log, TEXT("Server: Removed worker: %s"), *OldWorker->GetWorkerName());
-
-	// Broadcast to UI that the roster changed
-	OnWorkerRosterChanged.Broadcast();
 }
 
 void ABaseManagerState::AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID)
