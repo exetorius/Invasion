@@ -34,7 +34,7 @@ private:
 	
 public:
 	UFUNCTION(BlueprintCallable)
-	TArray<UWorkerData*> GetRoster() const { return Roster; }
+	const TArray<UWorkerData*>& GetRoster() const { return Roster; }
 	UFUNCTION(BlueprintCallable)
 	void AddWorker(UWorkerData* NewWorker);
 	UFUNCTION(BlueprintCallable)
