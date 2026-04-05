@@ -87,7 +87,7 @@ ABaseManagerState* UInvasionCheatManager::GetPlayerBaseState() const
 {
 	if (APlayerController* PC = GetOuterAPlayerController())
 	{
-		if (const AManagementPlayerController* MPC = Cast<AManagementPlayerController>(PC))
+		if (AManagementPlayerController* MPC = Cast<AManagementPlayerController>(PC))
 		{
 			return MPC->GetBaseManagerState();
 		}

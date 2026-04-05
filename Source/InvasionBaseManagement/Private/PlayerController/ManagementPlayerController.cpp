@@ -27,7 +27,7 @@ void AManagementPlayerController::BeginPlay()
 		{
 			MissionResultScreenWidget->AddToViewport(1);
 		}		
-	}
+	}	
 }
 
 AManagementPlayerController::AManagementPlayerController()
@@ -56,12 +56,11 @@ void AManagementPlayerController::Server_RequestHireWorker_Implementation(UWorke
 
 void AManagementPlayerController::Server_RequestFireWorker_Implementation(UWorkerData* Worker)
 {
-	if (!Worker) { return;}
-	
-	UInvasionCampaignSubsystem* CampaignSubsystem = GetGameInstance()->GetSubsystem<UInvasionCampaignSubsystem>();
+	if (!Worker) { return;}	
 	const ABaseManagerState* Base = GetBaseManagerState();
 	
-	if (!ensure(CampaignSubsystem)) { return; }
+	if (!CachedCampaignSubsystem) { CachedCampaignSubsystem = GetCampaignSubsystem(); }
+	if (!ensure(CachedCampaignSubsystem)) { return; }
 	if (!ensure(Base)) { return; }
 
 	TArray<AActor*> FoundActors;
@@ -74,7 +73,7 @@ void AManagementPlayerController::Server_RequestFireWorker_Implementation(UWorke
 			{
 				// Already server-authoritative, call implementation directly
 				Pool->Server_ReturnWorker_Implementation(Worker);
-				CampaignSubsystem->RemoveWorker(Worker);					
+				CachedCampaignSubsystem->RemoveWorker(Worker);					
 				break;
 			}
 		}
@@ -103,7 +102,7 @@ void AManagementPlayerController::Server_RequestUnassignWorker_Implementation(UW
 
 void AManagementPlayerController::CheckPlayerReady()
 {
-	if (GetBaseManagerState())
+	if (GetBaseManagerState() && GetCampaignSubsystem())
 	{
 		CreateHUD();
 	}
@@ -132,7 +131,7 @@ void AManagementPlayerController::CreateHUD()
 	}
 }
 
-ABaseManagerState* AManagementPlayerController::GetBaseManagerState() const
+ABaseManagerState* AManagementPlayerController::GetBaseManagerState()
 {
 	// Return cached if available
 	if (CachedBaseManagerState)
@@ -169,5 +168,21 @@ ABaseManagerState* AManagementPlayerController::GetBaseManagerState() const
 		}
 	}
 
+	return nullptr;
+}
+
+UInvasionCampaignSubsystem* AManagementPlayerController::GetCampaignSubsystem()
+{
+	if (CachedCampaignSubsystem)
+	{
+		return CachedCampaignSubsystem;
+	}
+
+	if (UInvasionCampaignSubsystem* CampaignSubsystem = GetGameInstance()->GetSubsystem<UInvasionCampaignSubsystem>())
+	{
+		CachedCampaignSubsystem = CampaignSubsystem;
+		return CachedCampaignSubsystem;
+	}
+	
 	return nullptr;
 }

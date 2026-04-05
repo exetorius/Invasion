@@ -6,6 +6,7 @@
 #include "UI/ManagementScreens/BaseManagementScreenWidget.h"
 #include "RosterScreenWidget.generated.h"
 
+class UWorkerData;
 /**
  * Roster screen - displays list of workers for the player's base
  */
@@ -27,8 +28,9 @@ private:
 	void PopulateWorkerList();
 	void BindWorkerRosterChangeEvents();
 	
-	void OnWorkerRosterUpdated();
-	void OnWorkerFired(class UWorkerData* Worker);
+	UFUNCTION()
+	void OnWorkerRosterUpdated(UWorkerData* Worker);
+	void OnWorkerFired(UWorkerData* Worker);
 	
 	// Class to spawn for each worker tile
 	UPROPERTY(EditAnywhere, Category = "Roster")

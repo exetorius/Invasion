@@ -6,6 +6,7 @@
 #include "Core/BaseManagerState.h"
 #include "PlayerController/ManagementPlayerController.h"
 #include "Components/ScrollBox.h"
+#include "Subsystems/InvasionCampaignSubsystem.h"
 
 // Button functionality called from BP
 void URosterScreenWidget::RefreshWorkerList()
@@ -18,7 +19,7 @@ void URosterScreenWidget::OnScreenDataReady()
 	InitialiseRosterScreen();	
 }
 
-void URosterScreenWidget::OnWorkerRosterUpdated()
+void URosterScreenWidget::OnWorkerRosterUpdated(UWorkerData* Worker)
 {
 	UE_LOG(LogTemp, Log, TEXT("RosterScreenWidget: Worker roster updated, refreshing UI"));   
 	PopulateWorkerList();
@@ -34,40 +35,35 @@ void URosterScreenWidget::PopulateWorkerList()
 {
 	// TODO: Display workers in a list by Role - Soldiers, Scientists, Engineers, Medics etc
 	if (!ensure(WorkerListScrollBox))	{ return; }
+	if (!ensure(CachedCampaignSubsystem)) { return; }
 
 	// Clear existing tiles
 	WorkerListScrollBox->ClearChildren();
 
-	if (CachedBaseManagerState)
+	const TArray<UWorkerData*>& Workers = CachedCampaignSubsystem->GetRoster();
+
+	UE_LOG(LogTemp, Log, TEXT("RosterScreenWidget: Populating %d workers"), Workers.Num());
+
+	// Create a tile for each worker
+	for (UWorkerData* Worker : Workers)
 	{
-		const TArray<UWorkerData*>& Workers = CachedBaseManagerState->GetAllWorkers();
-
-		UE_LOG(LogTemp, Log, TEXT("RosterScreenWidget: Populating %d workers"), Workers.Num());
-
-		// Create a tile for each worker
-		for (UWorkerData* Worker : Workers)
+		if (Worker && WorkerTileClass)
 		{
-			if (Worker && WorkerTileClass)
+			if (URosterWorkerTileWidget* Tile = CreateWidget<URosterWorkerTileWidget>(this, WorkerTileClass))
 			{
-				if (URosterWorkerTileWidget* Tile = CreateWidget<URosterWorkerTileWidget>(this, WorkerTileClass))
-				{
-					Tile->SetWorkerData(Worker);
-					Tile->SetActionLabel(FText::FromString("Fire"));
-					Tile->OnActionClicked.BindUObject(this, &URosterScreenWidget::OnWorkerFired);
-					WorkerListScrollBox->AddChild(Tile);
-				}
+				Tile->SetWorkerData(Worker);
+				Tile->SetActionLabel(FText::FromString("Fire"));
+				Tile->OnActionClicked.BindUObject(this, &URosterScreenWidget::OnWorkerFired);
+				WorkerListScrollBox->AddChild(Tile);
 			}
 		}
-	}
-	else
-	{
-		UE_LOG(LogTemp, Warning, TEXT("RosterScreenWidget: Could not get BaseManagerState"));
 	}
 }
 
 void URosterScreenWidget::BindWorkerRosterChangeEvents()
 {	
-	CachedBaseManagerState->OnWorkerRosterChanged.AddUObject(this, &URosterScreenWidget::OnWorkerRosterUpdated);
+	CachedCampaignSubsystem->OnWorkerAdded.AddDynamic(this, &URosterScreenWidget::OnWorkerRosterUpdated);
+	CachedCampaignSubsystem->OnWorkerRemoved.AddDynamic(this, &URosterScreenWidget::OnWorkerRosterUpdated);
 }
 
 void URosterScreenWidget::OnWorkerFired( UWorkerData* Worker)

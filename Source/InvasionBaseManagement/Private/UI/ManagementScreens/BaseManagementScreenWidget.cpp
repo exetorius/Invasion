@@ -18,6 +18,7 @@ void UBaseManagementScreenWidget::InitialiseScreenData()
 		CachedPlayerController = PC;
 		CachedBaseManagerState = PC->GetBaseManagerState();
 		CachedManagementHUD = PC->GetManagementHUD();
+		CachedCampaignSubsystem = PC->GetCampaignSubsystem();
 		
 		if (!CachedBaseManagerState)
 		{

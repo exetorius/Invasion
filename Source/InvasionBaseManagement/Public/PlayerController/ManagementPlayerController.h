@@ -53,14 +53,21 @@ private:
 
 	// Cached reference to this player's BaseManagerState
 	UPROPERTY()
-	mutable TObjectPtr<class ABaseManagerState> CachedBaseManagerState;
+	TObjectPtr<class ABaseManagerState> CachedBaseManagerState;
+	
+	// Cached reference to the Campaign Game Instance subsystem
+	UPROPERTY()
+	TObjectPtr<class UInvasionCampaignSubsystem> CachedCampaignSubsystem;
 	
 // Getters & Setters
 public:
 	// Get this player's BaseManagerState
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Base Manager")	
-	ABaseManagerState* GetBaseManagerState() const;
+	ABaseManagerState* GetBaseManagerState();
 	
 	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "UI")
 	UManagementHUD* GetManagementHUD() const { return HUD; }
+	
+	UFUNCTION(BlueprintCallable, BlueprintPure, Category = "Subsystem")
+	UInvasionCampaignSubsystem* GetCampaignSubsystem();
 };

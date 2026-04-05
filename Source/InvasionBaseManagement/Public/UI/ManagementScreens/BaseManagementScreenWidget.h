@@ -30,4 +30,7 @@ protected:
 	
 	UPROPERTY()
 	TObjectPtr<class UManagementHUD> CachedManagementHUD;
+	
+	UPROPERTY()
+	TObjectPtr<class UInvasionCampaignSubsystem> CachedCampaignSubsystem;
 };
