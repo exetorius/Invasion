@@ -18,7 +18,7 @@ ABaseManagerState::ABaseManagerState()
 	// CRITICAL: Required for AddReplicatedSubObject() to work
 	bReplicateUsingRegisteredSubObjectList = true;
 
-	// Initialize resources
+	// Initialise resources
 	Credits = 1000;
 	Supplies = 500;
 
@@ -199,7 +199,7 @@ void ABaseManagerState::AssignWorkerToTask(UWorkerData* Worker, FGuid TaskID)
 	{
 		if (Task.TaskID == TaskID)
 		{
-			// If a task is already at MaxWorkers, we cannot add anymore workers
+			// If a task is already at MaxWorkers, we cannot add any more workers
 			if (Task.AssignedWorkerIDs.Num() >= Task.MaxWorkers)
 			{
 				UE_LOG(LogTemp, Warning, TEXT("BaseManagerState: Task %s is full!"), *TaskID.ToString());
