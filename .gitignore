@@ -101,6 +101,7 @@ Assets/*
 # AI generated files
 CLAUDE.md
 .claude/
+memory/
 
 # Docs and design — tracked in private Invasion_Docs repo
 Docs/
