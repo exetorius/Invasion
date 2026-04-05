@@ -15,6 +15,21 @@ void UInvasionCampaignSubsystem::Deinitialize()
 	Super::Deinitialize();
 }
 
+UWorkerData* UInvasionCampaignSubsystem::FindWorkerByID(const FGuid& WorkerID) const
+{
+	if (!WorkerID.IsValid()) { return nullptr; }
+
+	for (UWorkerData* Worker : Roster)
+	{
+		if (Worker && Worker->GetWorkerUniqueID() == WorkerID)
+		{
+			return Worker;
+		}
+	}
+	
+	return nullptr;
+}
+
 void UInvasionCampaignSubsystem::AddWorker(UWorkerData* NewWorker)
 {
 	if (!NewWorker) { return; }

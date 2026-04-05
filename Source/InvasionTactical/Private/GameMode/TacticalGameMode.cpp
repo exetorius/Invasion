@@ -11,7 +11,9 @@
 #include "Units/EnemyUnit.h"
 #include "Units/PlayerUnit.h"
 #include "Data/MissionData.h"
+#include "Data/WorkerData.h"
 #include "GameFramework/PlayerStart.h"
+#include "Subsystems/InvasionCampaignSubsystem.h"
 #include "Subsystems/MissionBridgeSubsystem.h"
 
 
@@ -25,6 +27,7 @@ void ATacticalGameMode::BeginPlay()
 		TurnManager = Cast<ATurnManager>(UGameplayStatics::GetActorOfClass(World, ATurnManager::StaticClass()));
 		CombatManager = Cast<ACombatManager>(UGameplayStatics::GetActorOfClass(World, ACombatManager::StaticClass()));
 		UMissionBridgeSubsystem* MissionBridgeSubsystem = GetGameInstance()->GetSubsystem<UMissionBridgeSubsystem>();
+		if (!ensure(MissionBridgeSubsystem)) { return; }
 		
 		TArray<FMissionSoldier> Squad = MissionBridgeSubsystem->GetPendingSquad();
 		
@@ -84,16 +87,25 @@ void ATacticalGameMode::EndCombat(const bool bPlayerWon)
 	FMissionResult MissionResult;
 	MissionResult.bIsValid = true;
 	MissionResult.bVictory = bPlayerWon;
+	MissionResult.CreditsAwarded = bPlayerWon ? 100 : 0;
+	
+	UInvasionCampaignSubsystem* CampaignSubsystem = GetGameInstance()->GetSubsystem<UInvasionCampaignSubsystem>();
 		
 	for (ABaseUnit* Unit : TurnManager->GetPlayerUnits())
 	{
 		APlayerUnit* PlayerUnit = Cast<APlayerUnit>(Unit);
 		if (PlayerUnit && !PlayerUnit->IsAlive())
 		{
-			MissionResult.CasualtyIDs.Add(PlayerUnit->GetSoldierID());
+			MissionResult.CasualtyIDs.Add(PlayerUnit->GetSoldierID());		
+			if (CampaignSubsystem)
+			{
+				if (UWorkerData* Casualty = CampaignSubsystem->FindWorkerByID(PlayerUnit->GetSoldierID()))
+				{
+					Casualty->Kill();
+				}
+			}			
 		}
-	}
-	MissionResult.CreditsAwarded = bPlayerWon ? 100 : 0;
+	}	
 
 	UE_LOG(LogTemp, Log, TEXT("ATacticalGameMode::EndCombat — Victory: %s | Casualties: %d | Credits: %d"),
 		bPlayerWon ? TEXT("true") : TEXT("false"),

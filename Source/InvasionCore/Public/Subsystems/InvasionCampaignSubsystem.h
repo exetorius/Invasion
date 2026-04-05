@@ -36,6 +36,8 @@ public:
 	UFUNCTION(BlueprintCallable)
 	const TArray<UWorkerData*>& GetRoster() const { return Roster; }
 	UFUNCTION(BlueprintCallable)
+	UWorkerData* FindWorkerByID(const FGuid& WorkerID) const;
+	UFUNCTION(BlueprintCallable)
 	void AddWorker(UWorkerData* NewWorker);
 	UFUNCTION(BlueprintCallable)
 	void RemoveWorker(UWorkerData* WorkerToRemove);
